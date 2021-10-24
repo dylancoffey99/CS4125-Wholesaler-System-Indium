@@ -4,11 +4,23 @@
 # Author: Nikita Basovs 18233244
 
 import datetime
+import observer as ob
 
 
-class Calendar:
+class Calendar(ob.ISubject):
     def __init__(self):
         self.current_date = datetime.datetime(2021, 1, 1)  # datetime object, always 1/1/2021 initially
+        self.observers = []
+
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def detach(self, observer):
+        self.observers.remove(observer)
+
+    def notify(self):
+        for observer in self.observers:
+            observer.update()
 
     def advance_time(self):
         # adding a timedelta object to a datetime object will increment the datetime values
