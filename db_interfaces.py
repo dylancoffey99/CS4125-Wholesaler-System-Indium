@@ -11,11 +11,11 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def read_db(self, db_name):
+    def read_db(self, db_name, operation):
         pass
 
     @abstractmethod
-    def write_db(self, db_name):
+    def write_db(self, db_name, operation):
         pass
 
 
@@ -37,13 +37,5 @@ class IProductDB(ABC):
         pass
 
     @abstractmethod
-    def edit_product_name(self, product_id, product_name):
-        pass
-
-    @abstractmethod
-    def edit_product_quantity(self, product_id, product_quantity):
-        pass
-
-    @abstractmethod
-    def edit_product_price(self, product_id, product_price):
+    def edit_product(self, product_id, column, new_value):
         pass
