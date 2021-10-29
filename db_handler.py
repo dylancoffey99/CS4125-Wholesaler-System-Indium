@@ -1,5 +1,6 @@
 # db_handler.py
-# Defines ProductDB and UserDB classes implementing abstracts methods to manipulate their respective CSV files
+# Defines ProductDB and UserDB classes implementing
+# abstract methods to manipulate their respective CSV files
 # Author: Dylan Coffey - 18251382
 
 import csv
@@ -12,7 +13,7 @@ class ProductDB(db.AbstractDBHandler):
         self._db = None
 
     def open_db(self, operation):
-        self._db = open(self._db_name + ".csv", operation, newline="")
+        self._db = open(self._db_name + ".csv", operation, newline="", encoding="utf-8")
 
     def read_db(self, operation):
         self.open_db(operation)
@@ -24,17 +25,18 @@ class ProductDB(db.AbstractDBHandler):
         writer = csv.writer(self._db, delimiter=",")
         return writer
 
-    def add_row(self, product):
+    def add_row(self, row):
         writer = self.write_db("a")
-        writer.writerow(product)
+        writer.writerow(row)
         self._db.close()
 
-    def get_row(self, product_id):
+    def get_row(self, _id):
         reader = self.read_db("r")
         for row in reader:
-            if row[0] == product_id:
+            if row[0] == _id:
                 self._db.close()
                 return row
+        return "Error: that ID doesn't exist"
 
     def get_all_rows(self):
         temp_rows = []
@@ -45,29 +47,30 @@ class ProductDB(db.AbstractDBHandler):
         self._db.close()
         return temp_rows
 
-    def get_id(self, product_name):
+    def get_id(self, name):
         reader = self.read_db("r")
         for row in reader:
-            if row[1] == product_name:
+            if row[1] == name:
                 self._db.close()
                 return row[0]
+        return "Error: that name doesn't exist"
 
-    def remove_row(self, product_id):
+    def remove_row(self, _id):
         temp_rows = []
         reader = self.read_db("r")
         for row in reader:
             temp_rows.append(row)
-            if row[0] == product_id:
+            if row[0] == _id:
                 temp_rows.remove(row)
         writer = self.write_db("w")
         writer.writerows(temp_rows)
         self._db.close()
 
-    def edit_row(self, product_id, column, new_value):
+    def edit_row(self, _id, column, new_value):
         temp_rows = []
         reader = self.read_db("r")
         for row in reader:
-            if row[0] == product_id:
+            if row[0] == _id:
                 row[column] = new_value
             temp_rows.append(row)
         writer = self.write_db("w")
@@ -81,7 +84,7 @@ class UserDB(db.AbstractDBHandler):
         self._db = None
 
     def open_db(self, operation):
-        self._db = open(self._db_name + ".csv", operation, newline="")
+        self._db = open(self._db_name + ".csv", operation, newline="", encoding="utf-8")
 
     def read_db(self, operation):
         self.open_db(operation)
@@ -93,17 +96,18 @@ class UserDB(db.AbstractDBHandler):
         writer = csv.writer(self._db, delimiter=",")
         return writer
 
-    def add_row(self, user):
+    def add_row(self, row):
         writer = self.write_db("a")
-        writer.writerow(user)
+        writer.writerow(row)
         self._db.close()
 
-    def get_row(self, user_id):
+    def get_row(self, _id):
         reader = self.read_db("r")
         for row in reader:
-            if row[0] == user_id:
+            if row[0] == _id:
                 self._db.close()
                 return row
+        return "Error: that ID doesn't exist"
 
     def get_all_rows(self):
         temp_rows = []
@@ -114,9 +118,10 @@ class UserDB(db.AbstractDBHandler):
         self._db.close()
         return temp_rows
 
-    def get_id(self, user_name):
+    def get_id(self, name):
         reader = self.read_db("r")
         for row in reader:
-            if row[1] == user_name:
+            if row[1] == name:
                 self._db.close()
                 return row[0]
+        return "Error: that name doesn't exist"
