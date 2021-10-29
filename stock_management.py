@@ -35,6 +35,7 @@ class Product(ob.ISubject):
     def set_product_quantity(self, new_product_quantity):
         self._product_quantity = new_product_quantity
         # Notify observers when quantity changes, for low stock warnings etc
+
         self.notify()
 
     def attach(self, observer):
