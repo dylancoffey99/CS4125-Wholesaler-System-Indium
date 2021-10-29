@@ -27,5 +27,9 @@ class AbstractDBHandler(ABC):
         pass
 
     @abstractmethod
+    def get_all_rows(self):
+        pass
+
+    @abstractmethod
     def get_id(self, name):
         pass
