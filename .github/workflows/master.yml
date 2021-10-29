@@ -36,7 +36,7 @@ jobs:
           pip install pylint
       - name: Run Pylint
         run: |
-          python lint.py --path .
+          pylint *
 
       - name: GitHub Action for pytest
         uses: cclauss/GitHub-Action-for-pytest@0.5.0
