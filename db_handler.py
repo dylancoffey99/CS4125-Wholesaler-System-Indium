@@ -5,6 +5,7 @@
 
 import csv
 import abstract_db_handler as db
+from stock_management import Product
 
 
 class ProductDB(db.AbstractProductDB):
@@ -14,10 +15,16 @@ class ProductDB(db.AbstractProductDB):
         self.reader = None
         self.writer = None
 
-    def add_product(self, product):
+    def add_product(self, product: Product):
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as self.csv:
             self.writer = csv.writer(self.csv, delimiter=",")
-            self.writer.writerow(product)
+            prod_id = product.get_product_id()
+            name = product.get_product_name()
+            quantity = product.get_product_quantity()
+            price = product.get_product_price()
+
+            new_row = [prod_id, name, quantity, price]
+            self.writer.writerow(new_row)
 
     def remove_product(self, product_id):
         temp_rows = []
@@ -47,7 +54,8 @@ class ProductDB(db.AbstractProductDB):
             self.reader = csv.reader(self.csv, delimiter=",")
             for row in self.reader:
                 if row[0] == product_id:
-                    return row
+                    # return product with all elements
+                    return Product(row[0], row[1], row[2], row[3])
             return "Error: that product ID doesn't exist"
 
     def get_product_id(self, product_name):
@@ -62,10 +70,11 @@ class ProductDB(db.AbstractProductDB):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
             self.reader = csv.reader(self.csv, delimiter=",")
             next(self.reader)
-            temp_rows = []
+            product_list = []
             for row in self.reader:
-                temp_rows.append(row)
-            return temp_rows
+                product = Product(row[0], row[1], row[2], row[3])
+                product_list.append(product)
+            return product_list
 
 
 class UserDB(db.AbstractUserDB):
