@@ -15,11 +15,6 @@ class Product(ob.ISubject):
         self._product_price = product_price
         self._observers = []
 
-    def get_product(self):
-        product = [self._product_id, self._product_name,
-                   self._product_quantity, self._product_price]
-        return product
-
     def get_product_id(self):
         return self._product_id
 
@@ -31,6 +26,9 @@ class Product(ob.ISubject):
 
     def get_product_price(self):
         return self._product_price
+
+    def get_product_as_list(self):
+        return [self._product_id, self._product_name, self._product_quantity, self._product_price]
 
     def set_product_quantity(self, new_product_quantity):
         self._product_quantity = new_product_quantity
