@@ -17,18 +17,16 @@ class ProductDB(AbstractProductDB):
         self.writer = None
 
     def add_product(self, product: Product):
-        product = product.get_product_as_list()
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as self.csv:
             self.writer = csv.writer(self.csv, delimiter=",")
-            self.writer.writerow(product)
+            self.writer.writerow(product.get_product_as_list())
 
     def remove_product(self, product: Product):
         temp_rows = []
-        product_id = product.get_product_id()
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
             self.reader = csv.reader(self.csv, delimiter=",")
             for row in self.reader:
-                if row[0] != str(product_id):
+                if row[0] != str(product.get_product_id()):
                     temp_rows.append(row)
         with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
             self.writer = csv.writer(self.csv, delimiter=",")
@@ -36,12 +34,26 @@ class ProductDB(AbstractProductDB):
 
     def edit_product(self, product: Product, column: int, new_value: str):
         temp_rows = []
-        product_id = product.get_product_id()
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
             self.reader = csv.reader(self.csv, delimiter=",")
             for row in self.reader:
-                if row[0] == str(product_id):
+                if row[0] == str(product.get_product_id()):
                     row[column] = new_value
+                temp_rows.append(row)
+        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
+            self.writer = csv.writer(self.csv, delimiter=",")
+            self.writer.writerows(temp_rows)
+
+    def edit_product_quantity(self, product: Product, operation: bool, value: int):
+        temp_rows = []
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
+            self.reader = csv.reader(self.csv, delimiter=",")
+            for row in self.reader:
+                if row[0] == str(product.get_product_id()):
+                    if operation:
+                        row[2] += value
+                    else:
+                        row[2] -= value
                 temp_rows.append(row)
         with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
             self.writer = csv.writer(self.csv, delimiter=",")
