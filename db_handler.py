@@ -15,7 +15,7 @@ class ProductDB(db.AbstractProductDB):
         self.writer = None
 
     def add_product(self, product):
-        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
+        with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as self.csv:
             self.writer = csv.writer(self.csv, delimiter=",")
             self.writer.writerow(product)
 
@@ -76,7 +76,7 @@ class UserDB(db.AbstractUserDB):
         self.writer = None
 
     def add_user(self, user):
-        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
+        with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as self.csv:
             self.writer = csv.writer(self.csv, delimiter=",")
             self.writer.writerow(user)
 
