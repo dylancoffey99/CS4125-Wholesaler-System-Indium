@@ -21,6 +21,10 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
+    def edit_product_quantity(self, product: Product, operation: bool, value: int):
+        pass
+
+    @abstractmethod
     def get_product(self, product_id: int) -> Product:
         pass
 
