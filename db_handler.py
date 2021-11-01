@@ -3,125 +3,76 @@
 # abstract methods to manipulate their respective CSV files
 # Author: Dylan Coffey - 18251382
 
+from typing import List
 import csv
-import abstract_db_handler as db
+from stock_management import Product
+from abstract_db_handler import AbstractProductDB
 
 
-class ProductDB(db.AbstractDBHandler):
-    def __init__(self, db_name):
+class ProductDB(AbstractProductDB):
+    def __init__(self, db_name: str):
         self._db_name = db_name
-        self._db = None
+        self.csv = None
+        self.reader = None
+        self.writer = None
 
-    def open_db(self, operation):
-        self._db = open(self._db_name + ".csv", operation, newline="", encoding="utf-8")
+    def add_product(self, product: Product):
+        with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as self.csv:
+            self.writer = csv.writer(self.csv, delimiter=",")
+            self.writer.writerow(product.get_product_as_list())
 
-    def read_db(self, operation):
-        self.open_db(operation)
-        reader = csv.reader(self._db, delimiter=",")
-        return reader
-
-    def write_db(self, operation):
-        self.open_db(operation)
-        writer = csv.writer(self._db, delimiter=",")
-        return writer
-
-    def add_row(self, row):
-        writer = self.write_db("a")
-        writer.writerow(row)
-        self._db.close()
-
-    def get_row(self, _id):
-        reader = self.read_db("r")
-        for row in reader:
-            if row[0] == _id:
-                self._db.close()
-                return row
-        return "Error: that ID doesn't exist"
-
-    def get_all_rows(self):
+    def remove_product(self, product: Product):
         temp_rows = []
-        reader = self.read_db("r")
-        next(reader)
-        for row in reader:
-            temp_rows.append(row)
-        self._db.close()
-        return temp_rows
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
+            self.reader = csv.reader(self.csv, delimiter=",")
+            for row in self.reader:
+                if row[0] != str(product.get_product_id()):
+                    temp_rows.append(row)
+        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
+            self.writer = csv.writer(self.csv, delimiter=",")
+            self.writer.writerows(temp_rows)
 
-    def get_id(self, name):
-        reader = self.read_db("r")
-        for row in reader:
-            if row[1] == name:
-                self._db.close()
-                return row[0]
-        return "Error: that name doesn't exist"
-
-    def remove_row(self, _id):
+    def edit_product(self, product: Product, column: int, new_value: str):
         temp_rows = []
-        reader = self.read_db("r")
-        for row in reader:
-            temp_rows.append(row)
-            if row[0] == _id:
-                temp_rows.remove(row)
-        writer = self.write_db("w")
-        writer.writerows(temp_rows)
-        self._db.close()
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
+            self.reader = csv.reader(self.csv, delimiter=",")
+            for row in self.reader:
+                if row[0] == str(product.get_product_id()):
+                    row[column] = new_value
+                temp_rows.append(row)
+        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
+            self.writer = csv.writer(self.csv, delimiter=",")
+            self.writer.writerows(temp_rows)
 
-    def edit_row(self, _id, column, new_value):
+    def edit_product_quantity(self, product: Product, operation: bool, value: int):
         temp_rows = []
-        reader = self.read_db("r")
-        for row in reader:
-            if row[0] == _id:
-                row[column] = new_value
-            temp_rows.append(row)
-        writer = self.write_db("w")
-        writer.writerows(temp_rows)
-        self._db.close()
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
+            self.reader = csv.reader(self.csv, delimiter=",")
+            for row in self.reader:
+                if row[0] == str(product.get_product_id()):
+                    if operation:
+                        row[2] += value
+                    else:
+                        row[2] -= value
+                temp_rows.append(row)
+        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as self.csv:
+            self.writer = csv.writer(self.csv, delimiter=",")
+            self.writer.writerows(temp_rows)
 
+    def get_product(self, product_id: int) -> Product:
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
+            self.reader = csv.reader(self.csv, delimiter=",")
+            for row in self.reader:
+                if row[0] == str(product_id):
+                    product = Product(int(row[0]), row[1], int(row[2]), float(row[3]))
+                return product
 
-class UserDB(db.AbstractDBHandler):
-    def __init__(self, db_name):
-        self._db_name = db_name
-        self._db = None
-
-    def open_db(self, operation):
-        self._db = open(self._db_name + ".csv", operation, newline="", encoding="utf-8")
-
-    def read_db(self, operation):
-        self.open_db(operation)
-        reader = csv.reader(self._db, delimiter=",")
-        return reader
-
-    def write_db(self, operation):
-        self.open_db(operation)
-        writer = csv.writer(self._db, delimiter=",")
-        return writer
-
-    def add_row(self, row):
-        writer = self.write_db("a")
-        writer.writerow(row)
-        self._db.close()
-
-    def get_row(self, _id):
-        reader = self.read_db("r")
-        for row in reader:
-            if row[0] == _id:
-                self._db.close()
-                return row
-        return "Error: that ID doesn't exist"
-
-    def get_all_rows(self):
-        temp_rows = []
-        reader = self.read_db("r")
-        next(reader)
-        for row in reader:
-            temp_rows.append(row)
-        self._db.close()
-        return temp_rows
-
-    def get_id(self, name):
-        reader = self.read_db("r")
-        for row in reader:
-            if row[1] == name:
-                self._db.close()
-                return row[0]
-        return "Error: that name doesn't exist"
+    def get_all_products(self) -> List[Product]:
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as self.csv:
+            self.reader = csv.reader(self.csv, delimiter=",")
+            next(self.reader)
+            products = []
+            for row in self.reader:
+                product = Product(int(row[0]), row[1], int(row[2]), float(row[3]))
+                products.append(product)
+            return products

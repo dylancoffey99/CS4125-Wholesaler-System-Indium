@@ -1,35 +1,33 @@
 # abstract_db_handler.py
-# Defines AbstractDBHandler abstract methods
+# Defines the AbstractProductDB class and its abstract methods
 # Author: Dylan Coffey - 18251382
 
 from abc import ABC, abstractmethod
+from typing import List
+from stock_management import Product
 
 
-class AbstractDBHandler(ABC):
+class AbstractProductDB(ABC):
     @abstractmethod
-    def open_db(self, operation):
+    def add_product(self, product: Product):
         pass
 
     @abstractmethod
-    def read_db(self, operation):
+    def remove_product(self, product: Product):
         pass
 
     @abstractmethod
-    def write_db(self, operation):
+    def edit_product(self, product: Product, column: int, new_value: str):
         pass
 
     @abstractmethod
-    def add_row(self, row):
+    def edit_product_quantity(self, product: Product, operation: bool, value: int):
         pass
 
     @abstractmethod
-    def get_row(self, _id):
+    def get_product(self, product_id: int) -> Product:
         pass
 
     @abstractmethod
-    def get_all_rows(self):
-        pass
-
-    @abstractmethod
-    def get_id(self, name):
+    def get_all_products(self) -> List[Product]:
         pass
