@@ -1,25 +1,17 @@
-# user.py
-############################
-# Implemented class for the user
-#############################
-# Author: Wasim - 17193559
-# Last edited on 01/11
-# Modification time 10:33 AM
-
+from typing import List
 import hashlib
 import os
 
 
 class User:
-    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool, country: str):
+    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool):
         self._user_id = user_id
         self._user_name = user_name
         self._password = password
         self._is_admin = is_admin
-        self._country = country
 
     def get_user(self):
-        return [self._user_id, self._user_name, self._password, self._is_admin, self._country]
+        return [self._user_id, self._user_name, self._password, self._is_admin]
 
     def get_user_id(self):
         return self._user_id
@@ -33,15 +25,12 @@ class User:
     def get_is_admin(self):
         return self._is_admin
 
-    def get_country(self):
-        return self._country
-
     def set_user(self):
         print("The username= ", self._user_name, "\tThe password= ",
               self._password, "\tis the user admin= ", self._is_admin)
         self.get_hashed_password(self._password)
 
-    def get_hashed_password(self, password: str) -> str:
+    def get_hashed_password(self, password: str) -> List[str]:
         # https://nitratine.net/blog/post/how-to-hash-passwords-in-python/
         salt = os.urandom(32)
         key = hashlib.pbkdf2_hmac(
@@ -60,12 +49,3 @@ class User:
         salt_and_key = [salt_from_storage, key_from_storage]
 
         return salt_and_key
-
-
-# child class (admin) is push the information to the super class (user)
-
-
-print(User.get_hashed_password("1234567","123456"))
-# this line of code just to test
-
-# x.set_newUser()
