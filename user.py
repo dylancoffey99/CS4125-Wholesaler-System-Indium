@@ -1,6 +1,6 @@
 # user.py
 ############################
-# various classes for the user
+# Implemented class for the user
 #############################
 # Author: Wasim - 17193559
 # Last edited on 01/11
