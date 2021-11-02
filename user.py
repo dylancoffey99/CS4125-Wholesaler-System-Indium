@@ -1,4 +1,3 @@
-from typing import List
 import hashlib
 import os
 
@@ -25,13 +24,13 @@ class User:
     def get_is_admin(self):
         return self._is_admin
 
-    def set_user(self):
-        print("The username= ", self._user_name, "\tThe password= ",
-              self._password, "\tis the user admin= ", self._is_admin)
-        self.get_hashed_password(self._password)
+    def set_user(self, user_name: str, password: str):
+        self._user_name = user_name
+        self._password = self.get_hashed_password(password)
 
-    def get_hashed_password(self, password: str) -> List[str]:
+    def get_hashed_password(self, password: str) -> str:
         # https://nitratine.net/blog/post/how-to-hash-passwords-in-python/
+        # https://stackoverflow.com/questions/48448830/hashing-password-in-py-file
         salt = os.urandom(32)
         key = hashlib.pbkdf2_hmac(
             'sha256',  # The hash digest algorithm for HMAC
