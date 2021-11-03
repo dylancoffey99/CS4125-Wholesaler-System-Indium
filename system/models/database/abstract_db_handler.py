@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from system.models.shopping.stock_management import Product
+from system.models.shopping.product import Product
 
 
 class AbstractProductDB(ABC):

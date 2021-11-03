@@ -1,6 +1,6 @@
 from typing import List
 import csv
-from system.models.shopping.stock_management import Product
+from system.models.shopping.product import Product
 from abstract_db_handler import AbstractProductDB
 
 
