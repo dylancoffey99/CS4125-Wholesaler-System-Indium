@@ -1,6 +1,6 @@
 from user import User
-from stock_management import Product
-from db_handler import ProductDB
+from system.models.shopping.stock_management import Product
+from system.models.database.db_handler import ProductDB
 
 
 class Admin:
