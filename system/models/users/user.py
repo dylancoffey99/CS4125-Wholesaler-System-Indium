@@ -9,7 +9,7 @@ class User:
         self._password = password
         self._is_admin = is_admin
 
-    def get_user(self):
+    def get_user_as_list(self):
         return [self._user_id, self._user_name, self._password, self._is_admin]
 
     def get_user_id(self):
