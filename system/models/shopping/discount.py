@@ -49,10 +49,7 @@ class SeasonalDiscount(IObserver):
             self._current_date = subject.get_date()
 
     def check_if_active(self):
-        if self._start_date <= self._current_date <= self._end_date:
-            return True
-        else:
-            return False
+        bool(self._start_date <= self._current_date <= self._end_date)
 
 
 # brief test to see if this works
