@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
+from system.models.users.user import User
 from system.models.shopping.product import Product
 
 
@@ -26,4 +27,18 @@ class AbstractProductDB(ABC):
 
     @abstractmethod
     def get_all_products(self) -> List[Product]:
+        pass
+
+
+class AbstractUserDB(ABC):
+    @abstractmethod
+    def add_user(self, user: User):
+        pass
+
+    @abstractmethod
+    def get_user(self, user_id: int) -> User:
+        pass
+
+    @abstractmethod
+    def get_all_users(self) -> List[User]:
         pass
