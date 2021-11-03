@@ -1,15 +1,11 @@
-# calendar.py
-# A calendar used to simulate the progression of time in the system,
-# may be of use for keeping track of seasonal discounts and such
-# Author: Nikita Basovs 18233244
-
 import datetime
-import observer as ob
+from system.models.shopping.observer import ISubject
 
 
-class Calendar(ob.ISubject):
+class Calendar(ISubject):
     def __init__(self):
-        self.current_date = datetime.datetime(2021, 1, 1)  # datetime object, always 1/1/2021 initially
+        # datetime object, always 1/1/2021 initially
+        self.current_date = datetime.datetime(2021, 1, 1)
         self.observers = []
 
     def attach(self, observer):
@@ -28,10 +24,11 @@ class Calendar(ob.ISubject):
         # in this case, 1 day is being added on to the datetime created in the init function
         self.current_date += datetime.timedelta(days=1)
         self.notify()
-        print("Time advanced by 1 day. The current date is " + self.current_date.strftime("%d/%m/%Y"))
+        print("Time advanced by 1 day. The current date is "
+              + self.current_date.strftime("%d/%m/%Y"))
 
-    # once the date is retrieved, further actions such as extracting the exact month and day may be performed on the
-    # object
+    # once the date is retrieved, further actions such as extracting
+    # the exact month and day may be performed on the object
     def get_date(self):
         return self.current_date
 

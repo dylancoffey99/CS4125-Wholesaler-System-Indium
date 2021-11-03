@@ -1,6 +1,6 @@
-from user import User
-from stock_management import Product
-from db_handler import ProductDB
+from system.models.users.user import User
+from system.models.shopping.product import Product
+from system.models.database.db_handler import ProductDB
 
 
 class Admin:
@@ -16,6 +16,5 @@ class Admin:
     def remove_product(self, product: Product):
         self._db.remove_product(product)
 
-    # return list
-    def get_orders(self):
+    def get_orders(self):  # return list
         pass  # print the products order

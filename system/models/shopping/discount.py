@@ -1,9 +1,6 @@
-# discount.py
-# various classes relating to discounts
-# Author: Nikita Basovs - 18233244
-import calendar
-import observer as ob
 import datetime
+from system.models.shopping import calendar
+from system.models.shopping.observer import IObserver
 
 
 class DiscountCategory:
@@ -38,7 +35,7 @@ print("Discount for category " + startup_discount_category.get_name() + " is " +
       str(startup_discount_category.get_discount()) + "%")
 
 
-class SeasonalDiscount(ob.IObserver):
+class SeasonalDiscount(IObserver):
 
     def __init__(self, name, start_date, end_date):
         self._name = name
@@ -52,10 +49,7 @@ class SeasonalDiscount(ob.IObserver):
             self._current_date = subject.get_date()
 
     def check_if_active(self):
-        if self._start_date <= self._current_date <= self._end_date:
-            return True
-        else:
-            return False
+        bool(self._start_date <= self._current_date <= self._end_date)
 
 
 # brief test to see if this works

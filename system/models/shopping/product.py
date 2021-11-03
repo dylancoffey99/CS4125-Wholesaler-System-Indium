@@ -1,15 +1,8 @@
-# stock_management.py
-# Defines the Product class implementing its methods
-# for the stock management aspect of the system
-# Author: Nikita Basovs - 18233244
-# Edited: Dylan Coffey - 18251382
-
 from typing import List
-import observer as ob
+from system.models.shopping.observer import ISubject
 
 
-# Implements the subject interface
-class Product(ob.ISubject):
+class Product(ISubject):
     def __init__(self, product_id: int, product_name: str,
                  product_quantity: int, product_price: float):
         self._product_id = product_id
