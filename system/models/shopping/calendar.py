@@ -1,8 +1,8 @@
 import datetime
-import observer as ob
+from system.models.shopping.observer import ISubject
 
 
-class Calendar(ob.ISubject):
+class Calendar(ISubject):
     def __init__(self):
         self.current_date = datetime.datetime(2021, 1, 1)  # datetime object, always 1/1/2021 initially
         self.observers = []

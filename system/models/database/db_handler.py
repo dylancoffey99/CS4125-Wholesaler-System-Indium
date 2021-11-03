@@ -1,7 +1,7 @@
-from typing import List
 import csv
+from typing import List
 from system.models.shopping.product import Product
-from abstract_db_handler import AbstractProductDB
+from system.models.database.abstract_db_handler import AbstractProductDB
 
 
 class ProductDB(AbstractProductDB):

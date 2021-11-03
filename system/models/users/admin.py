@@ -1,4 +1,4 @@
-from user import User
+from system.models.users.user import User
 from system.models.shopping.product import Product
 from system.models.database.db_handler import ProductDB
 

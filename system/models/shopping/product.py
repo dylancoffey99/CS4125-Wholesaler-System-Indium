@@ -1,8 +1,8 @@
 from typing import List
-import observer as ob
+from system.models.shopping.observer import ISubject
 
 
-class Product(ob.ISubject):
+class Product(ISubject):
     def __init__(self, product_id: int, product_name: str,
                  product_quantity: int, product_price: float):
         self._product_id = product_id

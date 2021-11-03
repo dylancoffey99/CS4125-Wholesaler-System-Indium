@@ -1,6 +1,6 @@
-from system.models.shopping import calendar
-import observer as ob
 import datetime
+from system.models.shopping import calendar
+from system.models.shopping.observer import IObserver
 
 
 class DiscountCategory:
@@ -35,7 +35,7 @@ print("Discount for category " + startup_discount_category.get_name() + " is " +
       str(startup_discount_category.get_discount()) + "%")
 
 
-class SeasonalDiscount(ob.IObserver):
+class SeasonalDiscount(IObserver):
 
     def __init__(self, name, start_date, end_date):
         self._name = name
