@@ -36,14 +36,6 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def remove_user(self, user: User):
-        pass
-
-    @abstractmethod
-    def edit_user(self, user: User, column: int, new_value: str):
-        pass
-
-    @abstractmethod
     def get_user(self, user_id: int) -> User:
         pass
 
