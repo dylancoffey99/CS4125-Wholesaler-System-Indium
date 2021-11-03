@@ -1,7 +1,3 @@
-# abstract_db_handler.py
-# Defines the AbstractProductDB class and its abstract methods
-# Author: Dylan Coffey - 18251382
-
 from abc import ABC, abstractmethod
 from typing import List
 from stock_management import Product

@@ -1,8 +1,3 @@
-# calendar.py
-# A calendar used to simulate the progression of time in the system,
-# may be of use for keeping track of seasonal discounts and such
-# Author: Nikita Basovs 18233244
-
 import datetime
 import observer as ob
 

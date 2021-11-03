@@ -1,8 +1,3 @@
-# db_handler.py
-# Defines ProductDB and UserDB classes implementing
-# abstract methods to manipulate their respective CSV files
-# Author: Dylan Coffey - 18251382
-
 from typing import List
 import csv
 from stock_management import Product

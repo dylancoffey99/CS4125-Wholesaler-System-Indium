@@ -1,6 +1,3 @@
-# discount.py
-# various classes relating to discounts
-# Author: Nikita Basovs - 18233244
 import calendar
 import observer as ob
 import datetime
