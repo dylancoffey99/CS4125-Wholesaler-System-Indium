@@ -9,12 +9,13 @@ class Register:
         self._password = password
         self._is_admin = is_admin
 
-    def check_username(self, user_name, user: UserDB):
+    def check_username(self, user_name, password, user: UserDB):
         if user_name == user.get_user(user_name):
             print("Change username")
         else:
             print("Username available")
             user.add_user(user_name)
+            user.add_user(password)
 
 
 
