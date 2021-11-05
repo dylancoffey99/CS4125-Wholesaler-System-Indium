@@ -36,7 +36,7 @@ class RegistrationPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = ttk.Label(self, text="Registration Page", font='Aerial 20 bold')
-        label.grid(row=0, column=3, padx=10, pady=10, sticky='E')
+        label.grid(row=0, column=3, padx=10, pady=10)
 
         name_label = ttk.Label(self, text="Name", font='Aerial 12 ')
         name_label.grid(row=3, column=2)
@@ -92,34 +92,38 @@ class RegistrationPage(tk.Frame):
         register_button = ttk.Button(self, text="Register",
                                      command=lambda: controller.show_frame(UserPage))
 
-        register_button.grid(row=9, column=3, padx=10, pady=10, sticky='nsew')
+        register_button.grid(row=9, column=2, padx=10, pady=10)
+        login_button = ttk.Button(self, text="Already have an account",
+                                  command=lambda: controller.show_frame(LoginPage))
+
+        login_button.grid(row=9, column=3, padx=10, pady=10)
 
 
 class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = ttk.Label(self, text="Login Page", font='Aerial 20 bold')
-        label.grid(row=0, column=0, padx=10, pady=10)
+        label.grid(row=0, column=3, padx=10, pady=10)
 
-        name_label = ttk.Label(self, text="Name", font='Aerial 15')
-        name_label.grid(row=1, column=0)
-        password_label = ttk.Label(self, text="Password", font='Aerial 15')
-        password_label.grid(row=2, column=0)
+        name_label = ttk.Label(self, text="Name", font='Aerial 12')
+        name_label.grid(row=3, column=2)
+        password_label = ttk.Label(self, text="Password", font='Aerial 12')
+        password_label.grid(row=4, column=2)
 
         name_entry = ttk.Entry(self)
-        name_entry.grid(row=1, column=1, padx=10, pady=10)
+        name_entry.grid(row=3, column=3, padx=10, pady=10)
         password_entry = ttk.Entry(self)
-        password_entry.grid(row=2, column=1, padx=10, pady=10)
+        password_entry.grid(row=4, column=3, padx=10, pady=10)
 
         login_button = ttk.Button(self, text="Login",
                                   command=lambda: controller.show_frame(UserPage))
 
-        login_button.grid(row=3, column=1, padx=10, pady=10)
+        login_button.grid(row=6, column=2, padx=10, pady=10)
 
         register_button = ttk.Button(self, text="Register",
                                      command=lambda: controller.show_frame(RegistrationPage))
 
-        register_button.grid(row=3, column=2, padx=10, pady=10)
+        register_button.grid(row=6, column=3, padx=10, pady=10)
 
 
 class UserPage(tk.Frame):
