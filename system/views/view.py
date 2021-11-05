@@ -14,17 +14,10 @@ class View(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        # initializing frames to an empty array
         self.frames = {}
-
-        # iterating through a tuple consisting
-        # of the different page layouts
         for F in (RegistrationPage, LoginPage):
             frame = F(container, self)
 
-            # initializing frame of that object from
-            # startpage, page1, page2 respectively with
-            # for loop
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
@@ -42,41 +35,61 @@ class View(tk.Tk):
 class RegistrationPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Page 1")
+        label = ttk.Label(self, text="Registration Page")
         label.grid(row=0, column=4, padx=10, pady=10)
 
-        # button to show frame 2 with text
-        # layout2
-        button1 = ttk.Button(self, text="StartPage",
-                             command=lambda: controller.show_frame(RegistrationPage))
+        name_label = ttk.Label(self, text="Name")
+        name_label.grid(row=1, column=0)
+        email_label = ttk.Label(self, text="Email")
+        email_label.grid(row=2, column=0)
+        phone_label = ttk.Label(self, text="Phone Number")
+        phone_label.grid(row=3, column=0)
+        country_label = ttk.Label(self, text="Country")
+        country_label.grid(row=4, column=0)
+        password_label = ttk.Label(self, text="Password")
+        password_label.grid(row=5, column=0)
 
-        # putting the button in its place
-        # by using grid
-        button1.grid(row=1, column=1, padx=10, pady=10)
+        name_entry = ttk.Entry(self)
+        name_entry.grid(row=1, column=1, padx=10, pady=10)
+        email_entry = ttk.Entry(self)
+        email_entry.grid(row=2, column=1, padx=10, pady=10)
+        phone_entry = ttk.Entry(self)
+        phone_entry.grid(row=3, column=1, padx=10, pady=10)
+        country_entry = ttk.Entry(self)
+        country_entry.grid(row=4, column=1, padx=10, pady=10)
+        password_entry = ttk.Entry(self)
+        password_entry.grid(row=5, column=1, padx=10, pady=10)
 
-        # button to show frame 2 with text
-        # layout2
-        button2 = ttk.Button(self, text="Page 2",
+        register_button = ttk.Button(self, text="Register",
+                                     command=lambda: controller.show_frame(RegistrationPage))
+
+        register_button.grid(row=8, column=0, padx=10, pady=10)
+
+        button2 = ttk.Button(self, text="Login",
                              command=lambda: controller.show_frame(LoginPage))
 
-        # putting the button in its place by
-        # using grid
-        button2.grid(row=2, column=1, padx=10, pady=10)
+        button2.grid(row=8, column=1, padx=10, pady=10)
 
 
 class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Page 2")
+        label = ttk.Label(self, text="Login Page")
         label.grid(row=0, column=4, padx=10, pady=10)
 
-        # button to show frame 2 with text
-        # layout2
+        name_label = ttk.Label(self, text="Name")
+        name_label.grid(row=1, column=0)
+        password_label = ttk.Label(self, text="Password")
+        password_label.grid(row=2, column=0)
+
+        name_entry = ttk.Entry(self)
+        name_entry.grid(row=1, column=1, padx=10, pady=10)
+        password_entry = ttk.Entry(self)
+        password_entry.grid(row=2, column=1, padx=10, pady=10)
+
         button1 = ttk.Button(self, text="Page 1",
                              command=lambda: controller.show_frame(LoginPage))
 
-        # putting the button in its place by
-        # using grid
         button1.grid(row=1, column=1, padx=10, pady=10)
 
 
