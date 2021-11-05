@@ -36,7 +36,7 @@ class RegistrationPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = ttk.Label(self, text="Registration Page")
-        label.grid(row=0, column=4, padx=10, pady=10)
+        label.grid(row=0, column=0, padx=10, pady=10)
 
         name_label = ttk.Label(self, text="Name")
         name_label.grid(row=1, column=0)
@@ -48,6 +48,8 @@ class RegistrationPage(tk.Frame):
         country_label.grid(row=4, column=0)
         password_label = ttk.Label(self, text="Password")
         password_label.grid(row=5, column=0)
+        re_enter_password_label = ttk.Label(self, text="Password")
+        re_enter_password_label.grid(row=5, column=0)
 
         name_entry = ttk.Entry(self)
         name_entry.grid(row=1, column=1, padx=10, pady=10)
@@ -59,6 +61,8 @@ class RegistrationPage(tk.Frame):
         country_entry.grid(row=4, column=1, padx=10, pady=10)
         password_entry = ttk.Entry(self)
         password_entry.grid(row=5, column=1, padx=10, pady=10)
+        re_enter_password_entry = ttk.Entry(self)
+        re_enter_password_entry.grid(row=5, column=1, padx=10, pady=10)
 
         register_button = ttk.Button(self, text="Register",
                                      command=lambda: controller.show_frame(RegistrationPage))
@@ -75,7 +79,7 @@ class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = ttk.Label(self, text="Login Page")
-        label.grid(row=0, column=4, padx=10, pady=10)
+        label.grid(row=0, column=0, padx=10, pady=10)
 
         name_label = ttk.Label(self, text="Name")
         name_label.grid(row=1, column=0)
@@ -87,11 +91,19 @@ class LoginPage(tk.Frame):
         password_entry = ttk.Entry(self)
         password_entry.grid(row=2, column=1, padx=10, pady=10)
 
-        button1 = ttk.Button(self, text="Page 1",
-                             command=lambda: controller.show_frame(LoginPage))
+        login_button = ttk.Button(self, text="Login",
+                                  command=lambda: controller.show_frame(RegistrationPage))
 
-        button1.grid(row=1, column=1, padx=10, pady=10)
+        login_button.grid(row=3, column=1, padx=10, pady=10)
 
 
-app = View()
-app.mainloop()
+def main(self):
+    self.resizable(width=False, height=False)
+    self.state('zoomed')  # To make the GUI fit the screen
+    self.config(bg="grey")
+
+
+if __name__ == '__main__':
+    root = View()
+    main(root)
+    root.mainloop()
