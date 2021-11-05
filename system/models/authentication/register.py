@@ -17,8 +17,6 @@ class Register:
             user.add_user(user_name)
             user.add_user(password)
 
-
-
     def get_hashed_password(self, password: str) -> str:
     # https://nitratine.net/blog/post/how-to-hash-passwords-in-python/
     # https://stackoverflow.com/questions/48448830/hashing-password-in-py-file
