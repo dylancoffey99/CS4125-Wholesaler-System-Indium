@@ -15,7 +15,7 @@ class View(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (RegistrationPage, LoginPage):
+        for F in (RegistrationPage, LoginPage, UserPage):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -35,20 +35,20 @@ class View(tk.Tk):
 class RegistrationPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Registration Page")
+        label = ttk.Label(self, text="Registration Page", font='Aerial 20 bold')
         label.grid(row=0, column=0, padx=10, pady=10)
 
-        name_label = ttk.Label(self, text="Name")
+        name_label = ttk.Label(self, text="Name", font='Aerial 15')
         name_label.grid(row=1, column=0)
-        email_label = ttk.Label(self, text="Email")
+        email_label = ttk.Label(self, text="Email", font='Aerial 15')
         email_label.grid(row=2, column=0)
-        phone_label = ttk.Label(self, text="Phone Number")
+        phone_label = ttk.Label(self, text="Phone Number", font='Aerial 15')
         phone_label.grid(row=3, column=0)
-        country_label = ttk.Label(self, text="Country")
+        country_label = ttk.Label(self, text="Country", font='Aerial 15')
         country_label.grid(row=4, column=0)
-        password_label = ttk.Label(self, text="Password")
+        password_label = ttk.Label(self, text="Password", font='Aerial 15')
         password_label.grid(row=5, column=0)
-        re_enter_password_label = ttk.Label(self, text="Password")
+        re_enter_password_label = ttk.Label(self, text="Password", font='Aerial 15')
         re_enter_password_label.grid(row=5, column=0)
 
         name_entry = ttk.Entry(self)
@@ -65,25 +65,20 @@ class RegistrationPage(tk.Frame):
         re_enter_password_entry.grid(row=5, column=1, padx=10, pady=10)
 
         register_button = ttk.Button(self, text="Register",
-                                     command=lambda: controller.show_frame(RegistrationPage))
+                                     command=lambda: controller.show_frame(UserPage))
 
         register_button.grid(row=8, column=0, padx=10, pady=10)
-
-        button2 = ttk.Button(self, text="Login",
-                             command=lambda: controller.show_frame(LoginPage))
-
-        button2.grid(row=8, column=1, padx=10, pady=10)
 
 
 class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Login Page")
+        label = ttk.Label(self, text="Login Page", font='Aerial 20 bold')
         label.grid(row=0, column=0, padx=10, pady=10)
 
-        name_label = ttk.Label(self, text="Name")
+        name_label = ttk.Label(self, text="Name", font='Aerial 15')
         name_label.grid(row=1, column=0)
-        password_label = ttk.Label(self, text="Password")
+        password_label = ttk.Label(self, text="Password", font='Aerial 15')
         password_label.grid(row=2, column=0)
 
         name_entry = ttk.Entry(self)
@@ -92,9 +87,33 @@ class LoginPage(tk.Frame):
         password_entry.grid(row=2, column=1, padx=10, pady=10)
 
         login_button = ttk.Button(self, text="Login",
-                                  command=lambda: controller.show_frame(RegistrationPage))
+                                  command=lambda: controller.show_frame(UserPage))
 
         login_button.grid(row=3, column=1, padx=10, pady=10)
+
+        register_button = ttk.Button(self, text="Register",
+                                     command=lambda: controller.show_frame(RegistrationPage))
+
+        register_button.grid(row=3, column=2, padx=10, pady=10)
+
+
+class UserPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = ttk.Label(self, text="Choose the Item")
+        label.grid(row=5, column=0, padx=10, pady=10)
+
+        n = tk.StringVar()
+        product_sold = ttk.Combobox(self, width=27, textvariable=n)
+
+        # Adding combobox drop down list
+        product_sold['values'] = (' Laptop',
+                                  ' Monitors',
+                                  ' Mouse',
+                                  ' Keyboard',
+                                  )
+
+        product_sold.grid(row=5, column=1)
 
 
 def main(self):
