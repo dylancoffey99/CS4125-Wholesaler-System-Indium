@@ -9,9 +9,7 @@ class User:
         self._user_name = user_name
         self._password = password
         self._is_admin = is_admin
-
-    def get_user_id(self) -> int:
-        return self._user_id
+        self._country = country
 
     def get_user_name(self) -> str:
         return self._user_name

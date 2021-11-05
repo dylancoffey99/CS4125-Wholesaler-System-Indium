@@ -4,7 +4,7 @@ from system.models.shopping.observer import IObserver
 
 
 class DiscountCategory:
-    def __init__(self, name, desc, discount_percentage):
+    def __init__(self, name, desc, discount_percentage: int):
         self._name = name
         self._desc = desc
         self._discount_percentage = discount_percentage
