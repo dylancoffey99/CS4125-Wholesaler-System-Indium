@@ -4,39 +4,22 @@ from system.models.shopping.observer import IObserver
 
 
 class DiscountCategory:
-    def __init__(self, name, desc, discount_percentage):
-        self._name = name
-        self._desc = desc
+    def __init__(self, discount_id: int, discount_name: str, discount_percentage: int):
+        self._discount_id = discount_id
+        self._discount_name = discount_name
         self._discount_percentage = discount_percentage
 
-    def get_name(self):
-        return self._name
+    def get_discount_id(self) -> int:
+        return self._discount_id
 
-    def get_description(self):
-        return self._desc
+    def get_discount_name(self) -> str:
+        return self._discount_name
 
-    def get_discount(self):
+    def get_discount_percentage(self) -> int:
         return self._discount_percentage
-
-# testing some categories
-education_discount_category = DiscountCategory("Education",
-                                               "Purchasing on behalf of educational institution",
-                                               10)
-
-business_discount_category = DiscountCategory("Business",
-                                              "Purchasing on behalf of a medium to large business",
-                                              15)
-
-startup_discount_category = DiscountCategory("Startup",
-                                             "Purchasing on behalf of a small business or startup",
-                                             20)
-
-print("Discount for category " + startup_discount_category.get_name() + " is " + \
-      str(startup_discount_category.get_discount()) + "%")
 
 
 class SeasonalDiscount(IObserver):
-
     def __init__(self, name, start_date, end_date):
         self._name = name
         self._start_date = start_date
