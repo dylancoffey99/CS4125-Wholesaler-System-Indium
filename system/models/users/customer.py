@@ -2,7 +2,6 @@ from system.models.shopping.discount import DiscountCategory
 from system.models.users.user import User
 
 
-
 class Customer(User):
     def __init__(self, user_name, password, country):
         User.__init__(self, user_name, password, False, country)
@@ -14,16 +13,10 @@ class Customer(User):
         _country = country
         return DiscountCategory(_country)
 
-    def set_discount_category(self, name: str, desc: str) -> DiscountCategory:
-        if name == "Education":
-            discount_percentage = 10
-        elif name == "Business":
-            discount_percentage = 15
-        elif name == "Startup":
-            discount_percentage = 20
-        return DiscountCategory(name, desc, discount_percentage)
-
-
-customer = Customer("user", "12345", "ireland")
-print(customer)
-print(customer.get_user_as_list())
+    def set_discount_category(self, discount_id: int):
+        if discount_id == 0:
+            self.discount_category = DiscountCategory(discount_id, "Education", 10)
+        elif discount_id == 1:
+            self.discount_category = DiscountCategory(discount_id, "Business", 15)
+        elif discount_id == 2:
+            self.discount_category = DiscountCategory(discount_id, "Startup", 20)
