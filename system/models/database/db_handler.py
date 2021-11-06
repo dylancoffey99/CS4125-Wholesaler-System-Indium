@@ -41,7 +41,7 @@ class ProductDB(AbstractProductDB):
             writer = csv.writer(file, delimiter=",")
             writer.writerows(temp_rows)
 
-    def subtract_product_quantity(self, product: Product, amount: int):
+    def sub_product_quantity(self, product: Product, amount: int):
         temp_rows = []
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")

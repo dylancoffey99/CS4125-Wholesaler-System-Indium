@@ -18,7 +18,7 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
-    def subtract_product_quantity(self, product: Product, amount: int):
+    def sub_product_quantity(self, product: Product, amount: int):
         pass
 
     @abstractmethod
