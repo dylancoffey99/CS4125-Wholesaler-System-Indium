@@ -9,11 +9,8 @@ class DiscountCategory:
         self._desc = desc
         self._discount_percentage = discount_percentage
 
-    def get_name(self):
-        return self._name
-
-    def get_description(self):
-        return self._desc
+    def get_discount_name(self) -> str:
+        return self._discount_name
 
     def get_discount(self):
         return self._discount_percentage
