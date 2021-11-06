@@ -1,15 +1,9 @@
-from typing import List
-import hashlib
-import os
-
-
 class User:
-    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool):
-        self._user_id = user_id
+    def __init__(self, user_name: str, password: str, is_admin: bool, country_id: int):
         self._user_name = user_name
         self._password = password
         self._is_admin = is_admin
-        self._country = country
+        self._country_id = country_id
 
     def get_user_name(self) -> str:
         return self._user_name
