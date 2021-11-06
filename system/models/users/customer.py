@@ -3,8 +3,8 @@ from system.models.shopping.discount import DiscountCategory
 
 
 class Customer(User):
-    def __init__(self, user_name, password, country_id):
-        User.__init__(self, user_name, password, False, country_id)
+    def __init__(self, user_name: str, password: str, country_id: int):
+        User.__init__(self, user_name: str, password: str, False, country_id: int)
         self.discount_category = None
 
     def get_discount_category(self) -> DiscountCategory:
