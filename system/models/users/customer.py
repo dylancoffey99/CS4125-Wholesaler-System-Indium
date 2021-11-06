@@ -1,17 +1,14 @@
-from system.models.shopping.discount import DiscountCategory
 from system.models.users.user import User
+from system.models.shopping.discount import DiscountCategory
 
 
 class Customer(User):
-    def __init__(self, user_name, password, country):
-        User.__init__(self, user_name, password, False, country)
+    def __init__(self, user_name, password, country_id):
+        User.__init__(self, user_name, password, False, country_id)
+        self.discount_category = None
 
-    def set_category(self, name: str, desc: str, discount_percentage: int) -> DiscountCategory:
-        return DiscountCategory(name, desc, discount_percentage)
-
-    def set_country(self, country: str) -> DiscountCategory:
-        _country = country
-        return DiscountCategory(_country)
+    def get_discount_category(self) -> DiscountCategory:
+        return self.discount_category
 
     def set_discount_category(self, discount_id: int):
         if discount_id == 0:
