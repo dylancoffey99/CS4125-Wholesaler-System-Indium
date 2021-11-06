@@ -4,8 +4,8 @@ from system.models.database.db_handler import ProductDB
 
 
 class Admin(User):
-    def __init__(self, user_name: str, password: str, is_admin: bool, country: str):
-        User.__init__(self, user_name, password, is_admin, country)
+    def __init__(self, user_name: str, password: str):
+        User.__init__(self, user_name, password, True, 1)
         self._db = ProductDB("productDB")
 
     def add_product(self, product: Product):
