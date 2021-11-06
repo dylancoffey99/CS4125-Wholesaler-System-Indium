@@ -22,7 +22,7 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
-    def get_product(self, product_id: int) -> Product:
+    def get_product(self, product_name: str) -> Product:
         pass
 
     @abstractmethod
@@ -30,11 +30,11 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
-    def get_next_id(self) -> int:
+    def get_all_products(self) -> List[Product]:
         pass
 
     @abstractmethod
-    def get_all_products(self) -> List[Product]:
+    def increment_product_id(self) -> int:
         pass
 
 
@@ -44,7 +44,7 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def get_user(self, user_name: int) -> User:
+    def get_user(self, user_name: str) -> User:
         pass
 
     @abstractmethod
@@ -52,9 +52,9 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def get_next_id(self) -> int:
+    def get_all_users(self) -> List[User]:
         pass
 
     @abstractmethod
-    def get_all_users(self) -> List[User]:
+    def increment_user_id(self) -> int:
         pass
