@@ -18,11 +18,19 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
-    def edit_product_quantity(self, product: Product, operation: bool, value: int):
+    def subtract_product_quantity(self, product: Product, amount: int):
         pass
 
     @abstractmethod
     def get_product(self, product_id: int) -> Product:
+        pass
+
+    @abstractmethod
+    def get_product_id(self, product: Product) -> int:
+        pass
+
+    @abstractmethod
+    def get_next_id(self) -> int:
         pass
 
     @abstractmethod
@@ -36,7 +44,15 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def get_user(self, user_id: int) -> User:
+    def get_user(self, user_name: int) -> User:
+        pass
+
+    @abstractmethod
+    def get_user_id(self, user: User) -> int:
+        pass
+
+    @abstractmethod
+    def get_next_id(self) -> int:
         pass
 
     @abstractmethod
