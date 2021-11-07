@@ -3,11 +3,20 @@ import hashlib
 import os
 
 class Register:
-    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool):
+    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool, country_id):
         self._user_id = user_id
         self._user_name = user_name
         self._password = password
         self._is_admin = is_admin
+        self._country_id = country_id
+
+    def input_info(self):
+        user_name = input ("Username")
+        password = input ("Password")
+        self.check_username(user_name, password)
+        country = input ("What country do you live in?")
+        country_id = self.set_country_id(country)
+        is_admin = "false"
 
     def check_username(self, user_name, password, user: UserDB):
         if user_name == user.get_user(user_name):
@@ -16,6 +25,15 @@ class Register:
             print("Username available")
             user.add_user(user_name)
             user.add_user(password)
+
+    def set_country_id(self, country):
+        countries = ["Austria", "Belgium", "Bulgaria," "Croatia", "Cyprus", "Czech Republic",
+                     "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
+                     "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta",
+                     "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia",
+                     "Spain", "Sweden", "United Kingdom"]
+        country_id = countries.index(country)
+        return country_id
 
     def get_hashed_password(self, password: str) -> str:
     # https://nitratine.net/blog/post/how-to-hash-passwords-in-python/
