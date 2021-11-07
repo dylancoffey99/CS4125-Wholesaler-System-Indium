@@ -3,7 +3,7 @@ import hashlib
 import os
 
 class Register:
-    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool, country_id):
+    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool, country_id: int):
         self._user_id = user_id
         self._user_name = user_name
         self._password = password
@@ -26,7 +26,7 @@ class Register:
             user.add_user(user_name)
             user.add_user(password)
 
-    def set_country_id(self, country):
+    def set_country_id(self, country) -> int:
         countries = ["Austria", "Belgium", "Bulgaria," "Croatia", "Cyprus", "Czech Republic",
                      "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
                      "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta",
