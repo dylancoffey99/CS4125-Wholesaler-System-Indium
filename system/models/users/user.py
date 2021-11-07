@@ -1,5 +1,5 @@
 from typing import List
-from system.models.database.authentication.register import Register
+from system.models.authentication.register import Register
 
 
 class User:
