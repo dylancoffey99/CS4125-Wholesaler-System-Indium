@@ -7,17 +7,8 @@ class Register:
         self._password = password
         self._is_admin = is_admin
 
-    def add_user(self, user: UserDB):
-        pass
-
-    def get_user(self, user_id: int) -> UserDB:
-        pass
-
-    def get_all_users(self) -> List[UserDB]:
-        pass
-
-    def ask_user_credentials(self): -> return str:
-        print("Please Provide")
-        user_name = str(input("Name: "))
-        password = str(input("Password: "))
-        return user_name, password
+    def check_name (self, user_name, user : UserDB):
+        if user_name == user.get_user(user_name):
+            print("Enter new username")
+        else:
+            print("Username is available")
