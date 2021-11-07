@@ -13,8 +13,7 @@ class ProductDB(AbstractProductDB):
     def add_product(self, product: Product):
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
-            writer.writerow([self.increment_product_id(),
-                             product.get_product_name(),
+            writer.writerow([product.get_product_name(),
                              product.get_product_quantity(),
                              product.get_product_price()])
 
@@ -23,7 +22,7 @@ class ProductDB(AbstractProductDB):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
-                if row[0] != str(self.get_product_id(product)):
+                if row[0] != product.get_product_name():
                     temp_rows.append(row)
         with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
@@ -34,7 +33,7 @@ class ProductDB(AbstractProductDB):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
-                if row[0] == str(self.get_product_id(product)):
+                if row[0] == product.get_product_name():
                     row[column] = new_value
                 temp_rows.append(row)
         with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
@@ -46,9 +45,9 @@ class ProductDB(AbstractProductDB):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
-                if row[0] == str(self.get_product_id(product)):
-                    quantity = int(row[2]) - amount
-                    row[2] = str(quantity)
+                if row[0] == product.get_product_name():
+                    quantity = int(row[1]) - amount
+                    row[1] = str(quantity)
                 temp_rows.append(row)
         with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
@@ -59,16 +58,8 @@ class ProductDB(AbstractProductDB):
             reader = csv.reader(file, delimiter=",")
             for row in reader:
                 if row[0] == product_name:
-                    product = Product(row[1], int(row[2]), float(row[3]))
+                    product = Product(row[0], int(row[1]), float(row[2]))
                 return product
-
-    def get_product_id(self, product: Product):
-        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-            reader = csv.reader(file, delimiter=",")
-            for row in reader:
-                if row[1] == product.get_product_name():
-                    product_id = int(row[0])
-                return product_id
 
     def get_all_products(self) -> List[Product]:
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
@@ -76,7 +67,7 @@ class ProductDB(AbstractProductDB):
             next(reader)
             products = []
             for row in reader:
-                product = Product(row[1], int(row[2]), float(row[3]))
+                product = Product(row[0], int(row[1]), float(row[2]))
                 products.append(product)
             return products
 
@@ -84,15 +75,9 @@ class ProductDB(AbstractProductDB):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
-                if row[1] == product_name:
+                if row[0] == product_name:
                     return True
             return False
-
-    def increment_product_id(self) -> int:
-        products = self.get_all_products()
-        last_product = products[-1]
-        next_id = int(self.get_product_id(last_product)) + 1
-        return next_id
 
 
 class UserDB(AbstractUserDB):
@@ -102,8 +87,7 @@ class UserDB(AbstractUserDB):
     def add_user(self, user: User):
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
-            writer.writerow([self.increment_user_id(),
-                             user.get_user_name(),
+            writer.writerow([user.get_user_name(),
                              user.get_password(),
                              user.get_is_admin(),
                              user.get_country_id()])
@@ -112,17 +96,9 @@ class UserDB(AbstractUserDB):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
-                if row[1] == user_name:
-                    user = User(row[1], row[2], bool(row[3]), int(row[4]))
+                if row[0] == user_name:
+                    user = User(row[0], row[1], bool(row[2]), int(row[3]))
                 return user
-
-    def get_user_id(self, user: User):
-        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-            reader = csv.reader(file, delimiter=",")
-            for row in reader:
-                if row[1] == user.get_user_name():
-                    user_id = int(row[0])
-                return user_id
 
     def get_all_users(self) -> List[User]:
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
@@ -130,7 +106,7 @@ class UserDB(AbstractUserDB):
             next(reader)
             users = []
             for row in reader:
-                user = User(row[1], row[2], bool(row[3]), int(row[4]))
+                user = User(row[0], row[1], bool(row[2]), int(row[3]))
                 users.append(user)
             return users
 
@@ -141,9 +117,3 @@ class UserDB(AbstractUserDB):
                 if row[1] == user_name:
                     return True
             return False
-
-    def increment_user_id(self) -> int:
-        users = self.get_all_users()
-        last_user = users[-1]
-        next_id = int(self.get_user_id(last_user)) + 1
-        return next_id
