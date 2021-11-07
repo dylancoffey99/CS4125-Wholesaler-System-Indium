@@ -37,22 +37,19 @@ class ProductDB(AbstractProductDB):
         if not self.product_exists(product.get_product_name()):
             print("Error: product does not exist")
         else:
-            if column in (0, 1, 2):
-                if column == 0 and self.product_exists(new_value):
-                    print("Error: product name already exists")
-                else:
-                    temp_rows = []
-                    with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-                        reader = csv.reader(file, delimiter=",")
-                        for row in reader:
-                            if row[0] == product.get_product_name():
-                                row[column] = new_value
-                            temp_rows.append(row)
-                    with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
-                        writer = csv.writer(file, delimiter=",")
-                        writer.writerows(temp_rows)
+            if column == 0 and self.product_exists(new_value):
+                print("Error: product name already exists")
             else:
-                print("Error: column does not exist")
+                temp_rows = []
+                with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+                    reader = csv.reader(file, delimiter=",")
+                    for row in reader:
+                        if row[0] == product.get_product_name():
+                            row[column] = new_value
+                        temp_rows.append(row)
+                with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
+                    writer = csv.writer(file, delimiter=",")
+                    writer.writerows(temp_rows)
 
     def sub_product_quantity(self, product: Product, amount: int):
         if not self.product_exists(product.get_product_name()):
