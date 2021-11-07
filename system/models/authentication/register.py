@@ -3,13 +3,6 @@ import hashlib
 import os
 
 class Register:
-    def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool, country_id: int):
-        self._user_id = user_id
-        self._user_name = user_name
-        self._password = password
-        self._is_admin = is_admin
-        self._country_id = country_id
-
     def input_info(self):
         user_name = input ("Username")
         password = input ("Password")
