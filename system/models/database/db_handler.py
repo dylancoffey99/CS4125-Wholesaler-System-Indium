@@ -80,6 +80,14 @@ class ProductDB(AbstractProductDB):
                 products.append(product)
             return products
 
+    def product_name_exists(self, product_name: str) -> bool:
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            for row in reader:
+                if row[1] == product_name:
+                    return True
+            return False
+
     def increment_product_id(self) -> int:
         products = self.get_all_products()
         last_product = products[-1]
@@ -124,6 +132,14 @@ class UserDB(AbstractUserDB):
                 user = User(row[1], row[2], bool(row[3]), row[4])
                 users.append(user)
             return users
+
+    def user_name_exists(self, user_name: str) -> bool:
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            for row in reader:
+                if row[1] == user_name:
+                    return True
+            return False
 
     def increment_user_id(self) -> int:
         users = self.get_all_users()
