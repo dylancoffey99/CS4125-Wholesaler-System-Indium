@@ -2,7 +2,6 @@ from typing import List
 from system.models.database.authentication.register import Register
 
 
-
 class User:
     def __init__(self, user_id: int, user_name: str, password: str, is_admin: bool):
         self._user_id = user_id
