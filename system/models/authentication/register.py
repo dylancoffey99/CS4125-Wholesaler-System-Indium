@@ -7,6 +7,7 @@ class Register:
         user_name = input ("Username")
         password = input ("Password")
         self.check_username(user_name, password)
+        hash_pass = self.get_hashed_password(password)
         country = input ("What country do you live in?")
         country_id = self.set_country_id(country)
         is_admin = "false"
