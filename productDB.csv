@@ -1,5 +1,5 @@
-﻿product_id,product_name,product_quantity,product_price
-1,product1,10,50
-2,product2,100,10
-3,product3,50,20
-4,product4,5,100
+﻿product_name,product_quantity,product_price
+product1,10,50
+product2,100,10
+product3,50,20
+product4,5,100

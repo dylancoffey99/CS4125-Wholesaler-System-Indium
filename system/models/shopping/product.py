@@ -1,18 +1,12 @@
-from typing import List
 from system.models.shopping.observer import ISubject
 
 
 class Product(ISubject):
-    def __init__(self, product_id: int, product_name: str,
-                 product_quantity: int, product_price: float):
-        self._product_id = product_id
+    def __init__(self, product_name: str, product_quantity: int, product_price: float):
         self._product_name = product_name
         self._product_quantity = product_quantity
         self._product_price = product_price
         self._observers = []
-
-    def get_product_id(self) -> int:
-        return self._product_id
 
     def get_product_name(self) -> str:
         return self._product_name
@@ -22,10 +16,6 @@ class Product(ISubject):
 
     def get_product_price(self) -> float:
         return self._product_price
-
-    def get_product_as_list(self) -> List[str]:
-        return [str(self._product_id), self._product_name,
-                str(self._product_quantity), str(self._product_price)]
 
     def set_product_quantity(self, new_product_quantity: int):
         self._product_quantity = new_product_quantity
