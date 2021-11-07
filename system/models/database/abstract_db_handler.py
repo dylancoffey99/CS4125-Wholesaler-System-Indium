@@ -22,11 +22,11 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
-    def get_product(self, product_name: str) -> Product:
+    def get_product(self, product_name: str):
         pass
 
     @abstractmethod
-    def get_product_id(self, product: Product) -> int:
+    def get_product_id(self, product: Product):
         pass
 
     @abstractmethod
@@ -48,11 +48,11 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def get_user(self, user_name: str) -> User:
+    def get_user(self, user_name: str):
         pass
 
     @abstractmethod
-    def get_user_id(self, user: User) -> int:
+    def get_user_id(self, user: User):
         pass
 
     @abstractmethod

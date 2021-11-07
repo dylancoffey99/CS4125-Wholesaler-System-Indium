@@ -54,7 +54,7 @@ class ProductDB(AbstractProductDB):
             writer = csv.writer(file, delimiter=",")
             writer.writerows(temp_rows)
 
-    def get_product(self, product_name: str) -> Product:
+    def get_product(self, product_name: str):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
@@ -62,7 +62,7 @@ class ProductDB(AbstractProductDB):
                     product = Product(row[1], int(row[2]), float(row[3]))
                 return product
 
-    def get_product_id(self, product: Product) -> int:
+    def get_product_id(self, product: Product):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
@@ -108,7 +108,7 @@ class UserDB(AbstractUserDB):
                              user.get_is_admin(),
                              user.get_country_id()])
 
-    def get_user(self, user_name: str) -> User:
+    def get_user(self, user_name: str):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
@@ -116,7 +116,7 @@ class UserDB(AbstractUserDB):
                     user = User(row[1], row[2], bool(row[3]), int(row[4]))
                 return user
 
-    def get_user_id(self, user: User) -> int:
+    def get_user_id(self, user: User):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
