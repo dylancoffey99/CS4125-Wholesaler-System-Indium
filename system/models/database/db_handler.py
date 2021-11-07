@@ -105,14 +105,15 @@ class UserDB(AbstractUserDB):
             writer.writerow([self.increment_user_id(),
                              user.get_user_name(),
                              user.get_password(),
-                             user.get_is_admin()])
+                             user.get_is_admin(),
+                             user.get_country_id()])
 
     def get_user(self, user_name: str) -> User:
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
                 if row[1] == user_name:
-                    user = User(row[1], row[2], bool(row[3]), row[4])
+                    user = User(row[1], row[2], bool(row[3]), int(row[4]))
                 return user
 
     def get_user_id(self, user: User) -> int:
@@ -129,7 +130,7 @@ class UserDB(AbstractUserDB):
             next(reader)
             users = []
             for row in reader:
-                user = User(row[1], row[2], bool(row[3]), row[4])
+                user = User(row[1], row[2], bool(row[3]), int(row[4]))
                 users.append(user)
             return users
 
