@@ -1,4 +1,3 @@
-from typing import List
 from system.models.shopping.observer import ISubject
 
 
