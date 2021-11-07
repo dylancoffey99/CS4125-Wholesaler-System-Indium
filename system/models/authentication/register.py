@@ -16,6 +16,9 @@ class Register:
         else:
             print("Username is available")
 
+    def set_country_id(self, country_id):
+
+
     def get_hashed_password(self, password: str) -> str:
         # https://nitratine.net/blog/post/how-to-hash-passwords-in-python/
         # https://stackoverflow.com/questions/48448830/hashing-password-in-py-file

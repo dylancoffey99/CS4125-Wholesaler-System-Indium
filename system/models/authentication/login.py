@@ -10,4 +10,4 @@ class Login:
         if self._user_name == user_name and self._password == password:
             print("Success")
         else:
-            print(self._error)
+            print("Invalid username or password")
