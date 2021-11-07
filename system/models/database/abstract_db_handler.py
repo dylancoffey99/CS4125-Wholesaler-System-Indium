@@ -30,7 +30,7 @@ class AbstractProductDB(ABC):
         pass
 
     @abstractmethod
-    def product_name_exists(self, product_name: str) -> bool:
+    def product_exists(self, product_name: str) -> bool:
         pass
 
 
@@ -48,5 +48,5 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def user_name_exists(self, user_name: str) -> bool:
+    def user_exists(self, user_name: str) -> bool:
         pass
