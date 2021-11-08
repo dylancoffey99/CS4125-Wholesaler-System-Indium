@@ -2,8 +2,8 @@ import csv
 from typing import List
 from system.models.users.user import User
 from system.models.shopping.product import Product
-from system.models.database.abstract_db_handler import AbstractUserDB
-from system.models.database.abstract_db_handler import AbstractProductDB
+from system.database.abstract_db_handler import AbstractUserDB
+from system.database.abstract_db_handler import AbstractProductDB
 
 
 class ProductDB(AbstractProductDB):
