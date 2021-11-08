@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from system.views.user_view import UserView
-from system.views.login_view import LoginView
-from system.views.admin_view import AdminView
-from system.views.registration_view import RegistrationView
+import system.views.registration_page
+from system.views.login_page import LoginPage
+from system.views.user_page import UserPage
+from system.views.admin_page import AdminPage
 
 
 class View(tk.Tk):
@@ -18,7 +18,8 @@ class View(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (HomeView, RegistrationView, LoginView, UserView, AdminView):
+        for F in (HomeView, system.views.registration_page.RegistrationPage,
+                  LoginPage, UserPage, AdminPage):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -39,11 +40,12 @@ class HomeView(tk.Frame):
         label.grid(row=0, column=3, padx=10, pady=10)
 
         register_button = ttk.Button(self, text="Register",
-                                     command=lambda: controller.show_frame(RegistrationView))
+                                     command=lambda: controller.show_frame
+                                     (system.views.registration_page.RegistrationPage))
 
         register_button.grid(row=9, column=2, padx=10, pady=10)
         login_button = ttk.Button(self, text="Login",
-                                  command=lambda: controller.show_frame(LoginView))
+                                  command=lambda: controller.show_frame(LoginPage))
 
         login_button.grid(row=9, column=3, padx=10, pady=10)
 

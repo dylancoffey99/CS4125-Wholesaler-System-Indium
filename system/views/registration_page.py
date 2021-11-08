@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from system.views.login_view import LoginView
-from system.views.user_view import UserView
+from system.views.login_page import LoginPage
+import system.views.user_page
 
 
-class RegistrationView(tk.Frame):
+class RegistrationPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = ttk.Label(self, text="Registration Page", font='Aerial 20 bold')
@@ -62,10 +62,10 @@ class RegistrationView(tk.Frame):
         re_enter_password_entry.grid(row=8, column=3, padx=10, pady=10)
 
         register_button = ttk.Button(self, text="Register",
-                                     command=lambda: controller.show_frame(UserView))
+                                     command=lambda: controller.show_frame(system.views.user_page.UserPage))
 
         register_button.grid(row=9, column=2, padx=10, pady=10)
         login_button = ttk.Button(self, text="Already have an account",
-                                  command=lambda: controller.show_frame(LoginView))
+                                  command=lambda: controller.show_frame(LoginPage))
 
         login_button.grid(row=9, column=3, padx=10, pady=10)

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class AdminView(tk.Frame):
+class UserPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = ttk.Label(self, text="Choose the Item")
@@ -12,7 +12,8 @@ class AdminView(tk.Frame):
         product_sold = ttk.Combobox(self, width=27, textvariable=product_list)
         product_sold['values'] = (' Laptop',
                                   ' Monitors',
-
+                                  ' Mouse',
+                                  ' Keyboard',
                                   )
 
         product_sold.grid(row=5, column=1)
@@ -22,11 +23,16 @@ class AdminView(tk.Frame):
         quantity_entry = ttk.Entry(self)
         quantity_entry.grid(row=5, column=5, padx=10, pady=10)
 
-        discount_button = ttk.Button(self, text="Add Discount",
-                                     command=lambda: controller.show_frame(AdminView))
+        add_to_bag_button = ttk.Button(self, text="Add to Bag",
+                                       command=lambda: controller.show_frame(UserPage))
 
-        discount_button.grid(row=7, column=5, padx=10, pady=10)
-        vat_button = ttk.Button(self, text="Add VAT",
-                                command=lambda: controller.show_frame(AdminView))
+        add_to_bag_button.grid(row=7, column=5, padx=10, pady=10)
+        remove_button = ttk.Button(self, text="Remove item",
+                                   command=lambda: controller.show_frame(UserPage))
 
-        vat_button.grid(row=8, column=5, padx=10, pady=10)
+        remove_button.grid(row=8, column=5, padx=10, pady=10)
+
+        checkout = ttk.Button(self, text="Checkout",
+                              command=lambda: controller.show_frame(UserPage))
+
+        checkout.grid(row=9, column=5, padx=10, pady=10)
