@@ -8,7 +8,12 @@ class UserController(AbstractUserController):
         self.user_db = UserDB("../database/userDB")
 
     def login_user(self, user_name: str, password: str):
-        pass
+        if user_name != "" and password != "" is not None:
+            user = User(user_name, password)
+            self.user_db.get_user(user)
+            print("Login successful!")
+        else:
+            print("Error: please enter all the fields")
 
     def register_user(self, user_name: str, password: str, country_id: int):
         pass
