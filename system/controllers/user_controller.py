@@ -8,11 +8,11 @@ class UserController(AbstractUserController):
         self.user_db = UserDB("../database/userDB")
 
     def login_user(self, user_name: str, password: str):
-            country_id = User.get_country_id(self)
-            is_admin = User.get_is_admin(self)
-            user = User(user_name, password, is_admin, country_id)
-            self.user_db.get_user(user)
-            print("Login successful!")
+        country_id = User.get_country_id(self)
+        is_admin = User.get_is_admin(self)
+        user = User(user_name, password, is_admin, country_id)
+        self.user_db.get_user(user)
+        print("Login successful!")
 
     def register_user(self, user_name: str, password: str, country_id: int):
         pass
