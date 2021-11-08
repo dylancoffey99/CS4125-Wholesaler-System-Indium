@@ -20,7 +20,3 @@ class UserController(AbstractUserController):
     def hash_password(self, password: str) -> str:
         hashed_password = hashlib.sha256(password.encode("utf-8")).hexdigest()
         return hashed_password
-
-uc = UserController()
-#uc.register_user("Nadine", "pass", 1)
-uc.login_user("Nadine", "pass")
