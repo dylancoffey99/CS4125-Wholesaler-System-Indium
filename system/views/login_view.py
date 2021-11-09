@@ -1,32 +1,36 @@
 import tkinter as tk
 from tkinter import ttk
-import system.views.user_view as k
-import system.views.register_view
 
 
-class LoginPage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Login Page", font='Aerial 20 bold')
-        label.grid(row=0, column=3, padx=10, pady=10)
+class LoginView:
+    def __init__(self, root, controller):
+        self.root = root
+        self.root.rowconfigure(0, weight=1)
+        self.root.columnconfigure(0, weight=1)
+        self.controller = controller
+        self.frame = tk.Frame(self.root)
+        self.frame.grid(row=0, column=0)
 
-        name_label = ttk.Label(self, text="Name", font='Aerial 12')
-        name_label.grid(row=3, column=2)
-        password_label = ttk.Label(self, text="Password", font='Aerial 12')
-        password_label.grid(row=4, column=2)
+        # Frame labels
+        login_label = ttk.Label(self.frame, text="Login", font=(None, 20))
+        login_label.grid(row=0, columnspan=2, pady=20)
+        user_name_label = ttk.Label(self.frame, text="Username", font=(None, 11))
+        user_name_label.grid(row=1, column=0, pady=10)
+        password_label = ttk.Label(self.frame, text="Password", font=(None, 11))
+        password_label.grid(row=2, column=0, pady=10)
+        repeat_password_label = ttk.Label(self.frame, text="Repeat Password", font=(None, 11))
+        repeat_password_label.grid(row=3, column=0, pady=10)
 
-        name_entry = ttk.Entry(self)
-        name_entry.grid(row=3, column=3, padx=10, pady=10)
-        password_entry = ttk.Entry(self)
-        password_entry.grid(row=4, column=3, padx=10, pady=10)
+        # Frame entries
+        user_name_entry = ttk.Entry(self.frame, width=27)
+        user_name_entry.grid(row=1, column=1, padx=10, pady=10)
+        password_entry = ttk.Entry(self.frame, width=27, show="*")
+        password_entry.grid(row=2, column=1, padx=10, pady=10)
+        repeat_password_entry = ttk.Entry(self.frame, width=27, show="*")
+        repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
 
-        login_button = ttk.Button(self, text="Login",
-                                  command=lambda: controller.show_frame(k.UserPage))
-
-        login_button.grid(row=6, column=2, padx=10, pady=10)
-
-        register_button = ttk.Button(self, text="Register",
-                                     command=lambda: controller.show_frame
-                                     (system.views.registration_page.RegistrationPage))
-
-        register_button.grid(row=6, column=3, padx=10, pady=10)
+        # Frame buttons
+        login_button = ttk.Button(self.frame, text="Login")
+        login_button.grid(row=4, column=0, padx=10, pady=20)
+        register_button = ttk.Button(self.frame, text="Don't have an account?")
+        register_button.grid(row=4, column=1, padx=10, pady=20)
