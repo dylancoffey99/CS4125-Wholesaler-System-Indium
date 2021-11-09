@@ -1,71 +1,48 @@
 import tkinter as tk
 from tkinter import ttk
-from system.views.login_view import LoginPage
-import system.views.user_view
 
 
-class RegistrationPage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Registration Page", font='Aerial 20 bold')
-        label.grid(row=0, column=3, padx=10, pady=10)
+class RegisterView:
+    def __init__(self, root, controller):
+        self.root = root
+        self.root.rowconfigure(0, weight=1)
+        self.root.columnconfigure(0, weight=1)
+        self.controller = controller
+        self.frame = tk.Frame(self.root)
+        self.frame.grid(row=0, column=0)
 
-        name_label = ttk.Label(self, text="Name", font='Aerial 12 ')
-        name_label.grid(row=3, column=2)
-        email_label = ttk.Label(self, text="Email", font='Aerial 12 ')
-        email_label.grid(row=4, column=2)
-        phone_label = ttk.Label(self, text="Phone Number", font='Aerial 12 ')
-        phone_label.grid(row=5, column=2)
-        country_label = ttk.Label(self, text="Country", font='Aerial 12 ')
-        country_label.grid(row=6, column=2)
-        password_label = ttk.Label(self, text="Password", font='Aerial 12 ')
-        password_label.grid(row=7, column=2)
-        re_enter_password_label = ttk.Label(self, text="Re-enter Password", font='Aerial 12 ')
-        re_enter_password_label.grid(row=8, column=2)
+        # Frame labels
+        register_label = ttk.Label(self.frame, text="Registration", font=(None, 20))
+        register_label.grid(row=0, columnspan=2, pady=20)
+        user_name_label = ttk.Label(self.frame, text="Username", font=(None, 11))
+        user_name_label.grid(row=1, column=0, pady=10)
+        country_label = ttk.Label(self.frame, text="Country", font=(None, 11))
+        country_label.grid(row=2, column=0, pady=10)
+        password_label = ttk.Label(self.frame, text="Password", font=(None, 11))
+        password_label.grid(row=3, column=0, pady=10)
+        repeat_password_label = ttk.Label(self.frame, text="Repeat Password", font=(None, 11))
+        repeat_password_label.grid(row=4, column=0, pady=10)
 
-        name_entry = ttk.Entry(self, width=27)
-        name_entry.grid(row=3, column=3, padx=10, pady=10)
-        email_entry = ttk.Entry(self, width=27)
-        email_entry.grid(row=4, column=3, padx=10, pady=10)
-        phone_entry = ttk.Entry(self, width=27)
-        phone_entry.grid(row=5, column=3, padx=10, pady=10)
-        country_list = tk.StringVar()
-        country = ttk.Combobox(self, width=27, textvariable=country_list)
-        country['values'] = ('Luxembourg',
-                             'Malta',
-                             'Germany',
-                             'Romania',
-                             'Cyprus',
-                             'France',
-                             'UK',
-                             'Estonia',
-                             'Slovakia',
-                             'Bulgaria',
-                             'Austria',
-                             'Italy',
-                             'Slovenia',
-                             'Ireland',
-                             'Portugal',
-                             'Poland',
-                             'Greece',
-                             'Finland',
-                             'Sweden',
-                             'Denmark',
-                             'Croatia',
-                             'Hungary'
-                             )
+        # Frame combobox/entries
+        user_name_entry = ttk.Entry(self.frame, width=27)
+        user_name_entry.grid(row=1, column=1, padx=10, pady=10)
+        country_combobox = ttk.Combobox(self.frame, width=24, state="readonly")
+        country_combobox.grid(row=2, column=1, padx=10, pady=10)
+        country_combobox["values"] = ("Austria", "Belgium", "Bulgaria", "Croatia",
+                                      "Cyprus", "Czech", "Denmark", "Estonia",
+                                      "Finland", "France", "Germany", "Greece",
+                                      "Hungary", "Ireland", "Italy", "Latvia",
+                                      "Lithuania", "Luxembourg", "Malta",
+                                      "Netherlands", "Poland", "Portugal",
+                                      "Romania", "Slovakia", "Slovenia",
+                                      "Spain", "Sweden", "United Kingdom")
+        password_entry = ttk.Entry(self.frame, width=27, show="*")
+        password_entry.grid(row=3, column=1, padx=10, pady=10)
+        repeat_password_entry = ttk.Entry(self.frame, width=27, show="*")
+        repeat_password_entry.grid(row=4, column=1, padx=10, pady=10)
 
-        country.grid(row=6, column=3, padx=10, pady=10)
-        password_entry = ttk.Entry(self, width=27)
-        password_entry.grid(row=7, column=3, padx=10, pady=10)
-        re_enter_password_entry = ttk.Entry(self, width=27)
-        re_enter_password_entry.grid(row=8, column=3, padx=10, pady=10)
-
-        register_button = ttk.Button(self, text="Register",
-                                     command=lambda: controller.show_frame(system.views.user_page.UserPage))
-
-        register_button.grid(row=9, column=2, padx=10, pady=10)
-        login_button = ttk.Button(self, text="Already have an account",
-                                  command=lambda: controller.show_frame(LoginPage))
-
-        login_button.grid(row=9, column=3, padx=10, pady=10)
+        # Frame buttons
+        register_button = ttk.Button(self.frame, text="Register")
+        register_button.grid(row=5, column=0, padx=10, pady=20)
+        login_button = ttk.Button(self.frame, text="Already have an account?")
+        login_button.grid(row=5, column=1, padx=10, pady=20)
