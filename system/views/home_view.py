@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-import system.views.registration_page
-from system.views.login_page import LoginPage
-from system.views.user_page import UserPage
-from system.views.admin_page import AdminPage
+import system.views.register_view
+from system.views.login_view import LoginPage
+from system.views.user_view import UserPage
+from system.views.admin_view import AdminPage
 
 
 class View(tk.Tk):

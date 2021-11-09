@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-import system.views.user_page as k
-import system.views.registration_page
+import system.views.user_view as k
+import system.views.register_view
 
 
 class LoginPage(tk.Frame):
