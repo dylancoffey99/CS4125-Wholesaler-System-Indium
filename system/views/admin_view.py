@@ -77,5 +77,6 @@ class AdminView:
         edit_product_button.grid(row=2, column=7, columnspan=4, padx=10)
         remove_product_button = ttk.Button(self.root, width=20, text="Remove Product")
         remove_product_button.grid(row=3, column=7, columnspan=4, padx=10)
-        log_out_button = ttk.Button(self.root, width=20, text="Logout")
+        log_out_button = ttk.Button(self.root, width=20, text="Logout", command=lambda:
+                                    self.controller.logout_user(self.root, self.frame))
         log_out_button.grid(row=5, column=7, columnspan=4, padx=10)
