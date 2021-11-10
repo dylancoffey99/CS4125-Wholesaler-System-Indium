@@ -43,23 +43,22 @@ class AccessController(AbstractAccessController):
             self.user = self.user_db.get_user(username)
             if self.user.get_password() != self.hash_password(password):
                 print("Error: the password is incorrect!")
-            elif self.user.get_status():
-                print("Error: that user is already logged in!")
             else:
                 self.destroy_frame(frame)
                 if self.user.get_is_admin() == 1:
                     self.view = views.AdminView(root, self)
                 else:
                     self.view = views.CustomerView(root, self)
-                self.user.set_status(True)
                 print("Login successful!")
 
     def logout_user(self, root: tk.Tk, frame: tk.Frame):
+        self.input["username"].set("")
+        self.input["password"].set("")
+        self.input["r_password"].set("")
         self.destroy_frame(frame)
         for child in root.winfo_children():
             child.destroy()
         self.view = views.LoginView(self.root, self)
-        self.user.set_status(False)
         print("Logout successful!")
 
     def register_user(self, root: tk.Tk, frame: tk.Frame):

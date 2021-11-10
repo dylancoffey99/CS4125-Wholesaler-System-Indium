@@ -5,6 +5,7 @@ from tkinter import ttk
 class LoginView:
     def __init__(self, root, controller):
         self.root = root
+        self.root.geometry("600x500")
         self.root.rowconfigure(0, weight=1)
         self.root.columnconfigure(0, weight=1)
         self.controller = controller
