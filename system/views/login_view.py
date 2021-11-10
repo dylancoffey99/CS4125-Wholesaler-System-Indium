@@ -32,5 +32,6 @@ class LoginView:
         # Frame buttons
         login_button = ttk.Button(self.frame, text="Login")
         login_button.grid(row=4, column=0, padx=10, pady=20)
-        register_button = ttk.Button(self.frame, text="Don't have an account?")
+        register_button = ttk.Button(self.frame, text="Don't have an account?", command=lambda:
+                                     self.controller.register_view(self.root, self.frame))
         register_button.grid(row=4, column=1, padx=10, pady=20)
