@@ -1,7 +1,11 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractUserController(ABC):
+class AbstractAccessController(ABC):
+    @abstractmethod
+    def start(self):
+        pass
+
     @abstractmethod
     def login_user(self, user_name: str, password: str):
         pass

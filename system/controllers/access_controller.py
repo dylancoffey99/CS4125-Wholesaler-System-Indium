@@ -1,11 +1,16 @@
 import hashlib
+import tkinter as tk
 from system.database.db_handler import UserDB
-from system.controllers.abstract_controllers import AbstractUserController
+from system.controllers.abstract_controllers import AbstractAccessController
 
 
-class UserController(AbstractUserController):
+class AccessController(AbstractAccessController):
     def __init__(self):
-        self.user_db = UserDB("../database/userDB")
+        self.root = tk.Tk()
+        self.user_db = UserDB("system/database/userDB")
+
+    def start(self):
+        self.root.mainloop()
 
     def login_user(self, user_name: str, password: str):
         country_id = User.get_country_id(self)
