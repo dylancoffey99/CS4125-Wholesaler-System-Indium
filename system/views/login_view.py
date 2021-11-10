@@ -22,11 +22,14 @@ class LoginView:
         repeat_password_label.grid(row=3, column=0, pady=10)
 
         # Frame entries
-        user_name_entry = ttk.Entry(self.frame, width=27)
+        user_name_entry = ttk.Entry(self.frame, width=27,
+                                    textvariable=self.controller.input["username"])
         user_name_entry.grid(row=1, column=1, padx=10, pady=10)
-        password_entry = ttk.Entry(self.frame, width=27, show="*")
+        password_entry = ttk.Entry(self.frame, width=27, show="*",
+                                   textvariable=self.controller.input["password"])
         password_entry.grid(row=2, column=1, padx=10, pady=10)
-        repeat_password_entry = ttk.Entry(self.frame, width=27, show="*")
+        repeat_password_entry = ttk.Entry(self.frame, width=27, show="*",
+                                          textvariable=self.controller.input["r_password"])
         repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
 
         # Frame buttons
