@@ -19,7 +19,7 @@ class AbstractAccessController(ABC):
         pass
 
     @abstractmethod
-    def register_user(self, user_name: str, password: str, country_id: int):
+    def register_user(self, root, frame):
         pass
 
     @abstractmethod

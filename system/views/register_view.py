@@ -42,7 +42,8 @@ class RegisterView:
         repeat_password_entry.grid(row=4, column=1, padx=10, pady=10)
 
         # Frame buttons
-        register_button = ttk.Button(self.frame, text="Register")
+        register_button = ttk.Button(self.frame, text="Register", command=lambda:
+                                     self.controller.register_user(self.root, self.frame))
         register_button.grid(row=5, column=0, padx=10, pady=20)
         login_button = ttk.Button(self.frame, text="Already have an account?", command=lambda:
                                   self.controller.login_view(self.root, self.frame))
