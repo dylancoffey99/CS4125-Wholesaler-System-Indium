@@ -44,5 +44,6 @@ class CustomerView:
         remove_product_button.grid(row=2, column=2, columnspan=3, padx=10)
         checkout_button = ttk.Button(self.root, width=20, text="Checkout")
         checkout_button.grid(row=3, column=2, columnspan=3, padx=10)
-        log_out_button = ttk.Button(self.root, width=20, text="Logout")
+        log_out_button = ttk.Button(self.root, width=20, text="Logout", command=lambda:
+                                    self.controller.logout_user(self.root, self.frame))
         log_out_button.grid(row=5, column=2, columnspan=3, padx=10)

@@ -5,6 +5,7 @@ from tkinter import ttk
 class LoginView:
     def __init__(self, root, controller):
         self.root = root
+        self.root.geometry("600x500")
         self.root.rowconfigure(0, weight=1)
         self.root.columnconfigure(0, weight=1)
         self.controller = controller
@@ -22,15 +23,20 @@ class LoginView:
         repeat_password_label.grid(row=3, column=0, pady=10)
 
         # Frame entries
-        user_name_entry = ttk.Entry(self.frame, width=27)
+        user_name_entry = ttk.Entry(self.frame, width=27,
+                                    textvariable=self.controller.input["username"])
         user_name_entry.grid(row=1, column=1, padx=10, pady=10)
-        password_entry = ttk.Entry(self.frame, width=27, show="*")
+        password_entry = ttk.Entry(self.frame, width=27, show="*",
+                                   textvariable=self.controller.input["password"])
         password_entry.grid(row=2, column=1, padx=10, pady=10)
-        repeat_password_entry = ttk.Entry(self.frame, width=27, show="*")
+        repeat_password_entry = ttk.Entry(self.frame, width=27, show="*",
+                                          textvariable=self.controller.input["r_password"])
         repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
 
         # Frame buttons
-        login_button = ttk.Button(self.frame, text="Login")
+        login_button = ttk.Button(self.frame, text="Login", command=lambda:
+                                  self.controller.login_user(self.root, self.frame))
         login_button.grid(row=4, column=0, padx=10, pady=20)
-        register_button = ttk.Button(self.frame, text="Don't have an account?")
+        register_button = ttk.Button(self.frame, text="Don't have an account?", command=lambda:
+                                     self.controller.register_view(self.root, self.frame))
         register_button.grid(row=4, column=1, padx=10, pady=20)

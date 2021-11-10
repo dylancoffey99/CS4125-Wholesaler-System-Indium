@@ -1,15 +1,28 @@
+import tkinter as tk
 from abc import ABC, abstractmethod
 
 
-class AbstractUserController(ABC):
+class AbstractAccessController(ABC):
     @abstractmethod
-    def login_user(self, user_name: str, password: str):
+    def start(self):
         pass
 
     @abstractmethod
-    def register_user(self, user_name: str, password: str, country_id: int):
+    def login_view(self, root: tk.Tk, frame: tk.Frame):
         pass
 
     @abstractmethod
-    def hash_password(self, password: str) -> str:
+    def register_view(self, root: tk.Tk, frame: tk.Frame):
+        pass
+
+    @abstractmethod
+    def login_user(self, root: tk.Tk, frame: tk.Frame):
+        pass
+
+    @abstractmethod
+    def logout_user(self, root: tk.Tk, frame: tk.Frame):
+        pass
+
+    @abstractmethod
+    def register_user(self, root: tk.Tk, frame: tk.Frame):
         pass

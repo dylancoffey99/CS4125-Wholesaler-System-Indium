@@ -19,7 +19,9 @@ class HomeView:
         system_label.grid(row=0, column=0, pady=10)
 
         # Frame buttons
-        login_button = ttk.Button(self.frame, text="Login")
+        login_button = ttk.Button(self.frame, text="Login", command=lambda:
+                                  self.controller.login_view(self.root, self.frame))
         login_button.grid(row=1, column=0, pady=10)
-        register_button = ttk.Button(self.frame, text="Register")
+        register_button = ttk.Button(self.frame, text="Register", command=lambda:
+                                     self.controller.register_view(self.root, self.frame))
         register_button.grid(row=2, column=0, pady=10)
