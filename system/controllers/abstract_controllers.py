@@ -15,7 +15,7 @@ class AbstractAccessController(ABC):
         pass
 
     @abstractmethod
-    def login_user(self, user_name: str, password: str):
+    def login_user(self, root, frame):
         pass
 
     @abstractmethod

@@ -23,6 +23,3 @@ class User:
 
     def set_status(self, status: bool):
         self._logged_in = status
-
-    def set_hashed_password(self, hashed_password: str):
-        self._password = hashed_password

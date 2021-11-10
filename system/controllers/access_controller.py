@@ -18,6 +18,8 @@ class AccessController(AbstractAccessController):
 
     def login_view(self, root, frame):
         self.destroy_frame(frame)
+        self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
+                      "r_password": tk.StringVar()}
         self.view = views.LoginView(root, self)
 
     def register_view(self, root, frame):
@@ -26,12 +28,31 @@ class AccessController(AbstractAccessController):
                       "r_password": tk.StringVar(), "country": tk.StringVar()}
         self.view = views.RegisterView(root, self)
 
-    def login_user(self, user_name: str, password: str):
-        country_id = User.get_country_id(self)
-        is_admin = User.get_is_admin(self)
-        user = User(user_name, password, is_admin, country_id)
-        self.user_db.get_user(user)
-        print("Login successful!")
+    def login_user(self, root, frame):
+        username = self.input["username"].get()
+        password = self.input["password"].get()
+        r_password = self.input["r_password"].get()
+        if username == "" or password == "" or r_password == "":
+            print("Error: please enter all the fields!")
+        elif password != r_password:
+            print("Error: the passwords are not the same!")
+        else:
+            if not self.user_db.user_exists(username):
+                print("Error: that username does not exist!")
+            else:
+                user = self.user_db.get_user(username)
+                if user.get_password() != self.hash_password(password):
+                    print("Error: the password is incorrect!")
+                elif user.get_status():
+                    print("Error: that user is already logged in!")
+                else:
+                    self.destroy_frame(frame)
+                    if user.get_is_admin() == 1:
+                        self.view = views.AdminView(root, self)
+                    else:
+                        self.view = views.CustomerView(root, self)
+                    user.set_status(True)
+                    print("Login successful!")
 
     def register_user(self, root, frame):
         username = self.input["username"].get()
@@ -43,7 +64,7 @@ class AccessController(AbstractAccessController):
         elif password != r_password:
             print("Error: the passwords are not the same!")
         else:
-            if not self.user_db.user_exists(username):
+            if self.user_db.user_exists(username):
                 print("Error: that username already exists!")
             else:
                 country_dict = {"Austria": 1, "Belgium": 2, "Bulgaria": 3, "Croatia": 4,
