@@ -3,9 +3,10 @@ from system.models.users.customer import Customer
 from system.models.shopping.product import Product
 
 class Basket:
-    def __init__(self, basket_items: List[Product], customer: Customer):
+    def __init__(self, basket_items: List[Product], customer: Customer, basket_total: int):
         self._basket_items = basket_items
         self._customer = customer
+        self._basket_total = basket_total
 
     def set_order_id(self) -> int:
         return self._order_id
@@ -18,3 +19,6 @@ class Basket:
 
     def get_basket_as_list(self) -> List:
         return [self._order_id, self._basket_items, self._customer]
+
+    def calc_subtotal(self) -> int:
+        return self._basket_total
