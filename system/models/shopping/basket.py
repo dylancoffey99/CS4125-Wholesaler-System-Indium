@@ -8,7 +8,7 @@ class Basket:
         self._customer = customer
         self._basket_total = basket_total
 
-    def set_order_id(self) -> int:
+    def set_order_id(self) -> int: #this might be done in checkout so remove if wanted
         return self._order_id
 
     def get_basket(self) -> List[Product]:
@@ -22,3 +22,9 @@ class Basket:
 
     def calc_subtotal(self) -> int:
         return self._basket_total
+
+    def add_product(self) -> List[Product]:
+        return self._basket_items
+
+    def remove_product(self) -> List[Product]:
+        return self._basket_items
