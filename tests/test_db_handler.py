@@ -29,7 +29,7 @@ class TestProductDB(TestCase):
         self.mock_db.add_product(new_product)
         self.assertEqual(self.mock_db.product_exists(new_product.get_product_name()), True)
 
-    def remove_product(self):
+    def test_remove_product(self):
         self.mock_db.remove_product(self.mock_product)
         self.assertEqual(self.mock_db.product_exists(self.mock_product_name), False)
 
@@ -51,7 +51,7 @@ class TestProductDB(TestCase):
         self.assertEqual(self.mock_db.get_all_products()[0].get_product_name(),
                          self.mock_product_name)
 
-    def product_exists(self):
+    def test_product_exists(self):
         self.assertEqual(self.mock_db.product_exists(self.mock_product_name), True)
 
 
