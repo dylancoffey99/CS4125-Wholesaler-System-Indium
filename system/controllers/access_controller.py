@@ -1,6 +1,7 @@
 import hashlib
 import tkinter as tk
 from system import views
+from system.controllers.customer_controller import CustomerController
 from system.database.db_handler import UserDB
 from system.models.users.customer import Customer
 from system.controllers.abstract_controllers import AbstractAccessController
@@ -48,18 +49,8 @@ class AccessController(AbstractAccessController):
                 if self.user.get_is_admin() == 1:
                     self.view = views.AdminView(root, self)
                 else:
-                    self.view = views.CustomerView(root, self)
+                    CustomerController(root, self.user, self)
                 print("Login successful!")
-
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
-        self.input["username"].set("")
-        self.input["password"].set("")
-        self.input["r_password"].set("")
-        self.destroy_frame(frame)
-        for child in root.winfo_children():
-            child.destroy()
-        self.view = views.LoginView(self.root, self)
-        print("Logout successful!")
 
     def register_user(self, root: tk.Tk, frame: tk.Frame):
         username = self.input["username"].get()
@@ -87,8 +78,7 @@ class AccessController(AbstractAccessController):
             self.view = views.CustomerView(root, self)
             print("Registration successful!")
 
-    @staticmethod
-    def destroy_frame(frame: tk.Frame):
+    def destroy_frame(self, frame: tk.Frame):
         for widget in frame.winfo_children():
             widget.destroy()
         frame.destroy()
