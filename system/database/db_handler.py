@@ -55,6 +55,7 @@ class ProductDB(AbstractProductDB):
     def get_product(self, product_name: str):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
+            next(reader)
             for row in reader:
                 if row[0] == product_name:
                     product = Product(row[0], int(row[1]), float(row[2]))
@@ -93,6 +94,7 @@ class UserDB(AbstractUserDB):
     def get_user(self, user_name: str):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
+            next(reader)
             for row in reader:
                 if row[0] == user_name:
                     user = User(row[0], row[1], int(row[2]), int(row[3]))
