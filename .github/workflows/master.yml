@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       # adapted from https://gist.github.com/doedotdev/b689fa9eced9070a404d486dd7c88600
       - name: Set up Python 3.9
         uses: actions/setup-python@v1
@@ -39,6 +39,6 @@ jobs:
           pylint $(git ls-files '*.py') --disable=C0111 --fail-under=5
       # --disable=C0111 disables docstring warnings
       # --fail-under=5 means any score above 5 will result in a successful build
-      
-      - name: GitHub Action for pytest
-        uses: cclauss/GitHub-Action-for-pytest@0.5.0
+
+      - name: Run Tests
+        run: python -m unittest discover -p "test_*.py"
