@@ -20,9 +20,19 @@ class AbstractAccessController(ABC):
         pass
 
     @abstractmethod
+    def register_user(self, root: tk.Tk, frame: tk.Frame):
+        pass
+
+    @abstractmethod
+    def destroy_frame(self, frame: tk.Frame):
+        pass
+
+
+class AbstractCustomerController(ABC):
+    @abstractmethod
     def logout_user(self, root: tk.Tk, frame: tk.Frame):
         pass
 
     @abstractmethod
-    def register_user(self, root: tk.Tk, frame: tk.Frame):
+    def destroy_frame(self, frame: tk.Frame):
         pass
