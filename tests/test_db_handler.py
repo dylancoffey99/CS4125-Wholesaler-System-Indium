@@ -10,65 +10,64 @@ from system.database.db_handler import ProductDB
 class TestProductDB(TestCase):
     mock_db_name = "testProductDB"
     mock_db = ProductDB(mock_db_name)
-    mock_db_product1 = Product("product1", 25, 50)
-    mock_db_product2 = Product("product2", 50, 75)
+    mock_product = Product("product", 25, 50)
+    mock_product_name = mock_product.get_product_name()
 
     def setUp(self):
         with open(self.mock_db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(["product_name", "product_quantity", "product_price"])
-            writer.writerow([self.mock_db_product1.get_product_name(),
-                             self.mock_db_product1.get_product_quantity(),
-                             self.mock_db_product1.get_product_price()])
-            writer.writerow([self.mock_db_product2.get_product_name(),
-                             self.mock_db_product2.get_product_quantity(),
-                             self.mock_db_product2.get_product_price()])
-            writer.writerow([""])
+            writer.writerow([self.mock_product.get_product_name(),
+                             self.mock_product.get_product_quantity(),
+                             self.mock_product.get_product_price()])
 
     def tearDown(self):
-        os.remove(self.mock_db_name)
+        os.remove(self.mock_db_name + ".csv")
 
     def test_add_product(self):
         new_product = Product("new_product", 75, 100)
-        self.assertEqual(self.mock_db.add_product(new_product), True)
+        self.mock_db.add_product(new_product)
+        self.assertEqual(self.mock_db.product_exists(new_product.get_product_name()), True)
 
-    def test_remove_product(self):
-        pass
+    def remove_product(self):
+        self.mock_db.remove_product(self.mock_product)
+        self.assertEqual(self.mock_db.product_exists(self.mock_product_name), False)
 
     def test_edit_product(self):
-        pass
+        edited_product_name = "edited_product"
+        self.mock_db.edit_product(self.mock_product, 0, edited_product_name)
+        self.assertEqual(self.mock_db.get_product(edited_product_name).get_product_name(),
+                         edited_product_name)
 
-    def sub_product_quantity(self):
-        pass
+    def test_sub_product_quantity(self):
+        self.mock_db.sub_product_quantity(self.mock_product, 25)
+        self.assertEqual(self.mock_db.get_product(self.mock_product_name).get_product_quantity(), 0)
 
     def test_get_product(self):
-        pass
+        self.assertEqual(self.mock_db.get_product(self.mock_product_name).get_product_name(),
+                         self.mock_product_name)
 
     def test_get_all_products(self):
-        pass
+        self.assertEqual(self.mock_db.get_all_products()[0].get_product_name(),
+                         self.mock_product_name)
 
-    def test_product_exists(self):
-        pass
+    def product_exists(self):
+        self.assertEqual(self.mock_db.product_exists(self.mock_product_name), True)
 
 
 class TestUserDB(TestCase):
     mock_db_name = "testUserDB"
     mock_db = UserDB(mock_db_name)
-    mock_db_user1 = User("user1", "password1", 0, 1)
-    mock_db_user2 = User("user2", "password2", 0, 2)
+    mock_db_user = User("username", "password", 0, 1)
 
     def setUp(self):
         with open(self.mock_db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(["username", "password", "is_admin", "country_id"])
-            writer.writerow([self.mock_db_user1.get_user_name(),
-                             self.mock_db_user1.get_password(),
-                             self.mock_db_user1.get_is_admin(),
-                             self.mock_db_user1.get_country_id()])
-            writer.writerow([self.mock_db_user2.get_user_name(),
-                             self.mock_db_user2.get_password(),
-                             self.mock_db_user2.get_is_admin(),
-                             self.mock_db_user2.get_country_id()])
+            writer.writerow([self.mock_db_user.get_user_name(),
+                             self.mock_db_user.get_password(),
+                             self.mock_db_user.get_is_admin(),
+                             self.mock_db_user.get_country_id()])
             writer.writerow([""])
 
     def tearDown(self):
