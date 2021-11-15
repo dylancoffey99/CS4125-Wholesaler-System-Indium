@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
 from typing import List
+from abc import ABC, abstractmethod
 from system.models.users.user import User
+from system.models.shopping.order import Order
 from system.models.shopping.product import Product
 
 
@@ -49,4 +50,14 @@ class AbstractUserDB(ABC):
 
     @abstractmethod
     def user_exists(self, user_name: str) -> bool:
+        pass
+
+
+class AbstractOrderDB(ABC):
+    @abstractmethod
+    def add_order(self, order: Order):
+        pass
+
+    @abstractmethod
+    def get_customer_orders(self, customer_name: str) -> List:
         pass
