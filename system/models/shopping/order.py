@@ -1,9 +1,9 @@
 from typing import List
-from datetime import date
+from datetime import datetime
 
 
 class Order:
-    def __init__(self, customer_name: str, product_names: List[str], order_date: date, subtotal: float):
+    def __init__(self, customer_name: str, product_names: List[str], order_date: datetime, subtotal: float):
         self._customer_name = customer_name
         self._product_names = product_names
         self._order_date = order_date
@@ -15,7 +15,7 @@ class Order:
     def get_product_names(self) -> List[str]:
         return self._product_names
 
-    def get_order_date(self) -> date:
+    def get_order_date(self) -> datetime:
         return self._order_date
 
     def get_subtotal(self) -> float:

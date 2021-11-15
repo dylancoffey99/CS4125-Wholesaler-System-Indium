@@ -144,7 +144,7 @@ class OrderDB(AbstractOrderDB):
                 if row[0] == customer_name:
                     order.append(row[0])
                     order.append(row[1])
-                    order.append(datetime.strptime(row[3], "%d/%m/%y"))
-                    order.append(float(row[4]))
+                    order.append(datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S.%f'))
+                    order.append(float(row[3]))
                 orders.append(order)
             return orders
