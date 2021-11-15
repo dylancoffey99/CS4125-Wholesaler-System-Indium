@@ -61,8 +61,7 @@ class ProductDB(AbstractProductDB):
             next(reader)
             for row in reader:
                 if row[0] == product_name:
-                    product = Product(row[0], int(row[1]), float(row[2]))
-                    return product
+                    return Product(row[0], int(row[1]), float(row[2]))
             return False
 
     def get_all_products(self) -> List[Product]:
