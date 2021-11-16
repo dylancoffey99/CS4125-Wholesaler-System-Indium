@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from system.models.users.user import User
 from system.models.shopping.order import Order
 from system.models.shopping.product import Product
+from system.models.shopping.country import Country
 
 
 class AbstractProductDB(ABC):
@@ -60,4 +61,14 @@ class AbstractOrderDB(ABC):
 
     @abstractmethod
     def get_customer_orders(self, customer_name: str) -> List:
+        pass
+
+
+class AbstractUserDB(ABC):
+    @abstractmethod
+    def get_country(self, country_name: str):
+        pass
+
+    @abstractmethod
+    def get_all_countries(self) -> List[Country]:
         pass
