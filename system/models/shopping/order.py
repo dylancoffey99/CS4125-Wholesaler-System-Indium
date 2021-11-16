@@ -1,22 +1,22 @@
 from typing import List
-from system.models.users.customer import Customer
-from system.models.shopping.product import Product
+from datetime import datetime
 
 
 class Order:
-    def __init__(self, order_id: int, order_items: List[Product], customer: Customer):
-        self._order_id = order_id
-        self._order_items = order_items
-        self._customer = customer
+    def __init__(self, customer_name: str, product_names: List[str], order_date: datetime, subtotal: float):
+        self._customer_name = customer_name
+        self._product_names = product_names
+        self._order_date = order_date
+        self._subtotal = subtotal
 
-    def get_order_id(self) -> int:
-        return self._order_id
+    def get_customer_name(self) -> str:
+        return self._customer_name
 
-    def get_order_items(self) -> List[Product]:
-        return self._order_items
+    def get_product_names(self) -> List[str]:
+        return self._product_names
 
-    def get_customer(self) -> Customer:
-        return self._customer
+    def get_order_date(self) -> datetime:
+        return self._order_date
 
-    def get_order_as_list(self) -> List:
-        return [self._order_id, self._order_items, self._customer]
+    def get_subtotal(self) -> float:
+        return self._subtotal
