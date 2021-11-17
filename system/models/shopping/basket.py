@@ -1,5 +1,4 @@
 from typing import List
-from system.models.users.customer import Customer
 from system.models.shopping.product import Product
 
 
