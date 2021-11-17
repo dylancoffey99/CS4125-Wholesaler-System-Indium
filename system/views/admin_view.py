@@ -27,7 +27,7 @@ class AdminView:
         # Frame combobox/entries
         user_list = tk.StringVar()
         user_combobox = ttk.Combobox(self.root, width=37, state="readonly", textvariable=user_list)
-        user_combobox["values"] = ("username1", "username2", "username3")
+        user_combobox["values"] = self.controller.fill_users()
         user_combobox.grid(row=0, column=1, pady=10)
         amount_entry = ttk.Entry(self.root, width=8)
         amount_entry.grid(row=0, column=3, padx=10, pady=10)
