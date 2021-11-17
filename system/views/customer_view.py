@@ -19,7 +19,6 @@ class CustomerView:
         product_quantity_label.grid(row=0, column=2, padx=10, pady=10)
 
         # Frame combobox/entries
-        product_list = tk.StringVar()
         product_combobox = ttk.Combobox(self.root, width=34, state="readonly",
                                         textvariable=self.controller.input["product_name"])
         product_combobox["values"] = self.controller.fill_products()
