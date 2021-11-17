@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from system import views
 from system.database.db_handler import ProductDB
 from system.models.shopping.basket import Basket
