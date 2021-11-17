@@ -150,6 +150,7 @@ class OrderDB(AbstractOrderDB):
                 orders.append(order)
             return orders
 
+
 class CountryDB(AbstractCountryDB):
     def __init__(self, db_name: str):
         self._db_name = db_name
@@ -160,7 +161,7 @@ class CountryDB(AbstractCountryDB):
             next(reader)
             for row in reader:
                 if row[1] == country_name:
-                    return Country(row[0], row[1], int(row[2]), int(row[3]))
+                    return Country(row[0], row[1], float(row[2]), float(row[3]))
             return False
 
     def get_all_countries(self) -> List[Country]:
@@ -169,7 +170,7 @@ class CountryDB(AbstractCountryDB):
             next(reader)
             countries = []
             for row in reader:
-                country = Country(row[0], row[1], int(row[2]), int(row[3]))
+                country = Country(row[0], row[1], float(row[2]), float(row[3]))
                 countries.append(country)
             return countries
 
