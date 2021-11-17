@@ -36,3 +36,13 @@ class AbstractCustomerController(ABC):
     @abstractmethod
     def destroy_frame(self, frame: tk.Frame):
         pass
+
+
+class AbstractAdminController(ABC):
+    @abstractmethod
+    def logout_admin(self, root: tk.Tk, frame: tk.Frame):
+        pass
+
+    @abstractmethod
+    def destroy_frame(self,  frame: tk.Frame):
+        pass
