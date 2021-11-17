@@ -5,10 +5,10 @@ from system.controllers.abstract_controllers import AbstractAdminController
 
 
 class AdminController(AbstractAdminController):
-    def __init__(self, root, controller):
+    def __init__(self, root, user, access_controller):
         self.root = root
-        self.user = 'Admin'
-        self.controller = controller
+        self.user = user
+        self.access_controller = access_controller
         self.product_db = ProductDB("system/database/productDB")
         self.view = views.AdminView(self.root, self)
         self.input = {}
@@ -17,7 +17,7 @@ class AdminController(AbstractAdminController):
         self.destroy_frame(frame)
         for child in root.winfo_children():
             child.destroy()
-        self.view = views.LoginView(self.root, self.controller)
+        self.view = views.LoginView(self.root, self.access_controller)
         print("Logout successful!")
 
     def destroy_frame(self, frame: tk.Frame):
