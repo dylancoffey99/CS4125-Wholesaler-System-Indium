@@ -3,6 +3,7 @@ import tkinter as tk
 from system import views
 from system.database.db_handler import UserDB
 from system.models.users.customer import Customer
+from system.controllers.admin_controller import AdminController
 from system.controllers.abstract_controllers import AbstractAccessController
 
 
@@ -46,7 +47,7 @@ class AccessController(AbstractAccessController):
             else:
                 self.destroy_frame(frame)
                 if self.user.get_is_admin() == 1:
-                    self.view = views.AdminView(root, self)
+                    AdminController(root, self.user, self)
                 else:
                     self.view = views.CustomerView(root, self)
                 print("Login successful!")
