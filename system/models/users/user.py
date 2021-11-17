@@ -2,6 +2,9 @@
 This module holds the user class.
 """
 class User:
+    """
+    This class discusses the functions to do with both customer and admin users.
+    """
     def __init__(self, user_name: str, password: str, is_admin: int, country_id: int):
         """
         Parameters
