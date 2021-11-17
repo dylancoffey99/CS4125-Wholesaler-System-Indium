@@ -8,6 +8,7 @@ from system.models.shopping.country import Country
 from system.database.abstract_db_handler import AbstractUserDB
 from system.database.abstract_db_handler import AbstractOrderDB
 from system.database.abstract_db_handler import AbstractProductDB
+from system.database.abstract_db_handler import AbstractCountryDB
 
 
 class ProductDB(AbstractProductDB):
@@ -149,26 +150,26 @@ class OrderDB(AbstractOrderDB):
                 orders.append(order)
             return orders
 
-    class CountryDB(AbstractCountryDB):
-        def __init__(self, db_name: str):
-            self._db_name = db_name
+class CountryDB(AbstractCountryDB):
+    def __init__(self, db_name: str):
+        self._db_name = db_name
 
-        def get_country(self, country_name: str):
-            with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-                reader = csv.reader(file, delimiter=",")
-                next(reader)
-                for row in reader:
-                    if row[1] == country_name:
-                        return Country(row[0], row[1], int(row[2]), int(row[3]))
-                return False
+    def get_country(self, country_name: str):
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            next(reader)
+            for row in reader:
+                if row[1] == country_name:
+                    return Country(row[0], row[1], int(row[2]), int(row[3]))
+            return False
 
-        def get_all_countries(self) -> List[Country]:
-            with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-                reader = csv.reader(file, delimiter=",")
-                next(reader)
-                countries = []
-                for row in reader:
-                    country = Country(row[0], row[1], int(row[2]), int(row[3]))
-                    countries.append(country)
-                return countries
+    def get_all_countries(self) -> List[Country]:
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            next(reader)
+            countries = []
+            for row in reader:
+                country = Country(row[0], row[1], int(row[2]), int(row[3]))
+                countries.append(country)
+            return countries
 
