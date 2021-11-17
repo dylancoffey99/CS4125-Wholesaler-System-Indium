@@ -4,6 +4,8 @@ From the package typing, we are importing List.
 From the product model in the shipping folder, we
 are importing the product class as it contains the
 products to be in the basket.
+
+This module only contains the basket class.
 """
 from typing import List
 from system.models.shopping.product import Product
@@ -17,13 +19,13 @@ class Basket:
     """
     def __init__(self, basket_items: List[Product], basket_subtotal: int):
         """
-               Parameters
-               ----------
-               basket_items : List[Product]
-                   The list of items in the basket
-               basket_subtotal : int
-                   The subtotal of all the items in the basket
-               """
+        Parameters
+        ----------
+        basket_items : List[Product]
+            The list of items in the basket
+        basket_subtotal : int
+            The subtotal of all the items in the basket
+        """
         self._basket_items = basket_items
         self._basket_subtotal = basket_subtotal
 
