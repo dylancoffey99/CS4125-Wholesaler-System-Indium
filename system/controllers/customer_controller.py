@@ -11,6 +11,8 @@ class CustomerController(AbstractCustomerController):
         self.user = access_controller.user
         self.access_controller = access_controller
         self.product_db = ProductDB("system/database/productDB")
+        self.input = {"product_name": tk.StringVar(),
+                      "product_quantity": tk.StringVar()}
         self.view = views.CustomerView(self.root, self)
         self.basket = None
         self.fill_products()
