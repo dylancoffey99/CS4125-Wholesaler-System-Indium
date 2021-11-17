@@ -1,3 +1,8 @@
+"""
+This module imports the ISubject class from the observers model.
+
+This module contains the product class.
+"""
 from system.models.shopping.observer import ISubject
 
 
