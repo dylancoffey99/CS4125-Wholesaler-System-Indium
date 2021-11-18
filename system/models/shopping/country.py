@@ -1,58 +1,54 @@
-"""
-This module holds the country class.
-"""
+"""This module contains the Country class."""
+
+
 class Country:
     """
-    This class discusses all the functions revolving around the countries like
-    getting the country name, getting the country id, getting the vat of a
-    country and getting the shipping cost.
+    This class represents a model of a country, containing a constructor, and
+    the getter methods for its parameters.
     """
-    def __init__(self, country_name: str, country_id: int, vat: float, shipping_cost: float):
+    def __init__(self, country_name: str, country_id: int, vat_percentage: float,
+                 shipping_cost: float):
         """
-        Parameters
-        ----------
-        country_name : str
-            The list of items in the basket
-        country_id : int
-            The subtotal of all the items in the basket
-        vat : float
-            This the percentage of vat to be paid on the basket subtotal
-        shipping_cost : float
-            This is the cost of shipping
+        This constructor instantiates a country object.
+
+        :param country_name: Name of the country.
+        :param country_id: ID of the country.
+        :param vat_percentage: VAT percentage of the country.
+        :param shipping_cost: Shipping cost of the country.
         """
-        self._country_name = country_name
-        self._country_id = country_id
-        self._vat = vat
-        self._shipping_cost = shipping_cost
+        self.country_name = country_name
+        self.country_id = country_id
+        self.vat_percentage = vat_percentage
+        self.shipping_cost = shipping_cost
 
     def get_country_name(self) -> str:
         """
-        This is where you get the name of the country
+        This method gets the country name.
 
-        :returns: the country name
+        :returns: Name of the country.
         """
-        return self._country_name
+        return self.country_name
 
     def get_country_id(self) -> int:
         """
-        This is where you get the id belonging to a specific country
+        This method gets the country ID.
 
-        :returns: the country id
+        :returns: ID of the country.
         """
-        return self._country_id
+        return self.country_id
 
-    def get_vat(self) -> float:
+    def get_vat_percentage(self) -> float:
         """
-        This is where you get the vat
+        This method gets the country VAT percentage.
 
-        :returns: the vat percentage
+        :returns: VAT percentage of the country.
         """
-        return self._vat
+        return self.vat_percentage
 
     def get_shipping_cost(self) -> float:
         """
-        This is where you get the shipping cost
+        This method gets the country shipping cost.
 
-        :returns: the shipping cost
+        :returns: Shipping cost of the country.
         """
-        return self._shipping_cost
+        return self.shipping_cost
