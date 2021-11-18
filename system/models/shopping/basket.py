@@ -1,11 +1,6 @@
 """
-From the package typing, we are importing List.
-
-From the product model in the shipping folder, we
-are importing the product class as it contains the
-products to be in the basket.
-
-This module only contains the basket class.
+This module contains the Basket class. The module imports the type List from the typing
+module, and the Product class from the product module, in the systems shopping package.
 """
 from typing import List
 from system.models.shopping.product import Product
@@ -13,73 +8,64 @@ from system.models.shopping.product import Product
 
 class Basket:
     """
-    This is the basket class which includes a list of all the
-    functions to be completed within the basket of the
-    program.
+    This class represents a model of a basket, containing a constructor, and
+    the getter/setter methods for its parameters.
     """
-    def __init__(self, basket_items: List[Product], basket_subtotal: int):
+    def __init__(self, basket_items: List[Product], basket_subtotal: float):
         """
-        Parameters
-        ----------
-        basket_items : List[Product]
-            The list of items in the basket
-        basket_subtotal : int
-            The subtotal of all the items in the basket
+        This constructor instantiates a basket object.
+
+        :param basket_items: List of the basket items.
+        :param basket_subtotal: Price subtotal of the baskets items.
         """
-        self._basket_items = basket_items
-        self._basket_subtotal = basket_subtotal
+        self.basket_items = basket_items
+        self.basket_subtotal = basket_subtotal
 
     def get_basket_items(self) -> List[Product]:
         """
-        This gets the list of items within the basket.
+        This method gets the basket items.
 
-        :returns: This returns a list of products
+        :returns: List of the basket items.
         """
-        return self._basket_items
+        return self.basket_items
 
-    def get_basket_subtotal(self) -> int:
+    def get_basket_subtotal(self) -> float:
         """
-        This is gets the subtotal of all the items in the basket.
+        This method gets the basket subtotal.
 
-        :returns: this returns the basket subtotal value
+        :returns: Price subtotal of the baskets items.
         """
-        return self._basket_subtotal
+        return self.basket_subtotal
 
     def add_basket_subtotal(self, price: float):
         """
-        This is adds a value to the the previously calculated
-        basket subtotal
+        This method adds a price to the basket subtotal.
 
-        :param price: float
-        :returns: the basket subtotal with the added price
+        :param price: Price to be added to the basket subtotal.
         """
-        self._basket_subtotal += price
+        self.basket_subtotal += price
 
     def sub_basket_subtotal(self, price: float):
         """
-        This is subtracts a value from the previously
-        calculated busket subtotal. It also checks
-        that the basket value is not at 0 as there
-        cannot be a minus subtotal.
+        This method subtracts a price from the basket subtotal.
 
-        :param price: float
-        :returns: the basket subtotal less the price
+        :param price: Price to be subtracted from the basket subtotal.
         """
-        if self._basket_subtotal > 0 and price < self._basket_subtotal:
-            self._basket_subtotal -= price
+        if self.basket_subtotal > 0 and price <= self.basket_subtotal:
+            self.basket_subtotal -= price
 
     def add_item(self, product: Product):
         """
-        This is where you add an item to the basket.
+        This method adds an item to the basket.
 
-        :param product: Product(this is from the product class)
+        :param product: Product to be added to the basket items.
         """
-        self._basket_items.append(product)
+        self.basket_items.append(product)
 
     def remove_item(self, product: Product):
         """
-        This is where you remove an item to the basket.
+        This method removes an item from the basket.
 
-        :param product: Product(this is from the product class)
+        :param product: Product to be removed from the basket items.
         """
-        self._basket_items.remove(product)
+        self.basket_items.remove(product)
