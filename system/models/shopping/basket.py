@@ -1,27 +1,71 @@
+"""
+This module contains the Basket class. The module imports the type List from the typing
+module, and the Product class from the product module, in the systems shopping package.
+"""
 from typing import List
 from system.models.shopping.product import Product
 
 
 class Basket:
-    def __init__(self, basket_items: List[Product], basket_subtotal: int):
-        self._basket_items = basket_items
-        self._basket_subtotal = basket_subtotal
+    """
+    This class represents a model of a basket, containing a constructor, and
+    the getter/setter methods for its parameters.
+    """
+    def __init__(self, basket_items: List[Product], basket_subtotal: float):
+        """
+        This constructor instantiates a basket object.
+
+        :param basket_items: List of the basket items.
+        :param basket_subtotal: Price subtotal of the baskets items.
+        """
+        self.basket_items = basket_items
+        self.basket_subtotal = basket_subtotal
 
     def get_basket_items(self) -> List[Product]:
-        return self._basket_items
+        """
+        This method gets the basket items.
 
-    def get_basket_subtotal(self) -> int:
-        return self._basket_subtotal
+        :returns: List of the basket items.
+        """
+        return self.basket_items
+
+    def get_basket_subtotal(self) -> float:
+        """
+        This method gets the basket subtotal.
+
+        :returns: Price subtotal of the baskets items.
+        """
+        return self.basket_subtotal
 
     def add_basket_subtotal(self, price: float):
-        self._basket_subtotal += price
+        """
+        This method adds a price to the basket subtotal.
+
+        :param price: Price to be added to the basket subtotal.
+        """
+        self.basket_subtotal += price
 
     def sub_basket_subtotal(self, price: float):
-        if self._basket_subtotal > 0 and price < self._basket_subtotal:
-            self._basket_subtotal -= price
+        """
+        This method subtracts a price from the basket subtotal.
+
+        :param price: Price to be subtracted from the basket subtotal.
+        """
+        if self.basket_subtotal > 0 and price <= self.basket_subtotal:
+            self.basket_subtotal -= price
 
     def add_item(self, product: Product):
-        self._basket_items.append(product)
+        """
+        This method adds an item to the basket.
+
+        :param product: Product to be added to the basket items.
+        """
+        self.basket_items.append(product)
 
     def remove_item(self, product: Product):
-        self._basket_items.remove(product)
+        """
+        This method removes an item from the basket.
+
+        :param product: Product to be removed from the basket items.
+        """
+        self.basket_items.remove(product)
