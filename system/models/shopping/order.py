@@ -57,4 +57,3 @@ class Order:
         :returns: Price subtotal of the orders products.
         """
         return self.order_subtotal
-
