@@ -39,10 +39,3 @@ class AbstractObserver(ABC):
     @abstractmethod
     def update(self, subject):
         """This method updates a subject when the observer is notified."""
-
-
-
-class IObserver(ABC):
-    @abstractmethod
-    def update(self, subject):
-        pass
