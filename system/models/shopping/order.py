@@ -1,8 +1,6 @@
 """
-This module imports List from typing.
-It also imports datetime from datetime.
-
-This module contains the order class.
+This module contains the Order class. The module imports the type List from the
+typing module, and the datetime class from the datetime module.
 """
 from typing import List
 from datetime import datetime
@@ -10,47 +8,53 @@ from datetime import datetime
 
 class Order:
     """
-    This class deals with everything to do with the order. This includes getting
-    the customer name, getting a list of the products they intend to order,
-    getting the date they have ordered on and getting the subtotal of their
-    order.
+    This class represents a model of an order, containing a constructor, and
+    the getter methods for its parameters.
     """
-    def __init__(self, customer_name: str, product_names: List[str], order_date: datetime, subtotal: float):
+    def __init__(self, customer_name: str, product_names: List[str], order_date: datetime,
+                 order_subtotal: float):
+        """
+        This constructor instantiates an order object.
 
-        self._customer_name = customer_name
-        self._product_names = product_names
-        self._order_date = order_date
-        self._subtotal = subtotal
+        :param customer_name: Name of the orders customer.
+        :param product_names: List of the orders product names.
+        :param order_date: Date/time of the order.
+        :param order_subtotal: Price subtotal of the orders products.
+        """
+        self.customer_name = customer_name
+        self.product_names = product_names
+        self.order_date = order_date
+        self.order_subtotal = order_subtotal
 
     def get_customer_name(self) -> str:
         """
-        This gets the name of the customer linked to the order
+        This method gets the order customer name.
 
-        :returns: the customer name
+        :returns: Name of the orders customer.
         """
-        return self._customer_name
+        return self.customer_name
 
     def get_product_names(self) -> List[str]:
         """
-        This gets the the list of products the
-        customer intends to order.
+        This method gets the order product names.
 
-        :returns: the list of products
+        :returns: List of the orders product names.
         """
-        return self._product_names
+        return self.product_names
 
     def get_order_date(self) -> datetime:
         """
-        This gets the date the customer placed the order on.
+        This method gets the order date/time.
 
-        :returns: the order date
+        :returns: Date/time of the order.
         """
-        return self._order_date
+        return self.order_date
 
-    def get_subtotal(self) -> float:
+    def get_order_subtotal(self) -> float:
         """
-        This gets the subtotal of the list of items in the order
+        This method gets the order subtotal.
 
-        :returns: the subtotal
+        :returns: Price subtotal of the orders products.
         """
-        return self._subtotal
+        return self.order_subtotal
+
