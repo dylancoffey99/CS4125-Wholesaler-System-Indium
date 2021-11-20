@@ -40,7 +40,7 @@ class AbstractCustomerController(ABC):
 
 class AbstractAdminController(ABC):
     @abstractmethod
-    def logout_admin(self, root: tk.Tk, frame: tk.Frame):
+    def logout_user(self, root: tk.Tk, frame: tk.Frame):
         pass
 
     @abstractmethod
