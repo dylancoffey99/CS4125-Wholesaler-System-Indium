@@ -29,8 +29,9 @@ class AdminView:
                                      textvariable=self.controller.order_input["user_name"])
         user_combobox["values"] = self.controller.fill_users()
         user_combobox.grid(row=0, column=1, pady=10)
-        n = tk.StringVar()
-        discount_category = ttk.Combobox(self.root, width=17, state="readonly", textvariable=n)
+        discount_list = tk.StringVar()
+        discount_category = ttk.Combobox(self.root, width=17, state="readonly",
+                                         textvariable=discount_list)
         discount_category["values"] = ("Education", "Small Business", "Start-up Businesses")
         discount_category.grid(row=0, column=3, padx=10, pady=10)
         product_name_entry = ttk.Entry(self.root, width=42)
@@ -48,16 +49,16 @@ class AdminView:
 
         # Frame tree views
         order_tree_view = ttk.Treeview(self.root, column=("c1", "c2", "c3"),
-                                       show='headings', height=21)
+                                       show="headings", height=21)
         order_tree_view.column("c1", width=140)
         order_tree_view.column("c2", width=140)
         order_tree_view.column("c3", width=80)
         order_tree_view.heading("c1", text="Product Name")
-        order_tree_view.heading("c2", text="Quantity")
-        order_tree_view.heading("c3", text="Price")
+        order_tree_view.heading("c2", text="Date")
+        order_tree_view.heading("c3", text="Subtotal")
         order_tree_view.grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
         product_tree_view = ttk.Treeview(self.root, column=("c1", "c2", "c3"),
-                                         show='headings', height=21)
+                                         show="headings", height=21)
         product_tree_view.column("c1", width=190)
         product_tree_view.column("c2", width=85)
         product_tree_view.column("c3", width=85)
