@@ -37,12 +37,18 @@ class CustomerView:
         product_tree_view.heading("c2", text="Quantity")
         product_tree_view.heading("c3", text="Price")
         product_tree_view.grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
+        product_scrollbar = ttk.Scrollbar(self.root, orient="vertical",
+                                          command=product_tree_view.yview)
+        product_scrollbar.grid(row=1, rowspan=5, column=1, sticky="nse")
+        product_tree_view.configure(yscrollcommand=product_scrollbar.set)
 
         # Frame buttons
         add_product_button = ttk.Button(self.root, width=20, text="Add to Basket", command=lambda:
                                         self.controller.add_product(product_tree_view))
         add_product_button.grid(row=1, column=2, columnspan=3, padx=10)
-        remove_product_button = ttk.Button(self.root, width=20, text="Remove from Basket")
+        remove_product_button = ttk.Button(self.root, width=20, text="Remove from Basket",
+                                           command=lambda:
+                                           self.controller.remove_product(product_tree_view))
         remove_product_button.grid(row=2, column=2, columnspan=3, padx=10)
         checkout_button = ttk.Button(self.root, width=20, text="Checkout")
         checkout_button.grid(row=3, column=2, columnspan=3, padx=10)
