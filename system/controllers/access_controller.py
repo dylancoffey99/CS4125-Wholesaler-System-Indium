@@ -73,10 +73,10 @@ class AccessController(AbstractAccessController):
                             "Netherlands": 20, "Poland": 21, "Portugal": 22,
                             "Romania": 23, "Slovakia": 24, "Slovenia": 25,
                             "Spain": 26, "Sweden": 27, "United Kingdom": 28}
-            customer = Customer(username, self.hash_password(password), country_dict.get(country))
-            self.user_db.add_user(customer)
+            self.user = Customer(username, self.hash_password(password), country_dict.get(country))
+            self.user_db.add_user(self.user)
             self.destroy_frame(frame)
-            self.view = views.CustomerView(root, self)
+            CustomerController(root, self)
             print("Registration successful!")
 
     def destroy_frame(self, frame: tk.Frame):
