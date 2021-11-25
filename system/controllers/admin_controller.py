@@ -31,7 +31,12 @@ class AdminController(AbstractAdminController):
     def view_order(self, tree_view: ttk.Treeview):
         user_name = self.order_input["user_name"].get()
         orders = self.order_db.get_customer_orders(user_name)
-        self.insert_order(tree_view, orders)
+        print(orders)
+        if not orders:
+            print("Error: this user does not have any orders!")
+        else:
+            self.clear_orders(tree_view)
+            self.insert_order(tree_view, orders)
 
     def logout_user(self, root: tk.Tk, frame: tk.Frame):
         self.destroy_frame(frame)
@@ -55,3 +60,8 @@ class AdminController(AbstractAdminController):
                 tree_view.insert("", "end", text="Item", values=(product_name, "", ""))
             else:
                 tree_view.insert("", "end", text="Item", values=(product_name, date, subtotal))
+
+    @staticmethod
+    def clear_orders(tree_view: ttk.Treeview):
+        for order in tree_view.get_children():
+            tree_view.delete(order)
