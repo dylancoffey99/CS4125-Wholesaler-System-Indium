@@ -13,10 +13,10 @@ class AdminView:
         self.frame.grid(row=0, column=0)
 
         # Frame labels
-        label = ttk.Label(self.root, text="Choose a User")
-        label.grid(row=0, column=0, padx=10, pady=10)
-        discount_category_label = ttk.Label(self.root, text="Discount Category")
-        discount_category_label.grid(row=0, column=2, padx=10, pady=10)
+        user_label = ttk.Label(self.root, text="Choose a User")
+        user_label.grid(row=0, column=0, padx=10, pady=10)
+        discount_label = ttk.Label(self.root, text="Discount Category")
+        discount_label.grid(row=0, column=2, padx=10, pady=10)
         product_name_label = ttk.Label(self.root, text="Product Name")
         product_name_label.grid(row=0, column=5, padx=10, pady=10)
         product_quantity_label = ttk.Label(self.root, text="Quantity")
@@ -29,11 +29,10 @@ class AdminView:
                                      textvariable=self.controller.order_input["user_name"])
         user_combobox["values"] = self.controller.fill_users()
         user_combobox.grid(row=0, column=1, pady=10)
-        discount_list = tk.StringVar()
-        discount_category = ttk.Combobox(self.root, width=17, state="readonly",
-                                         textvariable=discount_list)
-        discount_category["values"] = ("Education", "Small Business", "Start-up Businesses")
-        discount_category.grid(row=0, column=3, padx=10, pady=10)
+        discount_combobox = ttk.Combobox(self.root, width=17, state="readonly",
+                                         textvariable=self.controller.order_input["discount_category"])
+        discount_combobox["values"] = ("Education", "Small Business", "Start-up Business")
+        discount_combobox.grid(row=0, column=3, padx=10, pady=10)
         product_name_entry = ttk.Entry(self.root, width=42)
         product_name_entry.grid(row=0, column=6, padx=10, pady=10)
         product_quantity_entry = ttk.Entry(self.root, width=8)
@@ -71,7 +70,9 @@ class AdminView:
         view_order_button = ttk.Button(self.root, width=20, text="View Order", command=lambda:
                                        self.controller.view_order(order_tree_view))
         view_order_button.grid(row=1, column=2, columnspan=2, padx=10)
-        add_discount_button = ttk.Button(self.root, width=20, text="Add Discount")
+        add_discount_button = ttk.Button(self.root, width=20, text="Add Discount",
+                                         command=lambda:
+                                         self.controller.add_discount(order_tree_view))
         add_discount_button.grid(row=2, column=2, columnspan=2, padx=10)
         add_product_button = ttk.Button(self.root, width=20, text="Add Product")
         add_product_button.grid(row=1, column=7, columnspan=4, padx=10)
