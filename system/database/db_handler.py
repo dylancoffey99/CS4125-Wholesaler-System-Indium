@@ -131,8 +131,8 @@ class OrderDB(AbstractOrderDB):
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
             product_names = order.get_product_names()
-            for i in range(len(product_names)):
-                writer.writerow([order.get_customer_name(), product_names[i],
+            for product, _ in enumerate(product_names):
+                writer.writerow([order.get_customer_name(), product_names[product],
                                  order.get_order_date(), order.get_order_subtotal()])
 
     def get_customer_orders(self, customer_name: str) -> List:
