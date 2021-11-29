@@ -50,7 +50,7 @@ class AccessController(AbstractAccessController):
                 if self.user.get_is_admin() == 1:
                     AdminController(root, self.user, self)
                 else:
-                    CustomerController(root, self)
+                    CustomerController(self)
                 print("Login successful!")
 
     def register_user(self, root: tk.Tk, frame: tk.Frame):
@@ -76,7 +76,7 @@ class AccessController(AbstractAccessController):
             self.user = Customer(username, self.hash_password(password), country_dict.get(country))
             self.user_db.add_user(self.user)
             self.destroy_frame(frame)
-            CustomerController(root, self)
+            CustomerController(self)
             print("Registration successful!")
 
     def destroy_frame(self, frame: tk.Frame):
