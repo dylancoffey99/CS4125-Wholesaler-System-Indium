@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from system import views
 from datetime import datetime
+from system import views
 from system.models.shopping.order import Order
 from system.models.shopping.basket import Basket
 from system.database.db_handler import ProductDB, OrderDB, CountryDB
