@@ -11,8 +11,14 @@ class AdminView:
         self.controller = controller
         self.frame = tk.Frame(self.root)
         self.frame.grid(row=0, column=0)
+        self.load_widgets()
 
-        # Frame labels
+    def load_widgets(self):
+        self.load_labels()
+        self.load_combobox_entry()
+        self.load_tree_view_buttons()
+
+    def load_labels(self):
         user_label = ttk.Label(self.root, text="Choose a User")
         user_label.grid(row=0, column=0, padx=10, pady=10)
         discount_label = ttk.Label(self.root, text="Discount Category")
@@ -24,13 +30,15 @@ class AdminView:
         product_price_label = ttk.Label(self.root, text="Price")
         product_price_label.grid(row=0, column=9, padx=10, pady=10)
 
+    def load_combobox_entry(self):
         # Frame combobox/entries
         user_combobox = ttk.Combobox(self.root, width=37, state="readonly",
                                      textvariable=self.controller.order_input["user_name"])
         user_combobox["values"] = self.controller.fill_users()
         user_combobox.grid(row=0, column=1, pady=10)
         discount_combobox = ttk.Combobox(self.root, width=17, state="readonly",
-                                         textvariable=self.controller.order_input["discount_category"])
+                                         textvariable=
+                                         self.controller.order_input["discount_category"])
         discount_combobox["values"] = ("Education", "Small Business", "Start-up Business")
         discount_combobox.grid(row=0, column=3, padx=10, pady=10)
         product_name_entry = ttk.Entry(self.root, width=42)
@@ -46,6 +54,7 @@ class AdminView:
         separator_expand = ttk.Label(self.root, text="")  # To push separator to the bottom
         separator_expand.grid(row=6, column=7, columnspan=4)
 
+    def load_tree_view_buttons(self):
         # Frame tree views
         order_tree_view = ttk.Treeview(self.root, column=("c1", "c2", "c3"),
                                        show="headings", height=21)
