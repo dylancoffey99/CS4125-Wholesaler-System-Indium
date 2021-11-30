@@ -131,9 +131,23 @@ class OrderDB(AbstractOrderDB):
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
             product_names = order.get_product_names()
-            for i in range(len(product_names)):
-                writer.writerow([order.get_customer_name(), product_names[i],
-                                 order.get_order_date(), order.get_subtotal()])
+            for product, _ in enumerate(product_names):
+                writer.writerow([order.get_customer_name(), product_names[product],
+                                 order.get_order_date(), order.get_order_subtotal()])
+
+    def update_order_subtotals(self, customer_name: str, discount_percentage: float):
+        temp_rows = []
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            for row in reader:
+                if row[0] == customer_name:
+                    subtotal = float(row[3])
+                    discount = subtotal * discount_percentage
+                    row[3] = str(subtotal - discount)
+                temp_rows.append(row)
+        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            writer.writerows(temp_rows)
 
     def get_customer_orders(self, customer_name: str) -> List:
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
@@ -147,7 +161,7 @@ class OrderDB(AbstractOrderDB):
                     order.append(row[1])
                     order.append(datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S.%f'))
                     order.append(float(row[3]))
-                orders.append(order)
+                    orders.append(order)
             return orders
 
 
@@ -161,7 +175,7 @@ class CountryDB(AbstractCountryDB):
             next(reader)
             for row in reader:
                 if row[1] == country_name:
-                    return Country(row[0], row[1], float(row[2]), float(row[3]))
+                    return Country(int(row[0]), row[1], float(row[2]), float(row[3]))
             return False
 
     def get_all_countries(self) -> List[Country]:
@@ -170,7 +184,6 @@ class CountryDB(AbstractCountryDB):
             next(reader)
             countries = []
             for row in reader:
-                country = Country(row[0], row[1], float(row[2]), float(row[3]))
+                country = Country(int(row[0]), row[1], float(row[2]), float(row[3]))
                 countries.append(country)
             return countries
-

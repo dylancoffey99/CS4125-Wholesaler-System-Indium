@@ -48,7 +48,7 @@ class AccessController(AbstractAccessController):
             else:
                 self.destroy_frame(frame)
                 if self.user.get_is_admin() == 1:
-                    AdminController(root, self.user, self)
+                    AdminController(self)
                 else:
                     CustomerController(self)
                 print("Login successful!")

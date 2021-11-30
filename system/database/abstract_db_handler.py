@@ -60,6 +60,10 @@ class AbstractOrderDB(ABC):
         pass
 
     @abstractmethod
+    def update_order_subtotals(self, customer_name: str, discount_percentage: float):
+        pass
+
+    @abstractmethod
     def get_customer_orders(self, customer_name: str) -> List:
         pass
 
