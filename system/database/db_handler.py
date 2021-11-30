@@ -135,6 +135,20 @@ class OrderDB(AbstractOrderDB):
                 writer.writerow([order.get_customer_name(), product_names[product],
                                  order.get_order_date(), order.get_order_subtotal()])
 
+    def update_order_subtotals(self, customer_name: str, discount_percentage: float):
+        temp_rows = []
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            for row in reader:
+                if row[0] == customer_name:
+                    subtotal = float(row[3])
+                    discount = subtotal * discount_percentage
+                    row[3] = str(subtotal - discount)
+                temp_rows.append(row)
+        with open(self._db_name + ".csv", "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            writer.writerows(temp_rows)
+
     def get_customer_orders(self, customer_name: str) -> List:
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
