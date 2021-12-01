@@ -169,12 +169,12 @@ class CountryDB(AbstractCountryDB):
     def __init__(self, db_name: str):
         self._db_name = db_name
 
-    def get_country(self, country_name: str):
+    def get_country(self, country_id: int):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             next(reader)
             for row in reader:
-                if row[1] == country_name:
+                if row[0] == str(country_id):
                     return Country(int(row[0]), row[1], float(row[2]), float(row[3]))
             return False
 
