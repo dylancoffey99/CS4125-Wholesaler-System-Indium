@@ -107,3 +107,29 @@ class AdminController(AbstractAdminController):
         discount = subtotal * discount_category.get_discount_percentage()
         subtotal -= discount
         return subtotal
+
+    def fill_products(self):
+        products = self.product_db.get_all_products()
+        product_names = []
+        for product, _ in enumerate(products):
+            if products[product].get_is_admin() == 0:
+                product_names.append(products[product].get_product_name())
+        return product_names
+
+    def add_product(self, tree_view: ttk.Treeview):
+        product_name = self.input["product_name"].get()
+        quantity = self.input["product_quantity"].get()
+        product = self.product_db.get_product(product_name)
+        price = float(quantity) * product.get_product_price()
+        self.product_db.add_product(product)
+        # self.product.set_product_price(price) #i noticed we don't have this in the product class or db handler
+        self.insert_data(tree_view, product_name, quantity, price)
+
+    def edit_product(self, tree_view: ttk.Treeview):
+        product_name = self.input["product_name"].get()
+        quantity = self.input["product_quantity"].get()
+        product = self.product_db.get_product(product_name)
+        price = float(quantity) * product.get_product_price()
+        self.product_db.add_product(product)
+        # self.basket.set_product_price(price)
+        self.insert_data(tree_view, product_name, quantity, price)
