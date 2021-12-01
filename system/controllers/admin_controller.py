@@ -122,7 +122,7 @@ class AdminController(AbstractAdminController):
         product = self.product_db.get_product(product_name)
         price = float(quantity) * product.get_product_price()
         self.product_db.add_product(product)
-        # self.product.set_product_price(price) #i noticed we don't have this in the product class or db handler
+        self.product_db.get_product_price(price)
         self.insert_data(tree_view, product_name, quantity, price)
 
     def edit_product(self, tree_view: ttk.Treeview):
@@ -131,5 +131,5 @@ class AdminController(AbstractAdminController):
         product = self.product_db.get_product(product_name)
         price = float(quantity) * product.get_product_price()
         self.product_db.add_product(product)
-        # self.basket.set_product_price(price)
+        self.product_db.get_product_price(price)
         self.insert_data(tree_view, product_name, quantity, price)
