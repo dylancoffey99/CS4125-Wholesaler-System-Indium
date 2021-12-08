@@ -57,7 +57,7 @@ class AbstractAdminController(ABC):
         pass
 
     @abstractmethod
-    def fill_products(self) -> List[str]:
+    def fill_products(self, tree_view: ttk.Treeview):
         pass
 
     @abstractmethod
