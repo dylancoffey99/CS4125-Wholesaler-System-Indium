@@ -5,20 +5,28 @@ from tkinter import ttk
 class HomeView:
     def __init__(self, root, controller):
         self.root = root
+        self.controller = controller
+        self.frame = tk.Frame(self.root)
+        self.setup_view()
+        self.load_widgets()
+
+    def setup_view(self):
         self.root.geometry("600x500")
         self.root.title("Wholesaler System")
         self.root.rowconfigure(0, weight=1)
         self.root.columnconfigure(0, weight=1)
         self.root.resizable(width=False, height=False)
-        self.controller = controller
-        self.frame = tk.Frame(self.root)
         self.frame.grid(row=0, column=0)
 
-        # Frame labels
+    def load_widgets(self):
+        self.load_labels()
+        self.load_interactions()
+
+    def load_labels(self):
         system_label = ttk.Label(self.frame, text="Wholesaler System", font=(None, 20))
         system_label.grid(row=0, column=0, pady=10)
 
-        # Frame buttons
+    def load_interactions(self):
         login_button = ttk.Button(self.frame, text="Login", command=lambda:
                                   self.controller.login_view(self.root, self.frame))
         login_button.grid(row=1, column=0, pady=10)

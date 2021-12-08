@@ -5,19 +5,21 @@ from tkinter import ttk
 class CustomerView:
     def __init__(self, root, controller):
         self.root = root
-        self.root.title("Wholesaler System - "
-                        + controller.access_controller.user.get_user_name())
-        self.root.rowconfigure(0, weight=0)
-        self.root.columnconfigure(0, weight=0)
         self.controller = controller
         self.frame = tk.Frame(self.root)
-        self.frame.grid(row=0, column=0)
+        self.setup_view()
         self.load_widgets()
+
+    def setup_view(self):
+        user_name = self.controller.access_controller.user.get_user_name()
+        self.root.title("Wholesaler System - " + user_name)
+        self.root.rowconfigure(0, weight=0)
+        self.root.columnconfigure(0, weight=0)
+        self.frame.grid(row=0, column=0)
 
     def load_widgets(self):
         self.load_labels()
-        self.load_combobox_entry()
-        self.load_tree_view_buttons()
+        self.load_interactions()
 
     def load_labels(self):
         product_label = ttk.Label(self.root, text="Choose a product")
@@ -25,7 +27,7 @@ class CustomerView:
         product_quantity_label = ttk.Label(self.root, text="Quantity")
         product_quantity_label.grid(row=0, column=2, padx=10, pady=10)
 
-    def load_combobox_entry(self):
+    def load_interactions(self):
         product_combobox = ttk.Combobox(self.root, width=34, state="readonly",
                                         textvariable=self.controller.input["product_name"])
         product_combobox["values"] = self.controller.fill_products()
@@ -33,9 +35,6 @@ class CustomerView:
         product_quantity_entry = ttk.Entry(self.root, width=18,
                                            textvariable=self.controller.input["product_quantity"])
         product_quantity_entry.grid(row=0, column=3, padx=10, pady=10)
-
-    def load_tree_view_buttons(self):
-        # Frame tree views
         product_tree_view = ttk.Treeview(self.root, column=("c1", "c2", "c3"),
                                          show='headings', height=21)
         product_tree_view.column("c1", width=190)
@@ -49,8 +48,6 @@ class CustomerView:
                                           command=product_tree_view.yview)
         product_scrollbar.grid(row=1, rowspan=5, column=1, sticky="nse")
         product_tree_view.configure(yscrollcommand=product_scrollbar.set)
-
-        # Frame buttons
         add_product_button = ttk.Button(self.root, width=20, text="Add to Basket", command=lambda:
                                         self.controller.add_product(product_tree_view))
         add_product_button.grid(row=1, column=2, columnspan=3, padx=10)

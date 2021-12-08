@@ -5,18 +5,23 @@ from tkinter import ttk
 class AdminView:
     def __init__(self, root, controller):
         self.root = root
-        self.root.geometry("1300x500")
-        self.root.rowconfigure(0, weight=0)
-        self.root.columnconfigure(0, weight=0)
         self.controller = controller
         self.frame = tk.Frame(self.root)
-        self.frame.grid(row=0, column=0)
+        self.setup_view()
         self.load_widgets()
+
+    def setup_view(self):
+        user_name = self.controller.access_controller.user.get_user_name()
+        self.root.geometry("1300x500")
+        self.root.title("Wholesaler System - " + user_name)
+        self.root.rowconfigure(0, weight=0)
+        self.root.columnconfigure(0, weight=0)
+        self.frame.grid(row=0, column=0)
 
     def load_widgets(self):
         self.load_labels()
-        self.load_combobox_entry()
-        self.load_tree_view_buttons()
+        self.load_separator()
+        self.load_interactions()
 
     def load_labels(self):
         user_label = ttk.Label(self.root, text="Choose a User")
@@ -30,8 +35,13 @@ class AdminView:
         product_price_label = ttk.Label(self.root, text="Price")
         product_price_label.grid(row=0, column=9, padx=10, pady=10)
 
-    def load_combobox_entry(self):
-        # Frame combobox/entries
+    def load_separator(self):
+        separator = ttk.Separator(self.root, orient="vertical")
+        separator.grid(row=0, rowspan=7, column=4, sticky="ns")
+        separator_expand = ttk.Label(self.root, text="")  # To expand separator to the bottom
+        separator_expand.grid(row=6, column=7, columnspan=4)
+
+    def load_interactions(self):
         user_combobox = ttk.Combobox(self.root, width=37, state="readonly",
                                      textvariable=self.controller.order_input["user_name"])
         user_combobox["values"] = self.controller.fill_users()
@@ -47,15 +57,6 @@ class AdminView:
         product_quantity_entry.grid(row=0, column=8, padx=10, pady=10)
         product_price_entry = ttk.Entry(self.root, width=8)
         product_price_entry.grid(row=0, column=10, padx=10, pady=10)
-
-        # Frame separator
-        separator = ttk.Separator(self.root, orient="vertical")
-        separator.grid(row=0, rowspan=7, column=4, sticky="ns")
-        separator_expand = ttk.Label(self.root, text="")  # To push separator to the bottom
-        separator_expand.grid(row=6, column=7, columnspan=4)
-
-    def load_tree_view_buttons(self):
-        # Frame tree views
         order_tree_view = ttk.Treeview(self.root, column=("c1", "c2", "c3"),
                                        show="headings", height=21)
         order_tree_view.column("c1", width=140)
@@ -74,8 +75,6 @@ class AdminView:
         product_tree_view.heading("c2", text="Quantity")
         product_tree_view.heading("c3", text="Price")
         product_tree_view.grid(row=1, rowspan=5, column=5, columnspan=2, padx=10, pady=2)
-
-        # Frame buttons
         view_order_button = ttk.Button(self.root, width=20, text="View Order", command=lambda:
                                        self.controller.view_order(order_tree_view))
         view_order_button.grid(row=1, column=2, columnspan=2, padx=10)
