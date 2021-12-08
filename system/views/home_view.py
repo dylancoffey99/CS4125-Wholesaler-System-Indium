@@ -29,8 +29,8 @@ class HomeView(AbstractView):
 
     def load_interactions(self):
         login_button = ttk.Button(self.frame, text="Login", command=lambda:
-                                  self.controller.login_view(self.root, self.frame))
+                                  self.controller.login_view(self.frame))
         login_button.grid(row=1, column=0, pady=10)
         register_button = ttk.Button(self.frame, text="Register", command=lambda:
-                                     self.controller.register_view(self.root, self.frame))
+                                     self.controller.register_view(self.frame))
         register_button.grid(row=2, column=0, pady=10)

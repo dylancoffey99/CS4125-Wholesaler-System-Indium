@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from typing import List
-from system import views
+from system.views import HomeView, AdminView
 from system.models.users.customer import Customer
 from system.models.shopping.discount import DiscountCategory
 from system.database.db_handler import UserDB, OrderDB, ProductDB
@@ -16,16 +16,23 @@ class AdminController(AbstractAdminController):
         self.product_db = ProductDB("system/database/productDB")
         self.order_input = {"user_name": tk.StringVar(),
                             "discount_category": tk.StringVar()}
-        self.view = views.AdminView(self.access_controller.root, self)
+        self.view = AdminView(self.access_controller.root, self)
         self.customer = None
 
-    def fill_users(self):
+    def fill_users(self) -> List[str]:
         users = self.user_db.get_all_users()
         user_names = []
         for user, _ in enumerate(users):
             if users[user].get_is_admin() == 0:
                 user_names.append(users[user].get_user_name())
         return user_names
+
+    def fill_products(self):
+        products = self.product_db.get_all_products()
+        product_names = []
+        for product, _ in enumerate(products):
+            product_names.append(products[product].get_product_name())
+        return product_names
 
     def view_order(self, tree_view: ttk.Treeview):
         user_name = self.order_input["user_name"].get()
@@ -58,64 +65,6 @@ class AdminController(AbstractAdminController):
                 self.update_orders(tree_view, discount)
                 self.order_db.update_order_subtotals(user_name, discount.get_discount_percentage())
 
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
-        self.destroy_frame(frame)
-        for child in root.winfo_children():
-            child.destroy()
-        self.view = views.LoginView(self.access_controller.root, self.access_controller)
-        print("Logout successful!")
-
-    def destroy_frame(self, frame: tk.Frame):
-        for widget in frame.winfo_children():
-            widget.destroy()
-        frame.destroy()
-
-    def update_orders(self, tree_view: ttk.Treeview, discount_category: DiscountCategory):
-        tree_list = list(tree_view.get_children(""))
-        for order in tree_list:
-            product_name = tree_view.item(order, "values")[0]
-            date_time = tree_view.item(order, "values")[1]
-            subtotal = float(tree_view.item(order, "values")[2])
-            new_subtotal = self.calc_discount(subtotal, discount_category)
-            tree_view.item(order, text="Order", values=(product_name, date_time, new_subtotal))
-
-    @staticmethod
-    def insert_order(tree_view: ttk.Treeview, orders: List):
-        for order in orders:
-            product_name = order[1]
-            date_time = order[2]
-            subtotal = order[3]
-            tree_view.insert("", "end", text="Order", values=(product_name, date_time, subtotal))
-
-    @staticmethod
-    def clear_orders(tree_view: ttk.Treeview):
-        for order in tree_view.get_children():
-            tree_view.delete(order)
-
-    @staticmethod
-    def check_discount(discount_category):
-        if discount_category == "Education":
-            discount = DiscountCategory(0, "Education", 0.10)
-        elif discount_category == "Small Business":
-            discount = DiscountCategory(0, "Small Business", 0.15)
-        else:
-            discount = DiscountCategory(0, "Start-up Business", 0.20)
-        return discount
-
-    @staticmethod
-    def calc_discount(subtotal: float, discount_category: DiscountCategory) -> float:
-        discount = subtotal * discount_category.get_discount_percentage()
-        subtotal -= discount
-        return subtotal
-
-    def fill_products(self):
-        products = self.product_db.get_all_products()
-        product_names = []
-        for product, _ in enumerate(products):
-            if products[product].get_is_admin() == 0:
-                product_names.append(products[product].get_product_name())
-        return product_names
-
     def add_product(self, tree_view: ttk.Treeview):
         product_name = self.input["product_name"].get()
         quantity = self.input["product_quantity"].get()
@@ -133,3 +82,52 @@ class AdminController(AbstractAdminController):
         self.product_db.add_product(product)
         self.product_db.get_product_price(price)
         self.insert_data(tree_view, product_name, quantity, price)
+
+    def remove_product(self, tree_view: ttk.Treeview):
+        pass
+
+    def logout_user(self, root: tk.Tk, frame: tk.Frame):
+        self.destroy_frame(frame)
+        for child in root.winfo_children():
+            child.destroy()
+        self.view = HomeView(self.access_controller.root, self.access_controller)
+        print("Logout successful!")
+
+    def destroy_frame(self, frame: tk.Frame):
+        for widget in frame.winfo_children():
+            widget.destroy()
+        frame.destroy()
+
+    @staticmethod
+    def insert_order(tree_view: ttk.Treeview, orders: List):
+        for order in orders:
+            product_name = order[1]
+            date_time = order[2]
+            subtotal = order[3]
+            tree_view.insert("", "end", text="Order", values=(product_name, date_time, subtotal))
+
+    @staticmethod
+    def update_orders(tree_view: ttk.Treeview, discount_category: DiscountCategory):
+        tree_list = list(tree_view.get_children(""))
+        for order in tree_list:
+            product_name = tree_view.item(order, "values")[0]
+            date_time = tree_view.item(order, "values")[1]
+            subtotal = float(tree_view.item(order, "values")[2])
+            discount = subtotal * discount_category.get_discount_percentage()
+            subtotal -= discount
+            tree_view.item(order, text="Order", values=(product_name, date_time, subtotal))
+
+    @staticmethod
+    def clear_orders(tree_view: ttk.Treeview):
+        for order in tree_view.get_children():
+            tree_view.delete(order)
+
+    @staticmethod
+    def check_discount(discount_category):
+        if discount_category == "Education":
+            discount = DiscountCategory(0, "Education", 0.10)
+        elif discount_category == "Small Business":
+            discount = DiscountCategory(0, "Small Business", 0.15)
+        else:
+            discount = DiscountCategory(0, "Start-up Business", 0.20)
+        return discount

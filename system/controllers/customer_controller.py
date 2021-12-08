@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
+from typing import List
 from datetime import datetime
-from system import views
+from system.views import HomeView, CustomerView
 from system.models.shopping.order import Order
 from system.models.shopping.basket import Basket
-from system.database.db_handler import ProductDB, OrderDB, CountryDB
+from system.database.db_handler import OrderDB, ProductDB, CountryDB
 from system.controllers.abstract_controllers import AbstractCustomerController
 
 
@@ -16,11 +17,10 @@ class CustomerController(AbstractCustomerController):
         self.country_db = CountryDB("system/database/countryDB")
         self.input = {"product_name": tk.StringVar(),
                       "product_quantity": tk.StringVar()}
-        self.view = views.CustomerView(self.access_controller.root, self)
+        self.view = CustomerView(self.access_controller.root, self)
         self.basket = Basket([], 0)
-        self.fill_products()
 
-    def fill_products(self):
+    def fill_products(self) -> List[str]:
         products = self.product_db.get_all_products()
         product_names = []
         for product, _ in enumerate(products):
@@ -59,7 +59,9 @@ class CustomerController(AbstractCustomerController):
                     self.remove_item(tree_view)
 
     def checkout(self, tree_view: ttk.Treeview):
-        if not self.basket_empty(tree_view):
+        if len(tree_view.get_children("")) == 0:
+            print("Error: the basket is empty, please add some products!")
+        else:
             customer_name = self.access_controller.user.get_user_name()
             tree_list = list(tree_view.get_children(''))
             products = self.basket.get_basket_items()
@@ -89,7 +91,7 @@ class CustomerController(AbstractCustomerController):
         self.destroy_frame(frame)
         for child in root.winfo_children():
             child.destroy()
-        self.view = views.LoginView(self.access_controller.root, self.access_controller)
+        self.view = HomeView(self.access_controller.root, self.access_controller)
         print("Logout successful!")
 
     def destroy_frame(self, frame: tk.Frame):
@@ -110,11 +112,3 @@ class CustomerController(AbstractCustomerController):
     def clear_items(tree_view: ttk.Treeview):
         for item in tree_view.get_children():
             tree_view.delete(item)
-
-    @staticmethod
-    def basket_empty(tree_view: ttk.Treeview):
-        children = tree_view.get_children('')
-        if len(children) == 0:
-            print("Error: the basket is empty, please add some products!")
-            return True
-        return False

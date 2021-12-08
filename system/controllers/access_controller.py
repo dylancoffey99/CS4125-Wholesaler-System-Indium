@@ -1,8 +1,8 @@
 import hashlib
 import tkinter as tk
-from system import views
 from system.database.db_handler import UserDB
 from system.models.users.customer import Customer
+from system.views import HomeView, LoginView, RegisterView
 from system.controllers.admin_controller import AdminController
 from system.controllers.customer_controller import CustomerController
 from system.controllers.abstract_controllers import AbstractAccessController
@@ -12,26 +12,26 @@ class AccessController(AbstractAccessController):
     def __init__(self):
         self.root = tk.Tk()
         self.user_db = UserDB("system/database/userDB")
-        self.view = views.HomeView(self.root, self)
+        self.view = HomeView(self.root, self)
         self.input = {}
         self.user = None
 
     def start(self):
         self.root.mainloop()
 
-    def login_view(self, root: tk.Tk, frame: tk.Frame):
+    def login_view(self, frame: tk.Frame):
         self.destroy_frame(frame)
         self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
                       "r_password": tk.StringVar()}
-        self.view = views.LoginView(root, self)
+        self.view = LoginView(self.root, self)
 
-    def register_view(self, root: tk.Tk, frame: tk.Frame):
+    def register_view(self, frame: tk.Frame):
         self.destroy_frame(frame)
         self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
                       "r_password": tk.StringVar(), "country": tk.StringVar()}
-        self.view = views.RegisterView(root, self)
+        self.view = RegisterView(self.root, self)
 
-    def login_user(self, root: tk.Tk, frame: tk.Frame):
+    def login_user(self, frame: tk.Frame):
         username = self.input["username"].get()
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()
@@ -53,7 +53,7 @@ class AccessController(AbstractAccessController):
                     CustomerController(self)
                 print("Login successful!")
 
-    def register_user(self, root: tk.Tk, frame: tk.Frame):
+    def register_user(self, frame: tk.Frame):
         username = self.input["username"].get()
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()

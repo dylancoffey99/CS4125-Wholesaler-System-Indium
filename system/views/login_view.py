@@ -12,10 +12,6 @@ class LoginView(AbstractView):
         self.load_widgets()
 
     def setup_view(self):
-        self.root.geometry("600x500")
-        self.root.title("Wholesaler System")
-        self.root.rowconfigure(0, weight=1)
-        self.root.columnconfigure(0, weight=1)
         self.frame.grid(row=0, column=0)
 
     def load_widgets(self):
@@ -43,8 +39,8 @@ class LoginView(AbstractView):
                                           textvariable=self.controller.input["r_password"])
         repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
         login_button = ttk.Button(self.frame, text="Login", command=lambda:
-                                  self.controller.login_user(self.root, self.frame))
+                                  self.controller.login_user(self.frame))
         login_button.grid(row=4, column=0, padx=10, pady=20)
         register_button = ttk.Button(self.frame, text="Don't have an account?", command=lambda:
-                                     self.controller.register_view(self.root, self.frame))
+                                     self.controller.register_view(self.frame))
         register_button.grid(row=4, column=1, padx=10, pady=20)

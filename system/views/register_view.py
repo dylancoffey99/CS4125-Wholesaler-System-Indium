@@ -12,8 +12,6 @@ class RegisterView(AbstractView):
         self.load_widgets()
 
     def setup_view(self):
-        self.root.rowconfigure(0, weight=1)
-        self.root.columnconfigure(0, weight=1)
         self.frame.grid(row=0, column=0)
 
     def load_widgets(self):
@@ -54,8 +52,8 @@ class RegisterView(AbstractView):
                                       "Romania", "Slovakia", "Slovenia",
                                       "Spain", "Sweden", "United Kingdom")
         register_button = ttk.Button(self.frame, text="Register", command=lambda:
-                                     self.controller.register_user(self.root, self.frame))
+                                     self.controller.register_user(self.frame))
         register_button.grid(row=5, column=0, padx=10, pady=20)
         login_button = ttk.Button(self.frame, text="Already have an account?", command=lambda:
-                                  self.controller.login_view(self.root, self.frame))
+                                  self.controller.login_view(self.frame))
         login_button.grid(row=5, column=1, padx=10, pady=20)
