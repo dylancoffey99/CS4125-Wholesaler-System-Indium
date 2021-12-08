@@ -11,7 +11,7 @@ from system.controllers.abstract_controllers import AbstractAccessController
 class AccessController(AbstractAccessController):
     def __init__(self):
         self.root = tk.Tk()
-        self.user_db = UserDB("system/database/userDB")
+        self.user_db = UserDB("system/database/csv/userDB")
         self.view = HomeView(self.root, self)
         self.input = {}
         self.user = None

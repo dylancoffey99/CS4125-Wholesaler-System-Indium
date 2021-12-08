@@ -11,9 +11,9 @@ from system.controllers.abstract_controllers import AbstractAdminController
 class AdminController(AbstractAdminController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
-        self.user_db = UserDB("system/database/userDB")
-        self.order_db = OrderDB("system/database/orderDB")
-        self.product_db = ProductDB("system/database/productDB")
+        self.user_db = UserDB("system/database/csv/userDB")
+        self.order_db = OrderDB("system/database/csv/orderDB")
+        self.product_db = ProductDB("system/database/csv/productDB")
         self.order_input = {"user_name": tk.StringVar(),
                             "discount_category": tk.StringVar()}
         self.view = AdminView(self.access_controller.root, self)
