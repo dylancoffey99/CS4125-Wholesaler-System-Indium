@@ -87,10 +87,8 @@ class CustomerController(AbstractCustomerController):
         order = Order(customer_name, product_names, datetime.now(), order_subtotal)
         self.order_db.add_order(order)
 
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
+    def logout_user(self, frame: tk.Frame):
         self.destroy_frame(frame)
-        for child in root.winfo_children():
-            child.destroy()
         self.view = HomeView(self.access_controller.root, self.access_controller)
         print("Logout successful!")
 

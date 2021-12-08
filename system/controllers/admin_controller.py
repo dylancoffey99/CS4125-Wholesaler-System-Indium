@@ -86,10 +86,8 @@ class AdminController(AbstractAdminController):
     def remove_product(self, tree_view: ttk.Treeview):
         pass
 
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
+    def logout_user(self, frame: tk.Frame):
         self.destroy_frame(frame)
-        for child in root.winfo_children():
-            child.destroy()
         self.view = HomeView(self.access_controller.root, self.access_controller)
         print("Logout successful!")
 
