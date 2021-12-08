@@ -17,7 +17,8 @@ class CustomerController(AbstractCustomerController):
         self.country_db = CountryDB("system/database/csv/countryDB")
         self.input = {"product_name": tk.StringVar(),
                       "product_quantity": tk.StringVar()}
-        self.view = CustomerView(self.access_controller.root, self)
+        self.view = CustomerView(self.access_controller.root,
+                                 self.access_controller.frame, self)
         self.basket = Basket([], 0)
 
     def fill_products(self) -> List[str]:
@@ -87,15 +88,11 @@ class CustomerController(AbstractCustomerController):
         order = Order(customer_name, product_names, datetime.now(), order_subtotal)
         self.order_db.add_order(order)
 
-    def logout_user(self, frame: tk.Frame):
-        self.destroy_frame(frame)
-        self.view = HomeView(self.access_controller.root, self.access_controller)
+    def logout_user(self):
+        self.view.clear_frame()
+        self.view = HomeView(self.access_controller.root, self.access_controller.frame,
+                             self.access_controller)
         print("Logout successful!")
-
-    def destroy_frame(self, frame: tk.Frame):
-        for widget in frame.winfo_children():
-            widget.destroy()
-        frame.destroy()
 
     @staticmethod
     def insert_item(tree_view: ttk.Treeview, product_name: str, quantity: int, price: float):

@@ -11,27 +11,28 @@ from system.controllers.abstract_controllers import AbstractAccessController
 class AccessController(AbstractAccessController):
     def __init__(self):
         self.root = tk.Tk()
+        self.frame = tk.Frame(self.root)
         self.user_db = UserDB("system/database/csv/userDB")
-        self.view = HomeView(self.root, self)
+        self.view = HomeView(self.root, self.frame, self)
         self.input = {}
         self.user = None
 
     def start(self):
         self.root.mainloop()
 
-    def login_view(self, frame: tk.Frame):
-        self.destroy_frame(frame)
+    def login_view(self):
+        self.view.clear_frame()
         self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
                       "r_password": tk.StringVar()}
-        self.view = LoginView(self.root, self)
+        self.view = LoginView(self.frame, self)
 
-    def register_view(self, frame: tk.Frame):
-        self.destroy_frame(frame)
+    def register_view(self):
+        self.view.clear_frame()
         self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
                       "r_password": tk.StringVar(), "country": tk.StringVar()}
-        self.view = RegisterView(self.root, self)
+        self.view = RegisterView(self.frame, self)
 
-    def login_user(self, frame: tk.Frame):
+    def login_user(self):
         username = self.input["username"].get()
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()
@@ -46,14 +47,14 @@ class AccessController(AbstractAccessController):
             if self.user.get_password() != self.hash_password(password):
                 print("Error: the password is incorrect!")
             else:
-                self.destroy_frame(frame)
+                self.view.clear_frame()
                 if self.user.get_is_admin() == 1:
                     AdminController(self)
                 else:
                     CustomerController(self)
                 print("Login successful!")
 
-    def register_user(self, frame: tk.Frame):
+    def register_user(self):
         username = self.input["username"].get()
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()
@@ -75,14 +76,9 @@ class AccessController(AbstractAccessController):
                             "Spain": 26, "Sweden": 27, "United Kingdom": 28}
             self.user = Customer(username, self.hash_password(password), country_dict.get(country))
             self.user_db.add_user(self.user)
-            self.destroy_frame(frame)
+            self.view.clear_frame()
             CustomerController(self)
             print("Registration successful!")
-
-    def destroy_frame(self, frame: tk.Frame):
-        for widget in frame.winfo_children():
-            widget.destroy()
-        frame.destroy()
 
     @staticmethod
     def hash_password(password: str) -> str:

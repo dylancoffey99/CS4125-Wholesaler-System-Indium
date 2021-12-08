@@ -1,20 +1,14 @@
-import tkinter as tk
 from tkinter import ttk
 from system.views.abstract_view import AbstractView
 
 
 class LoginView(AbstractView):
-    def __init__(self, root, controller):
-        self.root = root
+    def __init__(self, frame, controller):
+        self.frame = frame
         self.controller = controller
-        self.frame = tk.Frame(self.root)
         self.setup_view()
-        self.load_widgets()
 
     def setup_view(self):
-        self.frame.grid(row=0, column=0)
-
-    def load_widgets(self):
         self.load_labels()
         self.load_interactions()
 
@@ -38,9 +32,13 @@ class LoginView(AbstractView):
         repeat_password_entry = ttk.Entry(self.frame, width=27, show="*",
                                           textvariable=self.controller.input["r_password"])
         repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
-        login_button = ttk.Button(self.frame, text="Login", command=lambda:
-                                  self.controller.login_user(self.frame))
+        login_button = ttk.Button(self.frame, text="Login",
+                                  command=self.controller.login_user())
         login_button.grid(row=4, column=0, padx=10, pady=20)
-        register_button = ttk.Button(self.frame, text="Don't have an account?", command=lambda:
-                                     self.controller.register_view(self.frame))
+        register_button = ttk.Button(self.frame, text="Don't have an account?",
+                                     command=self.controller.register_view())
         register_button.grid(row=4, column=1, padx=10, pady=20)
+
+    def clear_frame(self):
+        for widget in self.frame.winfo_children():
+            widget.destroy()

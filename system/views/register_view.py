@@ -1,20 +1,14 @@
-import tkinter as tk
 from tkinter import ttk
 from system.views.abstract_view import AbstractView
 
 
 class RegisterView(AbstractView):
-    def __init__(self, root, controller):
-        self.root = root
+    def __init__(self, frame, controller):
+        self.frame = frame
         self.controller = controller
-        self.frame = tk.Frame(self.root)
         self.setup_view()
-        self.load_widgets()
 
     def setup_view(self):
-        self.frame.grid(row=0, column=0)
-
-    def load_widgets(self):
         self.load_labels()
         self.load_interactions()
 
@@ -51,9 +45,13 @@ class RegisterView(AbstractView):
                                       "Netherlands", "Poland", "Portugal",
                                       "Romania", "Slovakia", "Slovenia",
                                       "Spain", "Sweden", "United Kingdom")
-        register_button = ttk.Button(self.frame, text="Register", command=lambda:
-                                     self.controller.register_user(self.frame))
+        register_button = ttk.Button(self.frame, text="Register",
+                                     command=self.controller.register_user())
         register_button.grid(row=5, column=0, padx=10, pady=20)
-        login_button = ttk.Button(self.frame, text="Already have an account?", command=lambda:
-                                  self.controller.login_view(self.frame))
+        login_button = ttk.Button(self.frame, text="Already have an account?",
+                                  command=self.controller.login_view())
         login_button.grid(row=5, column=1, padx=10, pady=20)
+
+    def clear_frame(self):
+        for widget in self.frame.winfo_children():
+            widget.destroy()

@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import ttk
 from typing import List
 from abc import ABC, abstractmethod
@@ -10,23 +9,19 @@ class AbstractAccessController(ABC):
         pass
 
     @abstractmethod
-    def login_view(self, frame: tk.Frame):
+    def login_view(self):
         pass
 
     @abstractmethod
-    def register_view(self, frame: tk.Frame):
+    def register_view(self):
         pass
 
     @abstractmethod
-    def login_user(self, frame: tk.Frame):
+    def login_user(self):
         pass
 
     @abstractmethod
-    def register_user(self, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def destroy_frame(self, frame: tk.Frame):
+    def register_user(self):
         pass
 
 
@@ -52,11 +47,7 @@ class AbstractCustomerController(ABC):
         pass
 
     @abstractmethod
-    def logout_user(self, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def destroy_frame(self, frame: tk.Frame):
+    def logout_user(self):
         pass
 
 
@@ -90,9 +81,5 @@ class AbstractAdminController(ABC):
         pass
 
     @abstractmethod
-    def logout_user(self, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def destroy_frame(self, frame: tk.Frame):
+    def logout_user(self):
         pass

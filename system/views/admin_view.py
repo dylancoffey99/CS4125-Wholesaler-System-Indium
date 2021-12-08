@@ -1,23 +1,18 @@
-import tkinter as tk
 from tkinter import ttk
 from system.views.abstract_view import AbstractView
 
 
 class AdminView(AbstractView):
-    def __init__(self, root, controller):
+    def __init__(self, root, frame, controller):
         self.root = root
+        self.frame = frame
         self.controller = controller
-        self.frame = tk.Frame(self.root)
         self.setup_view()
-        self.load_widgets()
 
     def setup_view(self):
         user_name = self.controller.access_controller.user.get_user_name()
         self.root.geometry("1300x500")
         self.root.title("Wholesaler System - " + user_name)
-        self.frame.grid(row=0, column=0)
-
-    def load_widgets(self):
         self.load_labels()
         self.load_separator()
         self.load_interactions()
@@ -87,6 +82,10 @@ class AdminView(AbstractView):
         edit_product_button.grid(row=2, column=7, columnspan=4, padx=10)
         remove_product_button = ttk.Button(self.frame, width=20, text="Remove Product")
         remove_product_button.grid(row=3, column=7, columnspan=4, padx=10)
-        log_out_button = ttk.Button(self.frame, width=20, text="Logout", command=lambda:
-                                    self.controller.logout_user(self.frame))
+        log_out_button = ttk.Button(self.frame, width=20, text="Logout",
+                                    command=self.controller.logout_user())
         log_out_button.grid(row=5, column=7, columnspan=4, padx=10)
+
+    def clear_frame(self):
+        for widget in self.frame.winfo_children():
+            widget.destroy()

@@ -16,7 +16,8 @@ class AdminController(AbstractAdminController):
         self.product_db = ProductDB("system/database/csv/productDB")
         self.order_input = {"user_name": tk.StringVar(),
                             "discount_category": tk.StringVar()}
-        self.view = AdminView(self.access_controller.root, self)
+        self.view = AdminView(self.access_controller.root,
+                              self.access_controller.frame, self)
         self.customer = None
 
     def fill_users(self) -> List[str]:
@@ -86,15 +87,11 @@ class AdminController(AbstractAdminController):
     def remove_product(self, tree_view: ttk.Treeview):
         pass
 
-    def logout_user(self, frame: tk.Frame):
-        self.destroy_frame(frame)
-        self.view = HomeView(self.access_controller.root, self.access_controller)
+    def logout_user(self):
+        self.view.clear_frame()
+        self.view = HomeView(self.access_controller.root, self.access_controller.frame,
+                             self.access_controller)
         print("Logout successful!")
-
-    def destroy_frame(self, frame: tk.Frame):
-        for widget in frame.winfo_children():
-            widget.destroy()
-        frame.destroy()
 
     @staticmethod
     def insert_order(tree_view: ttk.Treeview, orders: List):
