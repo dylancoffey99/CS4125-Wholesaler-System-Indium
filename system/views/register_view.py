@@ -46,10 +46,10 @@ class RegisterView(AbstractView):
                                       "Romania", "Slovakia", "Slovenia",
                                       "Spain", "Sweden", "United Kingdom")
         register_button = ttk.Button(self.frame, text="Register",
-                                     command=self.controller.register_user())
+                                     command=self.controller.register_user)
         register_button.grid(row=5, column=0, padx=10, pady=20)
         login_button = ttk.Button(self.frame, text="Already have an account?",
-                                  command=self.controller.login_view())
+                                  command=self.controller.login_view)
         login_button.grid(row=5, column=1, padx=10, pady=20)
 
     def clear_frame(self):

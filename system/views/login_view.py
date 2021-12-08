@@ -33,10 +33,10 @@ class LoginView(AbstractView):
                                           textvariable=self.controller.input["r_password"])
         repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
         login_button = ttk.Button(self.frame, text="Login",
-                                  command=self.controller.login_user())
+                                  command=self.controller.login_user)
         login_button.grid(row=4, column=0, padx=10, pady=20)
         register_button = ttk.Button(self.frame, text="Don't have an account?",
-                                     command=self.controller.register_view())
+                                     command=self.controller.register_view)
         register_button.grid(row=4, column=1, padx=10, pady=20)
 
     def clear_frame(self):

@@ -49,7 +49,7 @@ class CustomerView(AbstractView):
                                      command=lambda: self.controller.checkout(product_tree_view))
         checkout_button.grid(row=3, column=2, columnspan=3, padx=10)
         log_out_button = ttk.Button(self.frame, width=20, text="Logout",
-                                    command=self.controller.logout_user())
+                                    command=self.controller.logout_user)
         log_out_button.grid(row=5, column=2, columnspan=3, padx=10)
 
     def clear_frame(self):

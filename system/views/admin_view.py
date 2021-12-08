@@ -83,7 +83,7 @@ class AdminView(AbstractView):
         remove_product_button = ttk.Button(self.frame, width=20, text="Remove Product")
         remove_product_button.grid(row=3, column=7, columnspan=4, padx=10)
         log_out_button = ttk.Button(self.frame, width=20, text="Logout",
-                                    command=self.controller.logout_user())
+                                    command=self.controller.logout_user)
         log_out_button.grid(row=5, column=7, columnspan=4, padx=10)
 
     def clear_frame(self):
