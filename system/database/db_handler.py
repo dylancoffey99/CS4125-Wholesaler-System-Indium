@@ -5,13 +5,10 @@ from system.models.users.user import User
 from system.models.shopping.order import Order
 from system.models.shopping.product import Product
 from system.models.shopping.country import Country
-from system.database.abstract_db_handler import AbstractUserDB
-from system.database.abstract_db_handler import AbstractOrderDB
-from system.database.abstract_db_handler import AbstractProductDB
-from system.database.abstract_db_handler import AbstractCountryDB
+from system.database import abstract_db_handler as db
 
 
-class ProductDB(AbstractProductDB):
+class ProductDB(db.AbstractProductDB):
     def __init__(self, db_name: str):
         self._db_name = db_name
 
@@ -85,7 +82,7 @@ class ProductDB(AbstractProductDB):
             return False
 
 
-class UserDB(AbstractUserDB):
+class UserDB(db.AbstractUserDB):
     def __init__(self, db_name: str):
         self._db_name = db_name
 
@@ -123,7 +120,7 @@ class UserDB(AbstractUserDB):
             return False
 
 
-class OrderDB(AbstractOrderDB):
+class OrderDB(db.AbstractOrderDB):
     def __init__(self, db_name: str):
         self._db_name = db_name
 
@@ -165,7 +162,7 @@ class OrderDB(AbstractOrderDB):
             return orders
 
 
-class CountryDB(AbstractCountryDB):
+class CountryDB(db.AbstractCountryDB):
     def __init__(self, db_name: str):
         self._db_name = db_name
 

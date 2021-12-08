@@ -70,7 +70,7 @@ class AbstractOrderDB(ABC):
 
 class AbstractCountryDB(ABC):
     @abstractmethod
-    def get_country(self, country_name: str):
+    def get_country(self, country_id: int):
         pass
 
     @abstractmethod
