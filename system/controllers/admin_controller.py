@@ -3,6 +3,7 @@ from tkinter import ttk
 from typing import List
 from system.views import HomeView, AdminView
 from system.models.users.customer import Customer
+from system.models.shopping.product import Product
 from system.models.shopping.discount import DiscountCategory
 from system.database.db_handler import UserDB, OrderDB, ProductDB
 from system.controllers.abstract_controllers import AbstractAdminController
@@ -16,6 +17,9 @@ class AdminController(AbstractAdminController):
         self.product_db = ProductDB("system/database/csv/productDB")
         self.order_input = {"user_name": tk.StringVar(),
                             "discount_category": tk.StringVar()}
+        self.product_input = {"product_name": tk.StringVar(),
+                              "product_quantity": tk.StringVar(),
+                              "product_price": tk.StringVar()}
         self.view = AdminView(self.access_controller.root,
                               self.access_controller.frame, self)
         self.customer = None
@@ -28,12 +32,10 @@ class AdminController(AbstractAdminController):
                 user_names.append(users[user].get_user_name())
         return user_names
 
-    def fill_products(self):
+    def fill_products(self, tree_view: ttk.Treeview):
         products = self.product_db.get_all_products()
-        product_names = []
-        for product, _ in enumerate(products):
-            product_names.append(products[product].get_product_name())
-        return product_names
+        for product in products:
+            self.insert_item(tree_view, product)
 
     def view_order(self, tree_view: ttk.Treeview):
         user_name = self.order_input["user_name"].get()
@@ -67,13 +69,20 @@ class AdminController(AbstractAdminController):
                 self.order_db.update_order_subtotals(user_name, discount.get_discount_percentage())
 
     def add_product(self, tree_view: ttk.Treeview):
-        product_name = self.input["product_name"].get()
-        quantity = self.input["product_quantity"].get()
-        product = self.product_db.get_product(product_name)
-        price = float(quantity) * product.get_product_price()
-        self.product_db.add_product(product)
-        self.product_db.get_product_price(price)
-        self.insert_data(tree_view, product_name, quantity, price)
+        product_name = self.product_input["product_name"].get()
+        quantity = self.product_input["product_quantity"].get()
+        price = self.product_input["product_price"].get()
+        if product_name == "" or quantity == "" or price == "":
+            print("Error: please enter all fields!")
+        else:
+            if not quantity.isdigit():
+                print("Error: the quantity entered is not a positive integer!")
+            elif not price.isdigit():
+                print("Error: the price entered is not a float!")
+            else:
+                product = Product(product_name, int(quantity), float(price))
+                self.product_db.add_product(product)
+                self.insert_item(tree_view, product)
 
     def edit_product(self, tree_view: ttk.Treeview):
         product_name = self.input["product_name"].get()
@@ -126,3 +135,16 @@ class AdminController(AbstractAdminController):
         else:
             discount = DiscountCategory(0, "Start-up Business", 0.20)
         return discount
+
+    @staticmethod
+    def insert_item(tree_view: ttk.Treeview, product: Product):
+        product_name = product.get_product_name()
+        quantity = product.get_product_quantity()
+        price = product.get_product_price()
+        tree_view.insert('', 'end', text="Item", values=(product_name, quantity, price))
+
+    @staticmethod
+    def remove_item(tree_view: ttk.Treeview):
+        selected_item = tree_view.selection()[0]
+        tree_view.delete(selected_item)
+

@@ -45,11 +45,17 @@ class AdminView(AbstractView):
                                          ["discount_category"])
         discount_combobox["values"] = ("Education", "Small Business", "Start-up Business")
         discount_combobox.grid(row=0, column=3, padx=10, pady=10)
-        product_name_entry = ttk.Entry(self.frame, width=42)
-        product_name_entry.grid(row=0, column=6, padx=10, pady=10)
-        product_quantity_entry = ttk.Entry(self.frame, width=8)
+        product_name_entry = ttk.Entry(self.frame, width=42,
+                                       textvariable=self.controller.product_input
+                                       ["product_name"])
+        product_name_entry.grid(row=0, column=6, padx=10, pady=10,)
+        product_quantity_entry = ttk.Entry(self.frame, width=8,
+                                           textvariable=self.controller.product_input
+                                           ["product_quantity"])
         product_quantity_entry.grid(row=0, column=8, padx=10, pady=10)
-        product_price_entry = ttk.Entry(self.frame, width=8)
+        product_price_entry = ttk.Entry(self.frame, width=8,
+                                        textvariable=self.controller.product_input
+                                        ["product_price"])
         product_price_entry.grid(row=0, column=10, padx=10, pady=10)
         order_tree_view = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
                                        show="headings", height=21)
@@ -76,7 +82,9 @@ class AdminView(AbstractView):
                                          command=lambda:
                                          self.controller.add_discount(order_tree_view))
         add_discount_button.grid(row=2, column=2, columnspan=2, padx=10)
-        add_product_button = ttk.Button(self.frame, width=20, text="Add Product")
+        add_product_button = ttk.Button(self.frame, width=20, text="Add Product",
+                                        command=lambda:
+                                        self.controller.add_product(product_tree_view))
         add_product_button.grid(row=1, column=7, columnspan=4, padx=10)
         edit_product_button = ttk.Button(self.frame, width=20, text="Edit Product")
         edit_product_button.grid(row=2, column=7, columnspan=4, padx=10)
@@ -85,6 +93,7 @@ class AdminView(AbstractView):
         log_out_button = ttk.Button(self.frame, width=20, text="Logout",
                                     command=self.controller.logout_user)
         log_out_button.grid(row=5, column=7, columnspan=4, padx=10)
+        self.controller.fill_products(product_tree_view)
 
     def clear_frame(self):
         for widget in self.frame.winfo_children():
