@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from system.views.abstract_view import AbstractView
 
 
-class AdminView:
+class AdminView(AbstractView):
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
@@ -47,8 +48,8 @@ class AdminView:
         user_combobox["values"] = self.controller.fill_users()
         user_combobox.grid(row=0, column=1, pady=10)
         discount_combobox = ttk.Combobox(self.root, width=17, state="readonly",
-                                         textvariable=
-                                         self.controller.order_input["discount_category"])
+                                         textvariable=self.controller.order_input
+                                         ["discount_category"])
         discount_combobox["values"] = ("Education", "Small Business", "Start-up Business")
         discount_combobox.grid(row=0, column=3, padx=10, pady=10)
         product_name_entry = ttk.Entry(self.root, width=42)

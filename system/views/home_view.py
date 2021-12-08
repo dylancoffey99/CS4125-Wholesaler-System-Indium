@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from system.views.abstract_view import AbstractView
 
 
-class HomeView:
+class HomeView(AbstractView):
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
