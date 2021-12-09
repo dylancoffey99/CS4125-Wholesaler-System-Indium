@@ -1,20 +1,23 @@
 import hashlib
 import tkinter as tk
+from system.views import HomeView, LoginView, RegisterView
 from system.database.db_handler import UserDB
 from system.models.users.customer import Customer
-from system.views import HomeView, LoginView, RegisterView
 from system.controllers.admin_controller import AdminController
 from system.controllers.customer_controller import CustomerController
-from system.controllers.abstract_controllers import AbstractAccessController
+from system.controllers.abstract_controllers import AbstractObserverController
 
 
-class AccessController(AbstractAccessController):
+class AccessController(AbstractObserverController):
     def __init__(self):
         self.root = tk.Tk()
         self.frame = tk.Frame(self.root)
         self.user_db = UserDB("system/database/csv/userDB")
-        self.view = HomeView(self.root, self.frame, self)
-        self.input = {}
+        self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
+                      "r_password": tk.StringVar(), "country": tk.StringVar()}
+        self.observers = []
+        self.view = HomeView(self.root, self.frame, self.observers)
+        self.attach_observers()
         self.user = None
 
     def start(self):
@@ -22,15 +25,13 @@ class AccessController(AbstractAccessController):
 
     def login_view(self):
         self.view.clear_frame()
-        self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
-                      "r_password": tk.StringVar()}
-        self.view = LoginView(self.frame, self)
+        self.clear_input()
+        self.view = LoginView(self.frame, self.input, self.observers)
 
     def register_view(self):
         self.view.clear_frame()
-        self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
-                      "r_password": tk.StringVar(), "country": tk.StringVar()}
-        self.view = RegisterView(self.frame, self)
+        self.clear_input()
+        self.view = RegisterView(self.frame, self.input, self.observers)
 
     def login_user(self):
         username = self.input["username"].get()
@@ -48,6 +49,7 @@ class AccessController(AbstractAccessController):
                 print("Error: the password is incorrect!")
             else:
                 self.view.clear_frame()
+                self.clear_input()
                 if self.user.get_is_admin() == 1:
                     AdminController(self)
                 else:
@@ -77,8 +79,19 @@ class AccessController(AbstractAccessController):
             self.user = Customer(username, self.hash_password(password), country_dict.get(country))
             self.user_db.add_user(self.user)
             self.view.clear_frame()
+            self.clear_input()
             CustomerController(self)
             print("Registration successful!")
+
+    def clear_input(self):
+        for value in self.input:
+            self.input[value].set("")
+
+    def attach_observers(self):
+        self.view.attach((1, self.login_user))
+        self.view.attach((2, self.register_user))
+        self.view.attach((3, self.login_view))
+        self.view.attach((4, self.register_view))
 
     @staticmethod
     def hash_password(password: str) -> str:

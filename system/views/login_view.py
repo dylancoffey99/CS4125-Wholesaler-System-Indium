@@ -3,9 +3,10 @@ from system.views.abstract_view import AbstractView
 
 
 class LoginView(AbstractView):
-    def __init__(self, frame, controller):
+    def __init__(self, frame, access_input, observers):
         self.frame = frame
-        self.controller = controller
+        self.input = access_input
+        self.observers = observers
         self.setup_view()
 
     def setup_view(self):
@@ -24,20 +25,27 @@ class LoginView(AbstractView):
 
     def load_interactions(self):
         user_name_entry = ttk.Entry(self.frame, width=27,
-                                    textvariable=self.controller.input["username"])
+                                    textvariable=self.input["username"])
         user_name_entry.grid(row=1, column=1, padx=10, pady=10)
         password_entry = ttk.Entry(self.frame, width=27, show="*",
-                                   textvariable=self.controller.input["password"])
+                                   textvariable=self.input["password"])
         password_entry.grid(row=2, column=1, padx=10, pady=10)
         repeat_password_entry = ttk.Entry(self.frame, width=27, show="*",
-                                          textvariable=self.controller.input["r_password"])
+                                          textvariable=self.input["r_password"])
         repeat_password_entry.grid(row=3, column=1, padx=10, pady=10)
-        login_button = ttk.Button(self.frame, text="Login",
-                                  command=self.controller.login_user)
+        login_button = ttk.Button(self.frame, text="Login", command=lambda: self.notify(1))
         login_button.grid(row=4, column=0, padx=10, pady=20)
         register_button = ttk.Button(self.frame, text="Don't have an account?",
-                                     command=self.controller.register_view)
+                                     command=lambda: self.notify(4))
         register_button.grid(row=4, column=1, padx=10, pady=20)
+
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def notify(self, command: int):
+        for observer in self.observers:
+            if observer[0] == command:
+                observer[1]()
 
     def clear_frame(self):
         for widget in self.frame.winfo_children():

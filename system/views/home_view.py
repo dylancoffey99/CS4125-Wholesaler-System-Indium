@@ -3,10 +3,10 @@ from system.views.abstract_view import AbstractView
 
 
 class HomeView(AbstractView):
-    def __init__(self, root, frame, controller):
+    def __init__(self, root, frame, observers):
         self.root = root
         self.frame = frame
-        self.controller = controller
+        self.observers = observers
         self.setup_view()
 
     def setup_view(self):
@@ -24,12 +24,18 @@ class HomeView(AbstractView):
         system_label.grid(row=0, column=0, pady=10)
 
     def load_interactions(self):
-        login_button = ttk.Button(self.frame, text="Login",
-                                  command=self.controller.login_view)
+        login_button = ttk.Button(self.frame, text="Login", command=lambda: self.notify(3))
         login_button.grid(row=1, column=0, pady=10)
-        register_button = ttk.Button(self.frame, text="Register",
-                                     command=self.controller.register_view)
+        register_button = ttk.Button(self.frame, text="Register", command=lambda: self.notify(4))
         register_button.grid(row=2, column=0, pady=10)
+
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def notify(self, command: int):
+        for observer in self.observers:
+            if observer[0] == command:
+                observer[1]()
 
     def clear_frame(self):
         for widget in self.frame.winfo_children():
