@@ -28,14 +28,14 @@ class AbstractView(ABC):
     def clear_frame(self):
         pass
 
+
+class AbstractUserView(ABC):
     @abstractmethod
     def get_input_value(self, dict_value: str) -> str:
         pass
 
-
-class AbstractUserView(ABC):
     @abstractmethod
-    def get_tree_view(self) -> ttk.Treeview:
+    def get_tree_view(self):
         pass
 
     @abstractmethod
@@ -43,13 +43,13 @@ class AbstractUserView(ABC):
         pass
 
     @abstractmethod
-    def insert_item(self, product_name: str, quantity: int, price: float):
+    def insert_item(self, tree_view: ttk.Treeview, *args):
         pass
 
     @abstractmethod
-    def remove_item(self):
+    def remove_item(self, tree_view: ttk.Treeview):
         pass
 
     @abstractmethod
-    def clear_items(self):
+    def clear_tree_view(self, tree_view: ttk.Treeview):
         pass

@@ -7,7 +7,7 @@ class AbstractController(ABC):
         pass
 
 
-class AbstractControllerObserver(ABC):
+class AbstractObserverController(ABC):
     @abstractmethod
     def attach_observers(self):
         pass
