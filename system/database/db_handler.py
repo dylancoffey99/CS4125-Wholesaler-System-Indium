@@ -155,12 +155,12 @@ class OrderDB(db.AbstractOrderDB):
                 writer.writerow([order.get_customer_name(), product_names[product],
                                  order.get_order_date(), order.get_order_subtotal()])
 
-    def update_order_subtotals(self, customer_name: str, discount_percentage: float):
+    def update_order_subtotals(self, user_name: str, discount_percentage: float):
         temp_rows = []
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             for row in reader:
-                if row[0] == customer_name:
+                if row[0] == user_name:
                     subtotal = float(row[3])
                     discount = subtotal * discount_percentage
                     row[3] = str(subtotal - discount)
@@ -169,20 +169,28 @@ class OrderDB(db.AbstractOrderDB):
             writer = csv.writer(file, delimiter=",")
             writer.writerows(temp_rows)
 
-    def get_customer_orders(self, customer_name: str) -> List:
+    def get_customer_orders(self, user_name: str) -> List:
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             next(reader)
             orders = []
             for row in reader:
                 order = []
-                if row[0] == customer_name:
+                if row[0] == user_name:
                     order.append(row[0])
                     order.append(row[1])
                     order.append(datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S.%f'))
                     order.append(float(row[3]))
                     orders.append(order)
             return orders
+
+    def orders_exist(self, user_name: str) -> bool:
+        with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            for row in reader:
+                if row[0] == user_name:
+                    return True
+            return False
 
 
 class CountryDB(db.AbstractCountryDB):
