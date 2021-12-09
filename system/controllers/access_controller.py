@@ -1,5 +1,6 @@
 import hashlib
 import tkinter as tk
+from tkinter import messagebox as mb
 from system.views import HomeView, LoginView, RegisterView
 from system.database.db_handler import UserDB
 from system.models.users.customer import Customer
@@ -38,15 +39,15 @@ class AccessController(AbstractObserverController):
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()
         if username == "" or password == "" or r_password == "":
-            print("Error: please enter all the fields!")
+            mb.showwarning("Error", "Please enter all the fields!")
         elif not self.user_db.user_exists(username):
-            print("Error: that username does not exist!")
+            mb.showwarning("Error", "That username does not exist!")
         elif password != r_password:
-            print("Error: the passwords are not the same!")
+            mb.showwarning("Error", "The passwords are not the same!")
         else:
             self.user = self.user_db.get_user(username)
             if self.user.get_password() != self.hash_password(password):
-                print("Error: the password is incorrect!")
+                mb.showwarning("Error", "The password is incorrect!")
             else:
                 self.view.clear_frame()
                 self.clear_input()
@@ -54,7 +55,6 @@ class AccessController(AbstractObserverController):
                     AdminController(self)
                 else:
                     CustomerController(self)
-                print("Login successful!")
 
     def register_user(self):
         username = self.input["username"].get()
@@ -62,11 +62,11 @@ class AccessController(AbstractObserverController):
         r_password = self.input["r_password"].get()
         country = self.input["country"].get()
         if username == "" or password == "" or r_password == "" or country == "":
-            print("Error: please enter all the fields!")
+            mb.showwarning("Error", "Please enter all the fields!")
         elif self.user_db.user_exists(username):
-            print("Error: that username already exists!")
+            mb.showwarning("Error", "That username already exists!")
         elif password != r_password:
-            print("Error: the passwords are not the same!")
+            mb.showwarning("Error", "The passwords are not the same!")
         else:
             country_dict = {"Austria": 1, "Belgium": 2, "Bulgaria": 3, "Croatia": 4,
                             "Cyprus": 5, "Czech": 6, "Denmark": 7, "Estonia": 8,
@@ -81,7 +81,6 @@ class AccessController(AbstractObserverController):
             self.view.clear_frame()
             self.clear_input()
             CustomerController(self)
-            print("Registration successful!")
 
     def clear_input(self):
         for value in self.input:

@@ -1,5 +1,6 @@
 from typing import List
 from datetime import datetime
+from tkinter import messagebox as mb
 from system.views import HomeView, CustomerView
 from system.database.db_handler import OrderDB, ProductDB, CountryDB
 from system.models.shopping.order import Order
@@ -30,24 +31,29 @@ class CustomerController(AbstractController, AbstractObserverController):
     def add_product(self):
         product_name = self.view.get_input_value("product_name")
         quantity = self.view.get_input_value("product_quantity")
-        if product_name == "":
-            print("Error: please select a product!")
-        elif quantity == "":
-            print("Error: please enter the quantity!")
+        if product_name == "" or quantity == "":
+            mb.showwarning("Error", "Please enter all fields!")
+        elif not quantity.isdigit():
+            mb.showwarning("Error", "The quantity entered is not a valid number!")
         else:
             product = self.product_db.get_product(product_name)
-            price = float(quantity) * product.get_product_price()
-            self.basket.add_item(product)
-            self.basket.add_basket_subtotal(price)
-            self.view.insert_item(self.tree_view, product_name, int(quantity), price)
+            if product.get_product_quantity() == 0:
+                mb.showwarning("Error", "Product out of stock!")
+            elif int(quantity) > product.get_product_quantity():
+                mb.showwarning("Error", "The quantity entered is too high,"
+                                        " not enough left in stock!")
+            else:
+                price = float(quantity) * product.get_product_price()
+                self.basket.add_item(product)
+                self.basket.add_basket_subtotal(price)
+                self.view.insert_item(self.tree_view, product_name, int(quantity), price)
 
     def remove_product(self):
-        tree_view = self.view.get_tree_view()
-        selected_item = tree_view.focus()
+        selected_item = self.tree_view.focus()
         if not selected_item:
-            print("Error: please select from the basket items!")
+            mb.showwarning("Error", "Please select a product from the basket!")
         else:
-            item_dict = tree_view.item(selected_item)
+            item_dict = self.tree_view.item(selected_item)
             values = list(item_dict.values())
             product_name = values[2][0]
             quantity = values[2][1]
@@ -60,17 +66,16 @@ class CustomerController(AbstractController, AbstractObserverController):
                     self.view.remove_item(self.tree_view)
 
     def checkout(self):
-        tree_view = self.view.get_tree_view()
-        if len(tree_view.get_children("")) == 0:
-            print("Error: the basket is empty, please add some products!")
+        if len(self.tree_view.get_children("")) == 0:
+            mb.showwarning("Error", "The basket is empty, please add some products to the basket!")
         else:
             customer_name = self.access_controller.user.get_user_name()
-            tree_list = list(tree_view.get_children(""))
+            tree_list = list(self.tree_view.get_children(""))
             products = self.basket.get_basket_items()
             product_names = []
             for row in tree_list:
-                product_name = tree_view.item(row, "values")[0]
-                quantity = int(tree_view.item(row, "values")[1])
+                product_name = self.tree_view.item(row, "values")[0]
+                quantity = int(self.tree_view.item(row, "values")[1])
                 for product in products:
                     if product_name == product.get_product_name():
                         self.product_db.sub_product_quantity(product, quantity)
@@ -78,7 +83,7 @@ class CustomerController(AbstractController, AbstractObserverController):
             self.create_order(customer_name, product_names)
             self.basket.clear_items()
             self.view.clear_tree_view(self.tree_view)
-            print("Checkout successful, your order has been created!")
+            mb.showwarning("Success", "Checkout successful, your order has been created!")
 
     def create_order(self, customer_name: str, product_names: List[str]):
         country_id = self.access_controller.user.get_country_id()
@@ -93,7 +98,6 @@ class CustomerController(AbstractController, AbstractObserverController):
         self.view.clear_frame()
         self.view = HomeView(self.access_controller.root, self.access_controller.frame,
                              self.access_controller.observers)
-        print("Logout successful!")
 
     def attach_observers(self):
         self.view.attach((1, self.add_product))

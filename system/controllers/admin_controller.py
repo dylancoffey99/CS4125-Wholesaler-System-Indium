@@ -1,5 +1,5 @@
-from tkinter import ttk
 from typing import List
+from tkinter import ttk, messagebox as mb
 from system.views import HomeView, AdminView
 from system.database.db_handler import UserDB, OrderDB, ProductDB
 from system.models.users.customer import Customer
@@ -42,7 +42,7 @@ class AdminController(AbstractController, AbstractObserverController):
         user_name = self.view.get_input_value("user_name")
         orders = self.order_db.get_customer_orders(user_name)
         if not orders:
-            print("Error: this user does not have any orders!")
+            mb.showwarning("Error", "This user does not have any orders!")
         else:
             self.view.clear_tree_view(self.tree_views[0])
             for order in orders:
@@ -55,9 +55,9 @@ class AdminController(AbstractController, AbstractObserverController):
         user_name = self.view.get_input_value("user_name")
         discount_category = self.view.get_input_value("discount_category")
         if user_name == "":
-            print("Error: please select a user!")
+            mb.showwarning("Error", "Please select a user!")
         elif discount_category == "":
-            print("Error: please select a discount category!")
+            mb.showwarning("Error", "Please select a discount category!")
         else:
             if self.customer is None:
                 user = self.user_db.get_user(user_name)
@@ -66,7 +66,7 @@ class AdminController(AbstractController, AbstractObserverController):
             if user_name != self.customer.get_user_name():
                 self.customer = None
             elif isinstance(self.customer.get_discount_category(), DiscountCategory):
-                print("Error: customer already has a discount category!")
+                mb.showwarning("Error", "Customer already has a discount category!")
             else:
                 discount = self.check_discount(discount_category)
                 discount_percentage = discount.get_discount_percentage()
@@ -79,16 +79,19 @@ class AdminController(AbstractController, AbstractObserverController):
         quantity = self.view.get_input_value("product_quantity")
         price = self.view.get_input_value("product_price")
         if product_name == "" or quantity == "" or price == "":
-            print("Error: please enter all fields!")
+            mb.showwarning("Error", "Please enter all fields!")
         else:
-            if not quantity.isdigit():
-                print("Error: the quantity entered is not a valid number!")
-            elif not price.isdigit():
-                print("Error: the price entered is not a valid number!")
+            if self.product_db.product_exists(product_name):
+                mb.showwarning("Error", "That product name already exists!")
             else:
-                product = Product(product_name, int(quantity), float(price))
-                self.product_db.add_product(product)
-                self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
+                if not quantity.isdigit():
+                    mb.showwarning("Error", "The quantity entered is not a valid number!")
+                elif not price.isdigit():
+                    mb.showwarning("Error", "The price entered is not a valid number!")
+                else:
+                    product = Product(product_name, int(quantity), float(price))
+                    self.product_db.add_product(product)
+                    self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
 
     def edit_product(self, tree_view: ttk.Treeview):
         product_name = self.input["product_name"].get()
@@ -106,7 +109,6 @@ class AdminController(AbstractController, AbstractObserverController):
         self.view.clear_frame()
         self.view = HomeView(self.access_controller.root, self.access_controller.frame,
                              self.access_controller.observers)
-        print("Logout successful!")
 
     def attach_observers(self):
         self.view.attach((1, self.view_order))
