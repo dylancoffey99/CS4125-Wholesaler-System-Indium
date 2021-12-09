@@ -1,3 +1,5 @@
+from tkinter import ttk
+from typing import List
 from abc import ABC, abstractmethod
 
 
@@ -15,15 +17,39 @@ class AbstractView(ABC):
         pass
 
     @abstractmethod
-    def clear_frame(self):
-        pass
-
-
-class AbstractViewSubject(ABC):
-    @abstractmethod
     def attach(self, observer):
         pass
 
     @abstractmethod
     def notify(self, command: int):
+        pass
+
+    @abstractmethod
+    def clear_frame(self):
+        pass
+
+    @abstractmethod
+    def get_input_value(self, dict_value: str) -> str:
+        pass
+
+
+class AbstractUserView(ABC):
+    @abstractmethod
+    def get_tree_view(self) -> ttk.Treeview:
+        pass
+
+    @abstractmethod
+    def set_combobox(self, combobox_items: List[str]):
+        pass
+
+    @abstractmethod
+    def insert_item(self, product_name: str, quantity: int, price: float):
+        pass
+
+    @abstractmethod
+    def remove_item(self):
+        pass
+
+    @abstractmethod
+    def clear_items(self):
         pass

@@ -1,16 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
 from typing import List
-from system.views.abstract_view import AbstractView, AbstractViewSubject
+from system.views.abstract_view import AbstractView, AbstractUserView
 
 
-class CustomerView(AbstractView, AbstractViewSubject):
+class CustomerView(AbstractView, AbstractUserView):
     def __init__(self, root, frame, user):
         self.root = root
         self.frame = frame
         self.user = user
-        self.input = {"product_name": tk.StringVar(),
-                      "product_quantity": tk.StringVar()}
+        self.input = {"product_name": tk.StringVar(), "product_quantity": tk.StringVar()}
         self.product_combobox = None
         self.product_tree_view = None
         self.observers = []
@@ -56,10 +55,6 @@ class CustomerView(AbstractView, AbstractViewSubject):
                                     self.notify(4))
         log_out_button.grid(row=5, column=2, columnspan=3, padx=10)
 
-    def clear_frame(self):
-        for widget in self.frame.winfo_children():
-            widget.destroy()
-
     def attach(self, observer):
         self.observers.append(observer)
 
@@ -67,6 +62,10 @@ class CustomerView(AbstractView, AbstractViewSubject):
         for observer in self.observers:
             if observer[0] == command:
                 observer[1]()
+
+    def clear_frame(self):
+        for widget in self.frame.winfo_children():
+            widget.destroy()
 
     def get_input_value(self, dict_value: str) -> str:
         value = self.input[dict_value].get()
