@@ -1,27 +1,25 @@
-import tkinter as tk
 from tkinter import ttk
 from typing import List
 from system.views import HomeView, AdminView
+from system.database.db_handler import UserDB, OrderDB, ProductDB
 from system.models.users.customer import Customer
 from system.models.shopping.product import Product
 from system.models.shopping.discount import DiscountCategory
-from system.database.db_handler import UserDB, OrderDB, ProductDB
-from system.controllers.abstract_controllers import AbstractAdminController
+from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
 
 
-class AdminController(AbstractAdminController):
+class AdminController(AbstractController, AbstractObserverController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
         self.user_db = UserDB("system/database/csv/userDB")
         self.order_db = OrderDB("system/database/csv/orderDB")
         self.product_db = ProductDB("system/database/csv/productDB")
-        self.order_input = {"user_name": tk.StringVar(),
-                            "discount_category": tk.StringVar()}
-        self.product_input = {"product_name": tk.StringVar(),
-                              "product_quantity": tk.StringVar(),
-                              "product_price": tk.StringVar()}
-        self.view = AdminView(self.access_controller.root,
-                              self.access_controller.frame, self)
+        self.view = AdminView(self.access_controller.root, self.access_controller.frame,
+                              self.access_controller.user)
+        self.view.set_combobox(self.fill_users())
+        self.tree_views = self.view.get_tree_view()
+        self.fill_products()
+        self.attach_observers()
         self.customer = None
 
     def fill_users(self) -> List[str]:
@@ -32,23 +30,30 @@ class AdminController(AbstractAdminController):
                 user_names.append(users[user].get_user_name())
         return user_names
 
-    def fill_products(self, tree_view: ttk.Treeview):
+    def fill_products(self):
         products = self.product_db.get_all_products()
         for product in products:
-            self.insert_item(tree_view, product)
+            product_name = product.get_product_name()
+            quantity = product.get_product_quantity()
+            price = product.get_product_price()
+            self.view.insert_item(self.tree_views[1], product_name, quantity, price)
 
-    def view_order(self, tree_view: ttk.Treeview):
-        user_name = self.order_input["user_name"].get()
+    def view_order(self):
+        user_name = self.view.get_input_value("user_name")
         orders = self.order_db.get_customer_orders(user_name)
         if not orders:
             print("Error: this user does not have any orders!")
         else:
-            self.clear_orders(tree_view)
-            self.insert_order(tree_view, orders)
+            self.view.clear_tree_view(self.tree_views[0])
+            for order in orders:
+                product_name = order[1]
+                date_time = order[2]
+                subtotal = order[3]
+                self.view.insert_item(self.tree_views[0], product_name, date_time, subtotal)
 
-    def add_discount(self, tree_view: ttk.Treeview):
-        user_name = self.order_input["user_name"].get()
-        discount_category = self.order_input["discount_category"].get()
+    def add_discount(self):
+        user_name = self.view.get_input_value("user_name")
+        discount_category = self.view.get_input_value("discount_category")
         if user_name == "":
             print("Error: please select a user!")
         elif discount_category == "":
@@ -64,14 +69,15 @@ class AdminController(AbstractAdminController):
                 print("Error: customer already has a discount category!")
             else:
                 discount = self.check_discount(discount_category)
+                discount_percentage = discount.get_discount_percentage()
                 self.customer.set_discount_category(discount)
-                self.update_orders(tree_view, discount)
-                self.order_db.update_order_subtotals(user_name, discount.get_discount_percentage())
+                self.update_orders(self.tree_views[0], discount_percentage)
+                self.order_db.update_order_subtotals(user_name, discount_percentage)
 
-    def add_product(self, tree_view: ttk.Treeview):
-        product_name = self.product_input["product_name"].get()
-        quantity = self.product_input["product_quantity"].get()
-        price = self.product_input["product_price"].get()
+    def add_product(self):
+        product_name = self.view.get_input_value("product_name")
+        quantity = self.view.get_input_value("product_quantity")
+        price = self.view.get_input_value("product_price")
         if product_name == "" or quantity == "" or price == "":
             print("Error: please enter all fields!")
         else:
@@ -82,7 +88,7 @@ class AdminController(AbstractAdminController):
             else:
                 product = Product(product_name, int(quantity), float(price))
                 self.product_db.add_product(product)
-                self.insert_item(tree_view, product)
+                self.view.insert_item(self.tree_views[1], product_name, quantity, price)
 
     def edit_product(self, tree_view: ttk.Treeview):
         product_name = self.input["product_name"].get()
@@ -99,52 +105,34 @@ class AdminController(AbstractAdminController):
     def logout_user(self):
         self.view.clear_frame()
         self.view = HomeView(self.access_controller.root, self.access_controller.frame,
-                             self.access_controller)
+                             self.access_controller.observers)
         print("Logout successful!")
 
-    @staticmethod
-    def insert_order(tree_view: ttk.Treeview, orders: List):
-        for order in orders:
-            product_name = order[1]
-            date_time = order[2]
-            subtotal = order[3]
-            tree_view.insert("", "end", text="Order", values=(product_name, date_time, subtotal))
+    def attach_observers(self):
+        self.view.attach((1, self.view_order))
+        self.view.attach((2, self.add_discount))
+        self.view.attach((3, self.add_product))
+        self.view.attach((4, self.edit_product))
+        self.view.attach((5, self.remove_product))
+        self.view.attach((6, self.logout_user))
 
     @staticmethod
-    def update_orders(tree_view: ttk.Treeview, discount_category: DiscountCategory):
-        tree_list = list(tree_view.get_children(""))
-        for order in tree_list:
-            product_name = tree_view.item(order, "values")[0]
-            date_time = tree_view.item(order, "values")[1]
-            subtotal = float(tree_view.item(order, "values")[2])
-            discount = subtotal * discount_category.get_discount_percentage()
-            subtotal -= discount
-            tree_view.item(order, text="Order", values=(product_name, date_time, subtotal))
-
-    @staticmethod
-    def clear_orders(tree_view: ttk.Treeview):
-        for order in tree_view.get_children():
-            tree_view.delete(order)
-
-    @staticmethod
-    def check_discount(discount_category):
-        if discount_category == "Education":
+    def check_discount(discount_name):
+        if discount_name == "Education":
             discount = DiscountCategory(0, "Education", 0.10)
-        elif discount_category == "Small Business":
+        elif discount_name == "Small Business":
             discount = DiscountCategory(0, "Small Business", 0.15)
         else:
             discount = DiscountCategory(0, "Start-up Business", 0.20)
         return discount
 
     @staticmethod
-    def insert_item(tree_view: ttk.Treeview, product: Product):
-        product_name = product.get_product_name()
-        quantity = product.get_product_quantity()
-        price = product.get_product_price()
-        tree_view.insert('', 'end', text="Item", values=(product_name, quantity, price))
-
-    @staticmethod
-    def remove_item(tree_view: ttk.Treeview):
-        selected_item = tree_view.selection()[0]
-        tree_view.delete(selected_item)
-
+    def update_orders(tree_view: ttk.Treeview, discount_percentage: float):
+        tree_list = list(tree_view.get_children(""))
+        for item in tree_list:
+            product_name = tree_view.item(item, "values")[0]
+            date_time = tree_view.item(item, "values")[1]
+            subtotal = float(tree_view.item(item, "values")[2])
+            discount = subtotal * discount_percentage
+            subtotal -= discount
+            tree_view.item(item, text="Item", values=(product_name, date_time, subtotal))
