@@ -76,7 +76,7 @@ class CustomerController(AbstractController, AbstractControllerObserver):
                         product_names.append(product.get_product_name())
             self.create_order(customer_name, product_names)
             self.view.clear_items()
-            self.basket = Basket([], 0)
+            self.basket.clear_items()
             print("Checkout successful, your order has been created!")
 
     def create_order(self, customer_name: str, product_names: List[str]):

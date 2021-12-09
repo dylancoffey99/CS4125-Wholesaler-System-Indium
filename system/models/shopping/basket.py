@@ -69,3 +69,11 @@ class Basket:
         :param product: Product to be removed from the basket items.
         """
         self.basket_items.remove(product)
+
+    def clear_items(self):
+        """
+        This method clears all items from the basket, and resets
+        the basket subtotal to zero.
+        """
+        self.basket_items.clear()
+        self.basket_subtotal = 0
