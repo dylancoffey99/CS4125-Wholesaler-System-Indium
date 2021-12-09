@@ -82,13 +82,13 @@ class AdminController(AbstractController, AbstractObserverController):
             print("Error: please enter all fields!")
         else:
             if not quantity.isdigit():
-                print("Error: the quantity entered is not a positive integer!")
+                print("Error: the quantity entered is not a valid number!")
             elif not price.isdigit():
-                print("Error: the price entered is not a float!")
+                print("Error: the price entered is not a valid number!")
             else:
                 product = Product(product_name, int(quantity), float(price))
                 self.product_db.add_product(product)
-                self.view.insert_item(self.tree_views[1], product_name, quantity, price)
+                self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
 
     def edit_product(self, tree_view: ttk.Treeview):
         product_name = self.input["product_name"].get()
