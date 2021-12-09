@@ -54,6 +54,8 @@ class AccessController(AbstractObserverController):
                 if self.user.get_is_admin() == 1:
                     AdminController(self)
                 else:
+                    self.user = Customer(self.user.get_user_name(), self.user.get_password(),
+                                         self.user.get_country_id())
                     CustomerController(self)
 
     def register_user(self):
@@ -77,7 +79,7 @@ class AccessController(AbstractObserverController):
                             "Romania": 23, "Slovakia": 24, "Slovenia": 25,
                             "Spain": 26, "Sweden": 27, "United Kingdom": 28}
             self.user = Customer(username, self.hash_password(password), country_dict.get(country))
-            self.user_db.add_user(self.user)
+            self.user_db.add_customer(self.user)
             self.view.clear_frame()
             self.clear_input()
             CustomerController(self)
