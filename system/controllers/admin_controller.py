@@ -16,18 +16,17 @@ class AdminController(AbstractController, AbstractObserverController):
         self.product_db = ProductDB("system/database/csv/productDB")
         self.view = AdminView(self.access_controller.root, self.access_controller.frame,
                               self.access_controller.user)
-        self.view.set_combobox(self.fill_users())
+        self.view.set_combobox(self.fill_customers())
         self.tree_views = self.view.get_tree_view()
         self.fill_products()
         self.attach_observers()
         self.customer = None
 
-    def fill_users(self) -> List[str]:
-        users = self.user_db.get_all_users()
+    def fill_customers(self) -> List[str]:
+        customers = self.user_db.get_all_customers()
         user_names = []
-        for user, _ in enumerate(users):
-            if users[user].get_is_admin() == 0:
-                user_names.append(users[user].get_user_name())
+        for customer, _ in enumerate(customers):
+            user_names.append(customers[customer].get_user_name())
         return user_names
 
     def fill_products(self):
@@ -109,6 +108,7 @@ class AdminController(AbstractController, AbstractObserverController):
         self.view.clear_frame()
         self.view = HomeView(self.access_controller.root, self.access_controller.frame,
                              self.access_controller.observers)
+        self.access_controller.user = None
 
     def attach_observers(self):
         self.view.attach((1, self.view_order))

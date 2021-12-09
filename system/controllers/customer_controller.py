@@ -98,6 +98,7 @@ class CustomerController(AbstractController, AbstractObserverController):
         self.view.clear_frame()
         self.view = HomeView(self.access_controller.root, self.access_controller.frame,
                              self.access_controller.observers)
+        self.access_controller.user = None
 
     def attach_observers(self):
         self.view.attach((1, self.add_product))

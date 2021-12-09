@@ -25,8 +25,8 @@ class AdminView(AbstractView, AbstractUserView):
         self.load_interactions()
 
     def load_labels(self):
-        user_label = ttk.Label(self.frame, text="Choose a User")
-        user_label.grid(row=0, column=0, padx=10, pady=10)
+        customer_label = ttk.Label(self.frame, text="Choose a Customer")
+        customer_label.grid(row=0, column=0, padx=10, pady=10)
         discount_label = ttk.Label(self.frame, text="Discount Category")
         discount_label.grid(row=0, column=2, padx=10, pady=10)
         product_name_label = ttk.Label(self.frame, text="Product Name")
