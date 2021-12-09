@@ -17,3 +17,11 @@ class AbstractView(ABC):
     @abstractmethod
     def clear_frame(self):
         pass
+
+    @abstractmethod
+    def attach(self, observer):
+        pass
+
+    @abstractmethod
+    def notify(self, command: int):
+        pass
