@@ -24,8 +24,8 @@ class CustomerController(AbstractController, AbstractObserverController):
     def fill_products(self) -> List[str]:
         products = self.product_db.get_all_products()
         product_names = []
-        for product, _ in enumerate(products):
-            product_names.append(products[product].get_product_name())
+        for product in products:
+            product_names.append(product.get_product_name())
         return product_names
 
     def add_product(self):
@@ -33,11 +33,13 @@ class CustomerController(AbstractController, AbstractObserverController):
         quantity = self.view.get_input_value("product_quantity")
         if product_name == "" or quantity == "":
             mb.showwarning("Error", "Please enter all fields!")
-        elif not quantity.isdigit():
+        elif not quantity.isdigit() or quantity == str(0):
             mb.showwarning("Error", "The quantity entered is not a valid number!")
         else:
             product = self.product_db.get_product(product_name)
-            if product.get_product_quantity() == 0:
+            if self.basket.item_exists(product_name):
+                mb.showwarning("Error", "That product is already in the basket!")
+            elif product.get_product_quantity() == 0:
                 mb.showwarning("Error", "Product out of stock!")
             elif int(quantity) > product.get_product_quantity():
                 mb.showwarning("Error", "The quantity entered is too high,"
@@ -50,7 +52,9 @@ class CustomerController(AbstractController, AbstractObserverController):
 
     def remove_product(self):
         selected_item = self.tree_view.focus()
-        if not selected_item:
+        if len(self.tree_view.get_children("")) == 0:
+            mb.showwarning("Error", "The basket is empty, there aren't any products to remove!")
+        elif not selected_item:
             mb.showwarning("Error", "Please select a product from the basket!")
         else:
             item_dict = self.tree_view.item(selected_item)

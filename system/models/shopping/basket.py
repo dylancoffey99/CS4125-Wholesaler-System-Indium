@@ -77,3 +77,16 @@ class Basket:
         """
         self.basket_items.clear()
         self.basket_subtotal = 0
+
+    def item_exists(self, product_name: str) -> bool:
+        """
+        This method checks if a product already exists in the
+        basket.
+
+        :param product_name: Product name of product to be checked.
+        :returns: Boolean on whether or not a product exists.
+        """
+        for product in self.basket_items:
+            if product_name == product.get_product_name():
+                return True
+        return False
