@@ -10,8 +10,8 @@ class CustomerView(AbstractView, AbstractUserView):
         self.frame = frame
         self.user = user
         self.input = {"product_name": tk.StringVar(), "product_quantity": tk.StringVar()}
-        self.product_combobox = None
-        self.product_tree_view = None
+        self.product_combobox = ttk.Combobox()
+        self.product_tree_view = ttk.Treeview()
         self.observers = []
         self.setup_view()
 
@@ -48,11 +48,11 @@ class CustomerView(AbstractView, AbstractUserView):
         remove_product_button = ttk.Button(self.frame, width=20, text="Remove from Basket",
                                            command=lambda: self.notify(2))
         remove_product_button.grid(row=2, column=2, columnspan=3, padx=10)
-        checkout_button = ttk.Button(self.frame, width=20, text="Checkout", command=lambda:
-                                     self.notify(3))
+        checkout_button = ttk.Button(self.frame, width=20, text="Checkout",
+                                     command=lambda: self.notify(3))
         checkout_button.grid(row=3, column=2, columnspan=3, padx=10)
-        log_out_button = ttk.Button(self.frame, width=20, text="Logout", command=lambda:
-                                    self.notify(4))
+        log_out_button = ttk.Button(self.frame, width=20, text="Logout",
+                                    command=lambda: self.notify(4))
         log_out_button.grid(row=5, column=2, columnspan=3, padx=10)
 
     def attach(self, observer):
@@ -77,14 +77,13 @@ class CustomerView(AbstractView, AbstractUserView):
     def set_combobox(self, combobox_items: List[str]):
         self.product_combobox["values"] = combobox_items
 
-    def insert_item(self, product_name: str, quantity: int, price: float):
-        self.product_tree_view.insert("", "end", text="Item",
-                                      values=(product_name, quantity, price))
+    def insert_item(self, tree_view: ttk.Treeview, *args):
+        tree_view.insert("", "end", text="Item", values=(args[0], args[1], args[2]))
 
-    def remove_item(self):
-        selected_item = self.product_tree_view.selection()[0]
-        self.product_tree_view.delete(selected_item)
+    def remove_item(self, tree_view: ttk.Treeview):
+        selected_item = tree_view.selection()[0]
+        tree_view.delete(selected_item)
 
-    def clear_items(self):
-        for item in self.product_tree_view.get_children():
-            self.product_tree_view.delete(item)
+    def clear_tree_view(self, tree_view: ttk.Treeview):
+        for item in tree_view.get_children():
+            tree_view.delete(item)

@@ -1,13 +1,13 @@
 from typing import List
 from datetime import datetime
 from system.views import HomeView, CustomerView
+from system.database.db_handler import OrderDB, ProductDB, CountryDB
 from system.models.shopping.order import Order
 from system.models.shopping.basket import Basket
-from system.database.db_handler import OrderDB, ProductDB, CountryDB
-from system.controllers.abstract_controllers import AbstractController, AbstractControllerObserver
+from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
 
 
-class CustomerController(AbstractController, AbstractControllerObserver):
+class CustomerController(AbstractController, AbstractObserverController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
         self.order_db = OrderDB("system/database/csv/orderDB")
@@ -16,8 +16,9 @@ class CustomerController(AbstractController, AbstractControllerObserver):
         self.view = CustomerView(self.access_controller.root, self.access_controller.frame,
                                  self.access_controller.user)
         self.view.set_combobox(self.fill_products())
-        self.basket = Basket([], 0)
+        self.tree_view = self.view.get_tree_view()
         self.attach_observers()
+        self.basket = Basket([], 0)
 
     def fill_products(self) -> List[str]:
         products = self.product_db.get_all_products()
@@ -38,7 +39,7 @@ class CustomerController(AbstractController, AbstractControllerObserver):
             price = float(quantity) * product.get_product_price()
             self.basket.add_item(product)
             self.basket.add_basket_subtotal(price)
-            self.view.insert_item(product_name, int(quantity), price)
+            self.view.insert_item(self.tree_view, product_name, int(quantity), price)
 
     def remove_product(self):
         tree_view = self.view.get_tree_view()
@@ -56,7 +57,7 @@ class CustomerController(AbstractController, AbstractControllerObserver):
                     price = float(quantity) * product.get_product_price()
                     self.basket.remove_item(product)
                     self.basket.sub_basket_subtotal(price)
-                    self.view.remove_item()
+                    self.view.remove_item(self.tree_view)
 
     def checkout(self):
         tree_view = self.view.get_tree_view()
@@ -75,8 +76,8 @@ class CustomerController(AbstractController, AbstractControllerObserver):
                         self.product_db.sub_product_quantity(product, quantity)
                         product_names.append(product.get_product_name())
             self.create_order(customer_name, product_names)
-            self.view.clear_items()
             self.basket.clear_items()
+            self.view.clear_tree_view(self.tree_view)
             print("Checkout successful, your order has been created!")
 
     def create_order(self, customer_name: str, product_names: List[str]):
@@ -91,7 +92,7 @@ class CustomerController(AbstractController, AbstractControllerObserver):
     def logout_user(self):
         self.view.clear_frame()
         self.view = HomeView(self.access_controller.root, self.access_controller.frame,
-                             self.access_controller)
+                             self.access_controller.observers)
         print("Logout successful!")
 
     def attach_observers(self):
