@@ -2,7 +2,6 @@ from typing import List
 from tkinter import ttk, messagebox as mb
 from system.views import HomeView, AdminView
 from system.database.db_handler import UserDB, OrderDB, ProductDB
-from system.models.users.customer import Customer
 from system.models.shopping.product import Product
 from system.models.shopping.discount import DiscountCategory
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
@@ -20,13 +19,12 @@ class AdminController(AbstractController, AbstractObserverController):
         self.tree_views = self.view.get_tree_view()
         self.fill_products()
         self.attach_observers()
-        self.customer = None
 
     def fill_customers(self) -> List[str]:
         customers = self.user_db.get_all_customers()
         user_names = []
-        for customer, _ in enumerate(customers):
-            user_names.append(customers[customer].get_user_name())
+        for customer in customers:
+            user_names.append(customer.get_user_name())
         return user_names
 
     def fill_products(self):
@@ -39,10 +37,12 @@ class AdminController(AbstractController, AbstractObserverController):
 
     def view_order(self):
         user_name = self.view.get_input_value("user_name")
-        orders = self.order_db.get_customer_orders(user_name)
-        if not orders:
-            mb.showwarning("Error", "This user does not have any orders!")
+        if user_name == "":
+            mb.showwarning("Error", "Please select a customer!")
+        elif not self.order_db.orders_exist(user_name):
+            mb.showwarning("Error", "This customer does not have any orders!")
         else:
+            orders = self.order_db.get_customer_orders(user_name)
             self.view.clear_tree_view(self.tree_views[0])
             for order in orders:
                 product_name = order[1]
@@ -58,20 +58,20 @@ class AdminController(AbstractController, AbstractObserverController):
         elif discount_category == "":
             mb.showwarning("Error", "Please select a discount category!")
         else:
-            if self.customer is None:
-                user = self.user_db.get_user(user_name)
-                self.customer = Customer(user.get_user_name(), user.get_password(),
-                                         user.get_is_admin(), user.get_country_id())
-            if user_name != self.customer.get_user_name():
-                self.customer = None
-            elif isinstance(self.customer.get_discount_category(), DiscountCategory):
-                mb.showwarning("Error", "Customer already has a discount category!")
+            customer = self.user_db.get_customer(user_name)
+            if not self.order_db.orders_exist(user_name):
+                mb.showwarning("Error", "This customer does not have any orders!")
+            elif customer.get_discount_id() != -1:
+                mb.showwarning("Error", "This customer already has a discount category!")
             else:
                 discount = self.check_discount(discount_category)
+                discount_id = discount.get_discount_id()
                 discount_percentage = discount.get_discount_percentage()
-                self.customer.set_discount_category(discount)
-                self.update_orders(self.tree_views[0], discount_percentage)
+                customer.set_discount_id(discount_id)
+                self.view_order()
+                self.user_db.set_customer_discount(user_name, discount_id)
                 self.order_db.update_order_subtotals(user_name, discount_percentage)
+                self.update_orders(self.tree_views[0], discount_percentage)
 
     def add_product(self):
         product_name = self.view.get_input_value("product_name")
@@ -123,9 +123,9 @@ class AdminController(AbstractController, AbstractObserverController):
         if discount_name == "Education":
             discount = DiscountCategory(0, "Education", 0.10)
         elif discount_name == "Small Business":
-            discount = DiscountCategory(0, "Small Business", 0.15)
+            discount = DiscountCategory(1, "Small Business", 0.15)
         else:
-            discount = DiscountCategory(0, "Start-up Business", 0.20)
+            discount = DiscountCategory(2, "Start-up Business", 0.20)
         return discount
 
     @staticmethod
