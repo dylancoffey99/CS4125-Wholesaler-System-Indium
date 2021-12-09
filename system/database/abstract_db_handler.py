@@ -1,6 +1,7 @@
 from typing import List
 from abc import ABC, abstractmethod
 from system.models.users.user import User
+from system.models.users.customer import Customer
 from system.models.shopping.order import Order
 from system.models.shopping.product import Product
 from system.models.shopping.country import Country
@@ -38,7 +39,7 @@ class AbstractProductDB(ABC):
 
 class AbstractUserDB(ABC):
     @abstractmethod
-    def add_user(self, user: User):
+    def add_customer(self, customer: Customer):
         pass
 
     @abstractmethod
@@ -46,7 +47,15 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def get_all_users(self) -> List[User]:
+    def get_customer(self, user_name: str):
+        pass
+
+    @abstractmethod
+    def get_all_customers(self) -> List[Customer]:
+        pass
+
+    @abstractmethod
+    def set_customer_discount(self, user_name: str, discount_id: int):
         pass
 
     @abstractmethod
