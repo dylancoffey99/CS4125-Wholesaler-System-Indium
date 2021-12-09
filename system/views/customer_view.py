@@ -1,17 +1,23 @@
+import tkinter as tk
 from tkinter import ttk
-from system.views.abstract_view import AbstractView
+from typing import List
+from system.views.abstract_view import AbstractView, AbstractViewSubject
 
 
-class CustomerView(AbstractView):
-    def __init__(self, root, frame, controller):
+class CustomerView(AbstractView, AbstractViewSubject):
+    def __init__(self, root, frame, user):
         self.root = root
         self.frame = frame
-        self.controller = controller
+        self.user = user
+        self.input = {"product_name": tk.StringVar(),
+                      "product_quantity": tk.StringVar()}
+        self.product_combobox = None
+        self.product_tree_view = None
+        self.observers = []
         self.setup_view()
 
     def setup_view(self):
-        user_name = self.controller.access_controller.user.get_user_name()
-        self.root.title("Wholesaler System - " + user_name)
+        self.root.title("Wholesaler System - " + self.user.get_user_name())
         self.load_labels()
         self.load_interactions()
 
@@ -22,36 +28,64 @@ class CustomerView(AbstractView):
         product_quantity_label.grid(row=0, column=2, padx=10, pady=10)
 
     def load_interactions(self):
-        product_combobox = ttk.Combobox(self.frame, width=34, state="readonly",
-                                        textvariable=self.controller.input["product_name"])
-        product_combobox["values"] = self.controller.fill_products()
-        product_combobox.grid(row=0, column=1, pady=10)
+        self.product_combobox = ttk.Combobox(self.frame, width=34, state="readonly",
+                                             textvariable=self.input["product_name"])
+        self.product_combobox.grid(row=0, column=1, pady=10)
+        self.product_tree_view = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
+                                              show='headings', height=21)
+        self.product_tree_view.column("c1", width=190)
+        self.product_tree_view.column("c2", width=85)
+        self.product_tree_view.column("c3", width=85)
+        self.product_tree_view.heading("c1", text="Product Name")
+        self.product_tree_view.heading("c2", text="Quantity")
+        self.product_tree_view.heading("c3", text="Price")
+        self.product_tree_view.grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
         product_quantity_entry = ttk.Entry(self.frame, width=18,
-                                           textvariable=self.controller.input["product_quantity"])
+                                           textvariable=self.input["product_quantity"])
         product_quantity_entry.grid(row=0, column=3, padx=10, pady=10)
-        product_tree_view = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
-                                         show='headings', height=21)
-        product_tree_view.column("c1", width=190)
-        product_tree_view.column("c2", width=85)
-        product_tree_view.column("c3", width=85)
-        product_tree_view.heading("c1", text="Product Name")
-        product_tree_view.heading("c2", text="Quantity")
-        product_tree_view.heading("c3", text="Price")
-        product_tree_view.grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
-        add_product_button = ttk.Button(self.frame, width=20, text="Add to Basket", command=lambda:
-                                        self.controller.add_product(product_tree_view))
+        add_product_button = ttk.Button(self.frame, width=20, text="Add to Basket",
+                                        command=lambda: self.notify(1))
         add_product_button.grid(row=1, column=2, columnspan=3, padx=10)
         remove_product_button = ttk.Button(self.frame, width=20, text="Remove from Basket",
-                                           command=lambda:
-                                           self.controller.remove_product(product_tree_view))
+                                           command=lambda: self.notify(2))
         remove_product_button.grid(row=2, column=2, columnspan=3, padx=10)
-        checkout_button = ttk.Button(self.frame, width=20, text="Checkout",
-                                     command=lambda: self.controller.checkout(product_tree_view))
+        checkout_button = ttk.Button(self.frame, width=20, text="Checkout", command=lambda:
+                                     self.notify(3))
         checkout_button.grid(row=3, column=2, columnspan=3, padx=10)
-        log_out_button = ttk.Button(self.frame, width=20, text="Logout",
-                                    command=self.controller.logout_user)
+        log_out_button = ttk.Button(self.frame, width=20, text="Logout", command=lambda:
+                                    self.notify(4))
         log_out_button.grid(row=5, column=2, columnspan=3, padx=10)
 
     def clear_frame(self):
         for widget in self.frame.winfo_children():
             widget.destroy()
+
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def notify(self, command: int):
+        for observer in self.observers:
+            if observer[0] == command:
+                observer[1]()
+
+    def get_input_value(self, dict_value: str) -> str:
+        value = self.input[dict_value].get()
+        return value
+
+    def get_tree_view(self) -> ttk.Treeview:
+        return self.product_tree_view
+
+    def set_combobox(self, combobox_items: List[str]):
+        self.product_combobox["values"] = combobox_items
+
+    def insert_item(self, product_name: str, quantity: int, price: float):
+        self.product_tree_view.insert("", "end", text="Item",
+                                      values=(product_name, quantity, price))
+
+    def remove_item(self):
+        selected_item = self.product_tree_view.selection()[0]
+        self.product_tree_view.delete(selected_item)
+
+    def clear_items(self):
+        for item in self.product_tree_view.get_children():
+            self.product_tree_view.delete(item)
