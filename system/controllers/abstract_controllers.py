@@ -6,6 +6,8 @@ class AbstractController(ABC):
     def logout_user(self):
         pass
 
+
+class AbstractControllerObserver(ABC):
     @abstractmethod
     def attach_observers(self):
         pass

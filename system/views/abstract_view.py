@@ -18,6 +18,8 @@ class AbstractView(ABC):
     def clear_frame(self):
         pass
 
+
+class AbstractViewSubject(ABC):
     @abstractmethod
     def attach(self, observer):
         pass
