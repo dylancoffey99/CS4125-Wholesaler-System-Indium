@@ -1,6 +1,5 @@
 from typing import List
 from abc import ABC, abstractmethod
-from system.models.users.user import User
 from system.models.users.customer import Customer
 from system.models.shopping.order import Order
 from system.models.shopping.product import Product

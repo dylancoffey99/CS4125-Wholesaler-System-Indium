@@ -85,7 +85,8 @@ class AccessController(AbstractObserverController):
             CustomerController(self)
 
     def clear_input(self):
-        for value in self.input:
+        for value in self.input.items():
+            value = value[0]
             self.input[value].set("")
 
     def attach_observers(self):

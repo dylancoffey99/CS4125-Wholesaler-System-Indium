@@ -90,8 +90,9 @@ class UserDB(db.AbstractUserDB):
     def add_customer(self, customer: Customer):
         with open(self._db_name + ".csv", "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
-            writer.writerow([customer.get_user_name(), customer.get_password(), customer.get_is_admin(),
-                             customer.get_country_id(), customer.get_discount_id()])
+            writer.writerow([customer.get_user_name(), customer.get_password(),
+                             customer.get_is_admin(), customer.get_country_id(),
+                             customer.get_discount_id()])
 
     def get_user(self, user_name: str):
         with open(self._db_name + ".csv", "r", newline="", encoding="utf-8") as file:
