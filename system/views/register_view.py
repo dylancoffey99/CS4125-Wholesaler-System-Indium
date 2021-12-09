@@ -1,5 +1,5 @@
 from tkinter import ttk
-from system.views.abstract_view import AbstractView
+from system.views.abstract_views import AbstractView
 
 
 class RegisterView(AbstractView):

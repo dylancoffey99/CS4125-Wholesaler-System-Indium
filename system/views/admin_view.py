@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from typing import List
-from system.views.abstract_view import AbstractView, AbstractUserView
+from system.views.abstract_views import AbstractView, AbstractUserView
 
 
 class AdminView(AbstractView, AbstractUserView):
