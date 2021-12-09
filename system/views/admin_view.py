@@ -43,7 +43,7 @@ class AdminView(AbstractView, AbstractUserView):
         separator_expand.grid(row=6, column=7, columnspan=4)
 
     def load_interactions(self):
-        self.combo_boxes[0] = ttk.Combobox(self.frame, width=37, state="readonly",
+        self.combo_boxes[0] = ttk.Combobox(self.frame, width=32, state="readonly",
                                            textvariable=self.input["user_name"])
         self.combo_boxes[0].grid(row=0, column=1, pady=10)
         self.combo_boxes[1] = ttk.Combobox(self.frame, width=17, state="readonly",
@@ -120,7 +120,7 @@ class AdminView(AbstractView, AbstractUserView):
         return self.tree_views
 
     def set_combobox(self, combobox_items: List[str]):
-        self.combo_boxes[0]["values"] = combobox_items[0]
+        self.combo_boxes[0]["values"] = combobox_items
 
     def insert_item(self, tree_view: ttk.Treeview, *args):
         tree_view.insert("", "end", text="Item", values=(args[0], args[1], args[2]))
