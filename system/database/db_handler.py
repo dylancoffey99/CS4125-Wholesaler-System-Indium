@@ -154,7 +154,8 @@ class OrderDB(db.AbstractOrderDB):
             product_names = order.get_product_names()
             for product, _ in enumerate(product_names):
                 writer.writerow([order.get_customer_name(), product_names[product],
-                                 order.get_order_date(), order.get_order_subtotal()])
+                                 order.get_order_date().strftime("%d-%m-%Y %H:%M:%S"),
+                                 order.get_order_subtotal()])
 
     def update_order_subtotals(self, user_name: str, discount_percentage: float):
         temp_rows = []
@@ -180,7 +181,7 @@ class OrderDB(db.AbstractOrderDB):
                 if row[0] == user_name:
                     order.append(row[0])
                     order.append(row[1])
-                    order.append(datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S.%f'))
+                    order.append(datetime.strptime(row[2], "%d-%m-%Y %H:%M:%S"))
                     order.append(float(row[3]))
                     orders.append(order)
             return orders
