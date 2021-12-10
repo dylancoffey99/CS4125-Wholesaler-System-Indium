@@ -54,7 +54,7 @@ class AdminController(AbstractController, AbstractObserverController):
         user_name = self.view.get_input_value("user_name")
         discount_category = self.view.get_input_value("discount_category")
         if user_name == "":
-            mb.showwarning("Error", "Please select a user!")
+            mb.showwarning("Error", "Please select a customer!")
         elif discount_category == "":
             mb.showwarning("Error", "Please select a discount category!")
         else:
@@ -79,18 +79,13 @@ class AdminController(AbstractController, AbstractObserverController):
         price = self.view.get_input_value("product_price")
         if product_name == "" or quantity == "" or price == "":
             mb.showwarning("Error", "Please enter all fields!")
+        elif self.product_db.product_exists(product_name):
+            mb.showwarning("Error", "That product name already exists!")
         else:
-            if self.product_db.product_exists(product_name):
-                mb.showwarning("Error", "That product name already exists!")
-            else:
-                if not quantity.isdigit():
-                    mb.showwarning("Error", "The quantity entered is not a valid number!")
-                elif not price.isdigit():
-                    mb.showwarning("Error", "The price entered is not a valid number!")
-                else:
-                    product = Product(product_name, int(quantity), float(price))
-                    self.product_db.add_product(product)
-                    self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
+            if self.product_check(product_name, quantity, price):
+                product = Product(product_name, int(quantity), float(price))
+                self.product_db.add_product(product)
+                self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
 
     def edit_product(self, tree_view: ttk.Treeview):
         product_name = self.input["product_name"].get()
@@ -138,3 +133,23 @@ class AdminController(AbstractController, AbstractObserverController):
             discount = subtotal * discount_percentage
             subtotal -= discount
             tree_view.item(item, text="Item", values=(product_name, date_time, subtotal))
+
+    @staticmethod
+    def product_check(product_name: str, quantity: str, price: str):
+        if not quantity.isdigit():
+            mb.showwarning("Error", "The quantity entered is not a valid number!")
+        try:
+            float(price)
+            price.isdigit()
+        except ValueError:
+            mb.showwarning("Error", "The price entered is not a valid number!")
+        else:
+            if len(product_name) > 30:
+                mb.showwarning("Error", "The product name has to be less than 30 characters!")
+            elif len(quantity) > 7:
+                mb.showwarning("Error", "The quantity has to be less than 7 digits!")
+            elif float(price) >= 10000 or len(price) > 7:
+                mb.showwarning("Error", "The price has to be less than 10,000 and 7 digits!")
+            else:
+                return True
+        return False
