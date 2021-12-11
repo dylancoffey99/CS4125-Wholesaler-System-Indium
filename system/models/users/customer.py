@@ -1,8 +1,9 @@
+from system.models.shopping import DiscountCategory
+from system.models.users.abstract_user import AbstractUser
 from system.models.users.user import User
-from system.models.shopping.discount import DiscountCategory
 
 
-class Customer(User):
+class Customer(User, AbstractUser):
     def __init__(self, user_name: str, password: str, country_id: int,
                  discount_id: int = -1):
         User.__init__(self, user_name, password, 0, country_id)
