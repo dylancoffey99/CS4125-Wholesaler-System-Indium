@@ -1,6 +1,6 @@
+from abc import ABC, abstractmethod
 from tkinter import ttk
 from typing import List
-from abc import ABC, abstractmethod
 
 
 class AbstractView(ABC):

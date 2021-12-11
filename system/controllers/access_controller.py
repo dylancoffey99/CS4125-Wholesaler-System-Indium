@@ -1,25 +1,26 @@
 import hashlib
 import tkinter as tk
 from tkinter import messagebox as mb
-from system.views import HomeView, LoginView, RegisterView
-from system.database.db_handler import UserDB
-from system.models.users.customer import Customer
+
+from system.controllers.abstract_controllers import AbstractObserverController
 from system.controllers.admin_controller import AdminController
 from system.controllers.customer_controller import CustomerController
-from system.controllers.abstract_controllers import AbstractObserverController
+from system.databases import UserDB
+from system.models.users import Customer
+from system.views import HomeView, LoginView, RegisterView
 
 
 class AccessController(AbstractObserverController):
     def __init__(self):
         self.root = tk.Tk()
         self.frame = tk.Frame(self.root)
-        self.user_db = UserDB("system/database/csv/userDB")
+        self.user_db = UserDB("system/databases/csv/user_db")
         self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
                       "r_password": tk.StringVar(), "country": tk.StringVar()}
         self.observers = []
         self.view = HomeView(self.root, self.frame, self.observers)
-        self.attach_observers()
         self.user = None
+        self.attach_observers()
 
     def start(self):
         self.root.mainloop()
@@ -54,8 +55,6 @@ class AccessController(AbstractObserverController):
                 if self.user.get_is_admin() == 1:
                     AdminController(self)
                 else:
-                    self.user = Customer(self.user.get_user_name(), self.user.get_password(),
-                                         self.user.get_country_id())
                     CustomerController(self)
 
     def register_user(self):

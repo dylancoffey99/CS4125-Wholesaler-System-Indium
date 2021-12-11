@@ -1,17 +1,18 @@
-from typing import List
 from tkinter import messagebox as mb
-from system.views import HomeView, AdminView
-from system.database.db_handler import UserDB, OrderDB, ProductDB
-from system.models.shopping.product import Product
+from typing import List
+
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
+from system.databases import UserDB, OrderDB, ProductDB
+from system.models.shopping import Product
+from system.views import HomeView, AdminView
 
 
 class AdminController(AbstractController, AbstractObserverController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
-        self.user_db = UserDB("system/database/csv/userDB")
-        self.order_db = OrderDB("system/database/csv/orderDB")
-        self.product_db = ProductDB("system/database/csv/productDB")
+        self.user_db = UserDB("system/databases/csv/user_db")
+        self.order_db = OrderDB("system/databases/csv/order_db")
+        self.product_db = ProductDB("system/databases/csv/product_db")
         self.view = AdminView(self.access_controller.root, self.access_controller.frame,
                               self.access_controller.user)
         self.view.set_combobox(self.fill_customers())

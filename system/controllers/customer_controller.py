@@ -1,17 +1,17 @@
-from typing import List
-from tkinter import messagebox as mb
 from datetime import datetime
-from system.views import HomeView, CustomerView
-from system.database.db_handler import UserDB, OrderDB, ProductDB, CountryDB
-from system.models.shopping.order import Order
-from system.models.shopping.basket import Basket
+from tkinter import messagebox as mb
+from typing import List
+
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
+from system.databases import UserDB, OrderDB, ProductDB, CountryDB
+from system.models.shopping import AbstractObserver, Basket, Order
+from system.views import HomeView, CustomerView
 
 
-class CustomerController(AbstractController, AbstractObserverController):
+class CustomerController(AbstractController, AbstractObserverController, AbstractObserver):
     def __init__(self, access_controller):
         self.access_controller = access_controller
-        self.product_db = ProductDB("system/database/csv/productDB")
+        self.product_db = ProductDB("system/databases/csv/product_db")
         self.view = CustomerView(self.access_controller.root, self.access_controller.frame,
                                  self.access_controller.user)
         self.view.set_combobox(self.fill_products())
@@ -88,8 +88,8 @@ class CustomerController(AbstractController, AbstractObserverController):
             self.view.clear_tree_view(self.tree_view)
 
     def create_order(self, customer_name: str, country_id: int, product_names: List[str]):
-        order_db = OrderDB("system/database/csv/orderDB")
-        country_db = CountryDB("system/database/csv/countryDB")
+        order_db = OrderDB("system/databases/csv/order_db")
+        country_db = CountryDB("system/databases/csv/country_db")
         country = country_db.get_country(country_id)
         basket_subtotal = self.basket.get_basket_subtotal()
         vat_cost = basket_subtotal * country.get_vat_percentage()
@@ -100,7 +100,7 @@ class CustomerController(AbstractController, AbstractObserverController):
         order = Order(customer_name, product_names, datetime.now(), order_subtotal)
         order_db.add_order(order)
         mb.showwarning("Success", "Checkout successful, your order has been created!\n"
-                       "\nBasket Subtotal = €" + str(basket_subtotal) +
+                                  "\nBasket Subtotal = €" + str(basket_subtotal) +
                        "\nVAT Cost = €" + str(f"{vat_cost:.1f}") +
                        "\nShipping Cost = €" + str(shipping_cost) +
                        "\nDiscount = €" + str(f"{discount:.1f}") +
@@ -124,7 +124,7 @@ class CustomerController(AbstractController, AbstractObserverController):
 
     @staticmethod
     def calc_discount(customer_name: str, order_subtotal: float):
-        user_db = UserDB("system/database/csv/userDB")
+        user_db = UserDB("system/databases/csv/user_db")
         customer = user_db.get_customer(customer_name)
         if customer.get_discount_id() != -1:
             discount_category = customer.check_discount_category()

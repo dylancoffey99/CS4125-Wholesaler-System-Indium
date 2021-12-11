@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 from typing import List
-from system.views.abstract_views import AbstractView, AbstractUserView
+
+from system.views.abstract_views import AbstractUserView, AbstractView
 
 
-class CustomerView(AbstractView, AbstractUserView):
+class CustomerView(AbstractUserView, AbstractView):
     def __init__(self, root, frame, user):
         self.root = root
         self.frame = frame

@@ -1,4 +1,5 @@
 from tkinter import ttk
+
 from system.views.abstract_views import AbstractView
 
 
