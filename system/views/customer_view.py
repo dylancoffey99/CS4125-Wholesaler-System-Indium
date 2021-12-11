@@ -21,7 +21,7 @@ class CustomerView(AbstractView, AbstractUserView):
 
     def load_labels(self):
         self.update_widgets[0] = ttk.Label(self.frame, text="Basket Subtotal = €0")
-        self.update_widgets[0].grid(row=4, column=2, columnspan=3, padx=10, pady=10)
+        self.update_widgets[0].grid(row=1, column=2, columnspan=3, padx=10, pady=10)
         product_label = ttk.Label(self.frame, text="Choose a product")
         product_label.grid(row=0, column=0, padx=10, pady=10)
         product_quantity_label = ttk.Label(self.frame, text="Quantity")
@@ -45,13 +45,13 @@ class CustomerView(AbstractView, AbstractUserView):
         product_quantity_entry.grid(row=0, column=3, padx=10, pady=10)
         add_product_button = ttk.Button(self.frame, width=20, text="Add to Basket",
                                         command=lambda: self.notify(1))
-        add_product_button.grid(row=1, column=2, columnspan=3, padx=10)
+        add_product_button.grid(row=2, column=2, columnspan=3, padx=10)
         remove_product_button = ttk.Button(self.frame, width=20, text="Remove from Basket",
                                            command=lambda: self.notify(2))
-        remove_product_button.grid(row=2, column=2, columnspan=3, padx=10)
+        remove_product_button.grid(row=3, column=2, columnspan=3, padx=10)
         checkout_button = ttk.Button(self.frame, width=20, text="Checkout",
                                      command=lambda: self.notify(3))
-        checkout_button.grid(row=3, column=2, columnspan=3, padx=10)
+        checkout_button.grid(row=4, column=2, columnspan=3, padx=10)
         log_out_button = ttk.Button(self.frame, width=20, text="Logout",
                                     command=lambda: self.notify(4))
         log_out_button.grid(row=5, column=2, columnspan=3, padx=10)
