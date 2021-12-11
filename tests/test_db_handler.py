@@ -1,14 +1,14 @@
-import os
 import csv
+import os
 from unittest import TestCase
-from system.models.users.user import User
-from system.models.shopping.product import Product
-from system.database.db_handler import UserDB
-from system.database.db_handler import ProductDB
+
+from system.databases import UserDB, ProductDB
+from system.models.shopping import Product
+from system.models.users import User
 
 
 class TestProductDB(TestCase):
-    mock_db_name = "testProductDB"
+    mock_db_name = "test_product_db"
     mock_db = ProductDB(mock_db_name)
     mock_product = Product("product", 25, 50)
     mock_product_name = mock_product.get_product_name()
@@ -56,7 +56,7 @@ class TestProductDB(TestCase):
 
 
 class TestUserDB(TestCase):
-    mock_db_name = "testUserDB"
+    mock_db_name = "test_user_db"
     mock_db = UserDB(mock_db_name)
     mock_user = User("username", "password", 0, 1)
     mock_user_name = mock_user.get_user_name()

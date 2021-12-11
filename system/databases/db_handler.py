@@ -1,14 +1,13 @@
 import csv
 from typing import List
-from system.database import abstract_db_handler as db
-from system.models.users.user import User
-from system.models.users.customer import Customer
-from system.models.shopping.order import Order
-from system.models.shopping.product import Product
-from system.models.shopping.country import Country
+
+from system.databases.abstract_db_handler import AbstractProductDB, AbstractUserDB, \
+    AbstractOrderDB, AbstractCountryDB
+from system.models.shopping import Country, Order, Product
+from system.models.users import Customer, User
 
 
-class ProductDB(db.AbstractProductDB):
+class ProductDB(AbstractProductDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
 
@@ -82,7 +81,7 @@ class ProductDB(db.AbstractProductDB):
             return False
 
 
-class UserDB(db.AbstractUserDB):
+class UserDB(AbstractUserDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
 
@@ -143,7 +142,7 @@ class UserDB(db.AbstractUserDB):
             return False
 
 
-class OrderDB(db.AbstractOrderDB):
+class OrderDB(AbstractOrderDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
         self.order_separator = "================"
@@ -205,7 +204,7 @@ class OrderDB(db.AbstractOrderDB):
             return False
 
 
-class CountryDB(db.AbstractCountryDB):
+class CountryDB(AbstractCountryDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
 

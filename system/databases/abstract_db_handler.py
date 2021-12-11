@@ -1,9 +1,8 @@
-from typing import List
 from abc import ABC, abstractmethod
-from system.models.users.customer import Customer
-from system.models.shopping.order import Order
-from system.models.shopping.product import Product
-from system.models.shopping.country import Country
+from typing import List
+
+from system.models.shopping import Country, Order, Product
+from system.models.users import Customer
 
 
 class AbstractProductDB(ABC):
