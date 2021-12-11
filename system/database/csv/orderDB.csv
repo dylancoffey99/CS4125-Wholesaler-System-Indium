@@ -1,5 +1,9 @@
 ﻿customer_name,product_name,order_date,subtotal
-username1,product1,15-11-2021 23:30:00,200
-username1,product2,15-11-2021 23:30:00,200
-username1,product3,15-11-2021 23:30:00,200
-username1,product4,15-11-2021 23:30:00,200
+username1,product1,15-11-2021 23:30:00,200.0
+username1,product2,15-11-2021 23:30:00,200.0
+username1,product3,15-11-2021 23:30:00,200.0
+username1,product4,15-11-2021 23:30:00,200.0
+username2,product4,10-12-2021 16:00:00,1500.0
+username2,product3,10-12-2021 16:00:00,1500.0
+username2,product2,10-12-2021 16:00:00,1500.0
+username2,product1,10-12-2021 16:00:00,1500.0
