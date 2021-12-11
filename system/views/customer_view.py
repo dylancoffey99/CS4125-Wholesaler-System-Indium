@@ -86,9 +86,8 @@ class CustomerView(AbstractView, AbstractUserView):
     def edit_item(self, tree_view: ttk.Treeview, item, *args):
         tree_view.item(item, text="Item", values=(args[0], args[1], args[2]))
 
-    def remove_item(self, tree_view: ttk.Treeview):
-        selected_item = tree_view.selection()[0]
-        tree_view.delete(selected_item)
+    def remove_item(self, tree_view: ttk.Treeview, item):
+        tree_view.delete(item)
 
     def clear_tree_view(self, tree_view: ttk.Treeview):
         for item in tree_view.get_children():

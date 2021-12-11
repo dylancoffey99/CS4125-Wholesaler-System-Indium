@@ -1,5 +1,5 @@
 from typing import List
-from tkinter import ttk, messagebox as mb
+from tkinter import messagebox as mb
 from system.views import HomeView, AdminView
 from system.database.db_handler import UserDB, OrderDB, ProductDB
 from system.models.shopping.product import Product
@@ -125,8 +125,19 @@ class AdminController(AbstractController, AbstractObserverController):
                     self.view.edit_item(self.tree_views[1], selected_item, values[0], values[1],
                                         str(float(values[2])))
 
-    def remove_product(self, tree_view: ttk.Treeview):
-        pass
+    def remove_product(self):
+        selected_item = self.tree_views[1].focus()
+        if len(self.tree_views[1].get_children("")) == 0:
+            mb.showwarning("Error", "There aren't any products to remove!")
+        elif not selected_item:
+            mb.showwarning("Error", "Please select a product to remove!")
+        else:
+            item_dict = self.tree_views[1].item(selected_item)
+            values = list(item_dict.values())
+            product_name = values[2][0]
+            product = self.product_db.get_product(product_name)
+            self.product_db.remove_product(product)
+            self.view.remove_item(self.tree_views[1], selected_item)
 
     def logout_user(self):
         self.view.clear_frame()

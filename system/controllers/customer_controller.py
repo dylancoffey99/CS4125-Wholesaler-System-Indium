@@ -65,7 +65,7 @@ class CustomerController(AbstractController, AbstractObserverController):
                     price = float(quantity) * product.get_product_price()
                     self.basket.remove_item(product)
                     self.basket.sub_basket_subtotal(price)
-                    self.view.remove_item(self.tree_view)
+                    self.view.remove_item(self.tree_view, selected_item)
 
     def checkout(self):
         if len(self.tree_view.get_children("")) == 0:
