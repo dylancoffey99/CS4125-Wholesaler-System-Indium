@@ -1,16 +1,12 @@
-"""
-This module contains the Product class. The module imports the AbstractSubject
-class from observer module, in the systems shopping package.
-"""
-from system.models.shopping.observer import AbstractSubject
+"""This module contains the Product class."""
 
 
-class Product(AbstractSubject):
+class Product:
     """
-    This class represents a model of a product and implements AbstractSubject.
-    The class contains a constructor, getter/setter methods for its parameters,
-    and the implemented abstract methods.
+    This class represents a model of a product, containing a constructor, and
+    the getter methods for its parameters.
     """
+
     def __init__(self, product_name: str, product_quantity: int, product_price: float):
         """
         This constructor instantiates a product object.
@@ -22,7 +18,6 @@ class Product(AbstractSubject):
         self.product_name = product_name
         self.product_quantity = product_quantity
         self.product_price = product_price
-        self.observers = []
 
     def get_product_name(self) -> str:
         """
@@ -47,22 +42,3 @@ class Product(AbstractSubject):
         :returns: Price of the product.
         """
         return self.product_price
-
-    def set_product_quantity(self, product_quantity: int):
-        """
-        This method sets the product quantity, and notifies the observers.
-
-        :param product_quantity: Product quantity to be set to the product.
-        """
-        self.product_quantity = product_quantity
-        self.notify()
-
-    def attach(self, observer):
-        self.observers.append(observer)
-
-    def detach(self, observer):
-        self.observers.remove(observer)
-
-    def notify(self):
-        for observer in self.observers:
-            observer.update()

@@ -1,17 +1,21 @@
 """
-This module contains the Basket class. The module imports the type List from the typing
-module, and the Product class from the product module, in the systems shopping package.
+This module contains the Basket class. The module imports the type List from the
+typing module, the Product class from the product module, and the AbstractSubject
+class from observer module, both in the systems shopping package.
 """
 from typing import List
+
+from system.models.shopping.abstract_observer import AbstractSubject
 from system.models.shopping.product import Product
-from system.models.shopping.observer import AbstractSubject
 
 
 class Basket(AbstractSubject):
     """
-    This class represents a model of a basket, containing a constructor, and
-    the getter/setter methods for its parameters.
+    This class represents a model of a basket and implements AbstractSubject.
+    It contains a constructor, the getter/setter methods for its parameters,
+    and the implemented abstract methods.
     """
+
     def __init__(self, basket_items: List[Product], basket_subtotal: float):
         """
         This constructor instantiates a basket object.
@@ -97,9 +101,6 @@ class Basket(AbstractSubject):
 
     def attach(self, observer):
         self.observers.append(observer)
-
-    def detach(self, observer):
-        self.observers.remove(observer)
 
     def notify(self):
         for observer in self.observers:

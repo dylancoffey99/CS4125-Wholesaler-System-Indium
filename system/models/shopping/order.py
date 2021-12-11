@@ -2,8 +2,8 @@
 This module contains the Order class. The module imports the type List from the
 typing module, and the datetime class from the datetime module.
 """
-from typing import List
 from datetime import datetime
+from typing import List
 
 
 class Order:
@@ -11,6 +11,7 @@ class Order:
     This class represents a model of an order, containing a constructor, and
     the getter methods for its parameters.
     """
+
     def __init__(self, customer_name: str, product_names: List[str], order_date: datetime,
                  order_subtotal: float):
         """
