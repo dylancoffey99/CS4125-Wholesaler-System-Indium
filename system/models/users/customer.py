@@ -1,4 +1,5 @@
 from system.models.users.user import User
+from system.models.shopping.discount import DiscountCategory
 
 
 class Customer(User):
@@ -12,3 +13,12 @@ class Customer(User):
 
     def set_discount_id(self, discount_id: int):
         self.discount_id = discount_id
+
+    def check_discount_category(self) -> DiscountCategory:
+        if self.discount_id == "0":
+            discount = DiscountCategory(0, "Education", 0.10)
+        elif self.discount_id == "1":
+            discount = DiscountCategory(1, "Small Business", 0.15)
+        else:
+            discount = DiscountCategory(2, "Start-up Business", 0.20)
+        return discount

@@ -64,7 +64,7 @@ class AdminController(AbstractController, AbstractObserverController):
             elif customer.get_discount_id() != -1:
                 mb.showwarning("Error", "This customer already has a discount category!")
             else:
-                discount = self.check_discount(discount_category)
+                discount = customer.check_discount_category()
                 discount_id = discount.get_discount_id()
                 discount_percentage = discount.get_discount_percentage()
                 customer.set_discount_id(discount_id)
@@ -112,16 +112,6 @@ class AdminController(AbstractController, AbstractObserverController):
         self.view.attach((4, self.edit_product))
         self.view.attach((5, self.remove_product))
         self.view.attach((6, self.logout_user))
-
-    @staticmethod
-    def check_discount(discount_name):
-        if discount_name == "Education":
-            discount = DiscountCategory(0, "Education", 0.10)
-        elif discount_name == "Small Business":
-            discount = DiscountCategory(1, "Small Business", 0.15)
-        else:
-            discount = DiscountCategory(2, "Start-up Business", 0.20)
-        return discount
 
     @staticmethod
     def update_orders(tree_view: ttk.Treeview, discount_percentage: float):
