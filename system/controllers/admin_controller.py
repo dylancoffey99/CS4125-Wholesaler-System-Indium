@@ -3,7 +3,6 @@ from tkinter import ttk, messagebox as mb
 from system.views import HomeView, AdminView
 from system.database.db_handler import UserDB, OrderDB, ProductDB
 from system.models.shopping.product import Product
-from system.models.shopping.discount import DiscountCategory
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
 
 
@@ -71,7 +70,17 @@ class AdminController(AbstractController, AbstractObserverController):
                 self.view_order()
                 self.user_db.set_customer_discount(user_name, discount_id)
                 self.order_db.update_order_subtotals(user_name, discount_percentage)
-                self.update_orders(self.tree_views[0], discount_percentage)
+                self.update_orders(discount_percentage)
+
+    def update_orders(self, discount_percentage: float):
+        tree_list = list(self.tree_views[0].get_children(""))
+        for item in tree_list:
+            product_name = self.tree_views[0].item(item, "values")[0]
+            date_time = self.tree_views[0].item(item, "values")[1]
+            subtotal = float(self.tree_views[0].item(item, "values")[2])
+            discount = subtotal * discount_percentage
+            subtotal -= discount
+            self.view.edit_item(self.tree_views[0], item, product_name, date_time, subtotal)
 
     def add_product(self):
         product_name = self.view.get_input_value("product_name")
@@ -87,14 +96,29 @@ class AdminController(AbstractController, AbstractObserverController):
                 self.product_db.add_product(product)
                 self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
 
-    def edit_product(self, tree_view: ttk.Treeview):
-        product_name = self.input["product_name"].get()
-        quantity = self.input["product_quantity"].get()
-        product = self.product_db.get_product(product_name)
-        price = float(quantity) * product.get_product_price()
-        self.product_db.add_product(product)
-        self.product_db.get_product_price(price)
-        self.insert_data(tree_view, product_name, quantity, price)
+    def edit_product(self):
+        values = [self.view.get_input_value("product_name"),
+                  self.view.get_input_value("product_quantity"),
+                  self.view.get_input_value("product_price")]
+        selected_item = self.tree_views[1].focus()
+        if not selected_item:
+            mb.showwarning("Error", "Please select a product to edit!")
+        elif values[0] == "" and values[1] == "" and values[2] == "":
+            mb.showwarning("Error", "Please enter a field to edit!")
+        else:
+            if values[0] != "" and self.product_db.product_exists(values[0]):
+                mb.showwarning("Error", "That product name already exists!")
+            else:
+                for i, value in enumerate(values):
+                    if value == "":
+                        values[i] = self.tree_views[1].item(selected_item, "values")[i]
+                if self.product_check(values[0], values[1], values[2]):
+                    product_name = self.tree_views[1].item(selected_item, "values")[0]
+                    product = self.product_db.get_product(product_name)
+                    for i, value in enumerate(values):
+                        self.product_db.edit_product(product, i, value)
+                    self.view.edit_item(self.tree_views[1], selected_item, values[0], values[1],
+                                        values[2])
 
     def remove_product(self, tree_view: ttk.Treeview):
         pass
@@ -112,17 +136,6 @@ class AdminController(AbstractController, AbstractObserverController):
         self.view.attach((4, self.edit_product))
         self.view.attach((5, self.remove_product))
         self.view.attach((6, self.logout_user))
-
-    @staticmethod
-    def update_orders(tree_view: ttk.Treeview, discount_percentage: float):
-        tree_list = list(tree_view.get_children(""))
-        for item in tree_list:
-            product_name = tree_view.item(item, "values")[0]
-            date_time = tree_view.item(item, "values")[1]
-            subtotal = float(tree_view.item(item, "values")[2])
-            discount = subtotal * discount_percentage
-            subtotal -= discount
-            tree_view.item(item, text="Item", values=(product_name, date_time, subtotal))
 
     @staticmethod
     def product_check(product_name: str, quantity: str, price: str):

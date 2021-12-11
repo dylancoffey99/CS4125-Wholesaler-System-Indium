@@ -47,6 +47,10 @@ class AbstractUserView(ABC):
         pass
 
     @abstractmethod
+    def edit_item(self, tree_view: ttk.Treeview, item, *args):
+        pass
+
+    @abstractmethod
     def remove_item(self, tree_view: ttk.Treeview):
         pass
 

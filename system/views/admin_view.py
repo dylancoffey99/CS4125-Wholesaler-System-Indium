@@ -125,6 +125,9 @@ class AdminView(AbstractView, AbstractUserView):
     def insert_item(self, tree_view: ttk.Treeview, *args):
         tree_view.insert("", "end", text="Item", values=(args[0], args[1], args[2]))
 
+    def edit_item(self, tree_view: ttk.Treeview, item, *args):
+        tree_view.item(item, text="Item", values=(args[0], args[1], args[2]))
+
     def remove_item(self, tree_view: ttk.Treeview):
         selected_item = tree_view.selection()[0]
         tree_view.delete(selected_item)
