@@ -77,10 +77,13 @@ class AdminController(AbstractController, AbstractObserverController):
         for item in tree_list:
             product_name = self.tree_views[0].item(item, "values")[0]
             date_time = self.tree_views[0].item(item, "values")[1]
-            subtotal = float(self.tree_views[0].item(item, "values")[2])
-            discount = subtotal * discount_percentage
-            subtotal -= discount
-            self.view.edit_item(self.tree_views[0], item, product_name, date_time, subtotal)
+            if product_name == "================" or date_time == "":
+                continue
+            else:
+                subtotal = float(self.tree_views[0].item(item, "values")[2])
+                discount = subtotal * discount_percentage
+                subtotal -= discount
+                self.view.edit_item(self.tree_views[0], item, product_name, date_time, subtotal)
 
     def add_product(self):
         product_name = self.view.get_input_value("product_name")
@@ -118,7 +121,7 @@ class AdminController(AbstractController, AbstractObserverController):
                     for i, value in enumerate(values):
                         self.product_db.edit_product(product, i, value)
                     self.view.edit_item(self.tree_views[1], selected_item, values[0], values[1],
-                                        values[2])
+                                        str(float(values[2])))
 
     def remove_product(self, tree_view: ttk.Treeview):
         pass
