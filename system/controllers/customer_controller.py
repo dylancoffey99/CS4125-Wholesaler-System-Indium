@@ -101,10 +101,10 @@ class CustomerController(AbstractController, AbstractObserverController):
         order_db.add_order(order)
         mb.showwarning("Success", "Checkout successful, your order has been created!\n"
                        "\nBasket Subtotal = €" + str(basket_subtotal) +
-                       "\nVAT Cost = €" + str(f"{vat_cost:.2f}") +
+                       "\nVAT Cost = €" + str(f"{vat_cost:.1f}") +
                        "\nShipping Cost = €" + str(shipping_cost) +
-                       "\nDiscount = €" + str(f"{discount:.2f}") +
-                       "\n==============\nTotal Cost = €" + str(order_subtotal))
+                       "\nDiscount = €" + str(f"{discount:.1f}") +
+                       "\n=================\nTotal Cost = €" + str(order_subtotal))
 
     def logout_user(self):
         self.view.clear_frame()

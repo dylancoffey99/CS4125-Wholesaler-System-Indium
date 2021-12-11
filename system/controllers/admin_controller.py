@@ -79,11 +79,10 @@ class AdminController(AbstractController, AbstractObserverController):
             date_time = self.tree_views[0].item(item, "values")[1]
             if product_name == "================" or date_time == "":
                 continue
-            else:
-                subtotal = float(self.tree_views[0].item(item, "values")[2])
-                discount = subtotal * discount_percentage
-                subtotal -= discount
-                self.view.edit_item(self.tree_views[0], item, product_name, date_time, subtotal)
+            subtotal = float(self.tree_views[0].item(item, "values")[2])
+            discount = subtotal * discount_percentage
+            subtotal -= discount
+            self.view.edit_item(self.tree_views[0], item, product_name, date_time, subtotal)
 
     def add_product(self):
         product_name = self.view.get_input_value("product_name")

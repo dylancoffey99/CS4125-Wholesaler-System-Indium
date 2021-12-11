@@ -1,6 +1,5 @@
 import csv
 from typing import List
-from datetime import datetime
 from system.database import abstract_db_handler as db
 from system.models.users.user import User
 from system.models.users.customer import Customer
@@ -174,10 +173,9 @@ class OrderDB(db.AbstractOrderDB):
                     if row[1] == self.order_separator or row[2] == "":
                         temp_rows.append(row)
                         continue
-                    else:
-                        subtotal = float(row[3])
-                        discount = subtotal * discount_percentage
-                        row[3] = str(subtotal - discount)
+                    subtotal = float(row[3])
+                    discount = subtotal * discount_percentage
+                    row[3] = str(subtotal - discount)
                 temp_rows.append(row)
         with open(self.db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")

@@ -40,6 +40,8 @@ class CustomerView(AbstractView, AbstractUserView):
         self.update_widgets[2].heading("c2", text="Quantity")
         self.update_widgets[2].heading("c3", text="Price")
         self.update_widgets[2].grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
+        self.update_widgets[2].bind("<Button-1>", lambda event:
+                                    self.stop_tree_view_resize(self.update_widgets[2], event))
         product_quantity_entry = ttk.Entry(self.frame, width=18,
                                            textvariable=self.input["product_quantity"])
         product_quantity_entry.grid(row=0, column=3, padx=10, pady=10)
@@ -91,6 +93,11 @@ class CustomerView(AbstractView, AbstractUserView):
     def clear_tree_view(self, tree_view: ttk.Treeview):
         for item in tree_view.get_children():
             tree_view.delete(item)
+
+    def stop_tree_view_resize(self, tree_view: ttk.Treeview, event):
+        if tree_view.identify_region(event.x, event.y) == "separator":
+            return "break"
+        return "continue"
 
     def set_basket_subtotal_label(self, basket_subtotal: float):
         self.update_widgets[0].config(text="Basket Subtotal = €" + str(basket_subtotal))

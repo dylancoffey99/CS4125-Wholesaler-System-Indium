@@ -57,3 +57,7 @@ class AbstractUserView(ABC):
     @abstractmethod
     def clear_tree_view(self, tree_view: ttk.Treeview):
         pass
+
+    @abstractmethod
+    def stop_tree_view_resize(self, tree_view: ttk.Treeview, event):
+        pass
