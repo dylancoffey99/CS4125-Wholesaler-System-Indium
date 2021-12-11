@@ -103,19 +103,22 @@ class AdminController(AbstractController, AbstractObserverController):
                   self.view.get_input_value("product_quantity"),
                   self.view.get_input_value("product_price")]
         selected_item = self.tree_views[1].focus()
-        if not selected_item:
+        if len(self.tree_views[1].get_children("")) == 0:
+            mb.showwarning("Error", "There aren't any products to edit!")
+        elif not selected_item:
             mb.showwarning("Error", "Please select a product to edit!")
         elif values[0] == "" and values[1] == "" and values[2] == "":
             mb.showwarning("Error", "Please enter a field to edit!")
         else:
-            if values[0] != "" and self.product_db.product_exists(values[0]):
+            product_name = self.tree_views[1].item(selected_item, "values")[0]
+            if values[0] != "" and values[0] != product_name and \
+                    self.product_db.product_exists(values[0]):
                 mb.showwarning("Error", "That product name already exists!")
             else:
                 for i, value in enumerate(values):
                     if value == "":
                         values[i] = self.tree_views[1].item(selected_item, "values")[i]
                 if self.product_check(values[0], values[1], values[2]):
-                    product_name = self.tree_views[1].item(selected_item, "values")[0]
                     product = self.product_db.get_product(product_name)
                     for i, value in enumerate(values):
                         self.product_db.edit_product(product, i, value)
