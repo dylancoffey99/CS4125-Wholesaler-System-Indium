@@ -4,9 +4,10 @@ module, and the Product class from the product module, in the systems shopping p
 """
 from typing import List
 from system.models.shopping.product import Product
+from system.models.shopping.observer import AbstractSubject
 
 
-class Basket:
+class Basket(AbstractSubject):
     """
     This class represents a model of a basket, containing a constructor, and
     the getter/setter methods for its parameters.
@@ -20,6 +21,7 @@ class Basket:
         """
         self.basket_items = basket_items
         self.basket_subtotal = basket_subtotal
+        self.observers = []
 
     def get_basket_items(self) -> List[Product]:
         """
@@ -44,6 +46,7 @@ class Basket:
         :param price: Price to be added to the basket subtotal.
         """
         self.basket_subtotal += price
+        self.notify()
 
     def sub_basket_subtotal(self, price: float):
         """
@@ -53,6 +56,7 @@ class Basket:
         """
         if self.basket_subtotal > 0 and price <= self.basket_subtotal:
             self.basket_subtotal -= price
+            self.notify()
 
     def add_item(self, product: Product):
         """
@@ -90,3 +94,13 @@ class Basket:
             if product_name == product.get_product_name():
                 return True
         return False
+
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def detach(self, observer):
+        self.observers.remove(observer)
+
+    def notify(self):
+        for observer in self.observers:
+            observer.update(self)

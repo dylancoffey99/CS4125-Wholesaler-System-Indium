@@ -18,8 +18,8 @@ class CustomerController(AbstractController, AbstractObserverController):
                                  self.access_controller.user)
         self.view.set_combobox(self.fill_products())
         self.tree_view = self.view.get_tree_view()
-        self.attach_observers()
         self.basket = Basket([], 0)
+        self.attach_observers()
 
     def fill_products(self) -> List[str]:
         products = self.product_db.get_all_products()
@@ -109,3 +109,7 @@ class CustomerController(AbstractController, AbstractObserverController):
         self.view.attach((2, self.remove_product))
         self.view.attach((3, self.checkout))
         self.view.attach((4, self.logout_user))
+        self.basket.attach(self)
+
+    def update(self, subject):
+        self.view.set_basket_subtotal_label(subject.get_basket_subtotal())

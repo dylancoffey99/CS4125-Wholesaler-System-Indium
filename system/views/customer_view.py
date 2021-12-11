@@ -10,8 +10,7 @@ class CustomerView(AbstractView, AbstractUserView):
         self.frame = frame
         self.user = user
         self.input = {"product_name": tk.StringVar(), "product_quantity": tk.StringVar()}
-        self.product_combobox = ttk.Combobox()
-        self.product_tree_view = ttk.Treeview()
+        self.update_widgets = [ttk.Label(), ttk.Combobox(), ttk.Treeview()]
         self.observers = []
         self.setup_view()
 
@@ -21,24 +20,26 @@ class CustomerView(AbstractView, AbstractUserView):
         self.load_interactions()
 
     def load_labels(self):
+        self.update_widgets[0] = ttk.Label(self.frame, text="Basket Subtotal = €0")
+        self.update_widgets[0].grid(row=4, column=2, columnspan=3, padx=10, pady=10)
         product_label = ttk.Label(self.frame, text="Choose a product")
         product_label.grid(row=0, column=0, padx=10, pady=10)
         product_quantity_label = ttk.Label(self.frame, text="Quantity")
         product_quantity_label.grid(row=0, column=2, padx=10, pady=10)
 
     def load_interactions(self):
-        self.product_combobox = ttk.Combobox(self.frame, width=34, state="readonly",
-                                             textvariable=self.input["product_name"])
-        self.product_combobox.grid(row=0, column=1, pady=10)
-        self.product_tree_view = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
+        self.update_widgets[1] = ttk.Combobox(self.frame, width=34, state="readonly",
+                                              textvariable=self.input["product_name"])
+        self.update_widgets[1].grid(row=0, column=1, pady=10)
+        self.update_widgets[2] = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
                                               show='headings', height=21)
-        self.product_tree_view.column("c1", width=190)
-        self.product_tree_view.column("c2", width=85)
-        self.product_tree_view.column("c3", width=85)
-        self.product_tree_view.heading("c1", text="Product Name")
-        self.product_tree_view.heading("c2", text="Quantity")
-        self.product_tree_view.heading("c3", text="Price")
-        self.product_tree_view.grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
+        self.update_widgets[2].column("c1", width=190)
+        self.update_widgets[2].column("c2", width=85)
+        self.update_widgets[2].column("c3", width=85)
+        self.update_widgets[2].heading("c1", text="Product Name")
+        self.update_widgets[2].heading("c2", text="Quantity")
+        self.update_widgets[2].heading("c3", text="Price")
+        self.update_widgets[2].grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
         product_quantity_entry = ttk.Entry(self.frame, width=18,
                                            textvariable=self.input["product_quantity"])
         product_quantity_entry.grid(row=0, column=3, padx=10, pady=10)
@@ -72,10 +73,10 @@ class CustomerView(AbstractView, AbstractUserView):
         return value
 
     def get_tree_view(self) -> ttk.Treeview:
-        return self.product_tree_view
+        return self.update_widgets[2]
 
     def set_combobox(self, combobox_items: List[str]):
-        self.product_combobox["values"] = combobox_items
+        self.update_widgets[1]["values"] = combobox_items
 
     def insert_item(self, tree_view: ttk.Treeview, *args):
         tree_view.insert("", "end", text="Item", values=(args[0], args[1], args[2]))
@@ -87,3 +88,6 @@ class CustomerView(AbstractView, AbstractUserView):
     def clear_tree_view(self, tree_view: ttk.Treeview):
         for item in tree_view.get_children():
             tree_view.delete(item)
+
+    def set_basket_subtotal_label(self, basket_subtotal: float):
+        self.update_widgets[0].config(text="Basket Subtotal = €" + str(basket_subtotal))
