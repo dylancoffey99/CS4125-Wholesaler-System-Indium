@@ -6,7 +6,7 @@ from system.controllers.abstract_controllers import AbstractObserverController
 from system.controllers.admin_controller import AdminController
 from system.controllers.customer_controller import CustomerController
 from system.databases import UserDB
-from system.models.users import Customer
+from system.models.users import Admin, Customer
 from system.views import HomeView, LoginView, RegisterView
 
 
@@ -53,8 +53,11 @@ class AccessController(AbstractObserverController):
                 self.view.clear_frame()
                 self.clear_input()
                 if self.user.get_is_admin() == 1:
+                    self.user = Admin(self.user.get_user_name(), self.user.get_password())
                     AdminController(self)
                 else:
+                    self.user = Customer(self.user.get_user_name(), self.user.get_password(),
+                                         self.user.get_country_id())
                     CustomerController(self)
 
     def register_user(self):

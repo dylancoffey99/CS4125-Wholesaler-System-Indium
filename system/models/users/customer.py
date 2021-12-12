@@ -4,8 +4,7 @@ from system.models.users.user import User
 
 
 class Customer(User, AbstractUser):
-    def __init__(self, user_name: str, password: str, country_id: int,
-                 discount_id: int = -1):
+    def __init__(self, user_name: str, password: str, country_id: int, discount_id: int = -1):
         User.__init__(self, user_name, password, 0, country_id)
         self.discount_id = discount_id
 

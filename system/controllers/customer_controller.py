@@ -3,7 +3,7 @@ from tkinter import messagebox as mb
 from typing import List
 
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases import UserDB, OrderDB, ProductDB, CountryDB
+from system.databases import UserDB, OrderDB, CountryDB
 from system.models.shopping import AbstractObserver, Basket, Order
 from system.views import HomeView, CustomerView
 
@@ -11,16 +11,16 @@ from system.views import HomeView, CustomerView
 class CustomerController(AbstractController, AbstractObserverController, AbstractObserver):
     def __init__(self, access_controller):
         self.access_controller = access_controller
-        self.product_db = ProductDB("system/databases/csv/product_db")
+        self.customer = self.access_controller.user
         self.view = CustomerView(self.access_controller.root, self.access_controller.frame,
-                                 self.access_controller.user)
+                                 self.customer)
         self.view.set_combobox(self.fill_products())
         self.tree_view = self.view.get_tree_view()
         self.basket = Basket([], 0)
         self.attach_observers()
 
     def fill_products(self) -> List[str]:
-        products = self.product_db.get_all_products()
+        products = self.customer.get_all_products()
         product_names = []
         for product in products:
             product_names.append(product.get_product_name())
@@ -34,7 +34,7 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
         elif not quantity.isdigit() or quantity == str(0):
             mb.showwarning("Error", "The quantity entered is not a valid number!")
         else:
-            product = self.product_db.get_product(product_name)
+            product = self.customer.get_product(product_name)
             if self.basket.item_exists(product_name):
                 mb.showwarning("Error", "That product is already in the basket!")
             elif product.get_product_quantity() == 0:
@@ -43,7 +43,7 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
                 mb.showwarning("Error", "The quantity entered is too high,"
                                         " not enough left in stock!")
             else:
-                price = float(quantity) * product.get_product_price()
+                price = product.calc_price(quantity)
                 self.basket.add_item(product)
                 self.basket.add_basket_subtotal(price)
                 self.view.insert_item(self.tree_view, product_name, int(quantity), price)
@@ -62,7 +62,7 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
             products = self.basket.get_basket_items()
             for product in products:
                 if product.get_product_name() == product_name:
-                    price = float(quantity) * product.get_product_price()
+                    price = product.calc_price(quantity)
                     self.basket.remove_item(product)
                     self.basket.sub_basket_subtotal(price)
                     self.view.remove_item(self.tree_view, selected_item)
@@ -71,8 +71,6 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
         if len(self.tree_view.get_children("")) == 0:
             mb.showwarning("Error", "The basket is empty, please add some products to the basket!")
         else:
-            customer_name = self.access_controller.user.get_user_name()
-            country_id = self.access_controller.user.get_country_id()
             tree_list = list(self.tree_view.get_children(""))
             products = self.basket.get_basket_items()
             product_names = []
@@ -81,8 +79,10 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
                 quantity = int(self.tree_view.item(row, "values")[1])
                 for product in products:
                     if product_name == product.get_product_name():
-                        self.product_db.sub_product_quantity(product, quantity)
+                        self.customer.sub_product_quantity(product_name, quantity)
                         product_names.append(product.get_product_name())
+            customer_name = self.customer.get_user_name()
+            country_id = self.customer.get_country_id()
             self.create_order(customer_name, country_id, product_names)
             self.basket.clear_items()
             self.view.clear_tree_view(self.tree_view)

@@ -2,7 +2,7 @@ from tkinter import messagebox as mb
 from typing import List
 
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases import UserDB, OrderDB, ProductDB
+from system.databases import UserDB, OrderDB
 from system.models.shopping import Product
 from system.views import HomeView, AdminView
 
@@ -10,11 +10,11 @@ from system.views import HomeView, AdminView
 class AdminController(AbstractController, AbstractObserverController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
+        self.admin = self.access_controller.user
         self.user_db = UserDB("system/databases/csv/user_db")
         self.order_db = OrderDB("system/databases/csv/order_db")
-        self.product_db = ProductDB("system/databases/csv/product_db")
         self.view = AdminView(self.access_controller.root, self.access_controller.frame,
-                              self.access_controller.user)
+                              self.admin)
         self.view.set_combobox(self.fill_customers())
         self.tree_views = self.view.get_tree_view()
         self.fill_products()
@@ -28,7 +28,7 @@ class AdminController(AbstractController, AbstractObserverController):
         return user_names
 
     def fill_products(self):
-        products = self.product_db.get_all_products()
+        products = self.admin.get_all_products()
         for product in products:
             product_name = product.get_product_name()
             quantity = product.get_product_quantity()
@@ -91,12 +91,12 @@ class AdminController(AbstractController, AbstractObserverController):
         price = self.view.get_input_value("product_price")
         if product_name == "" or quantity == "" or price == "":
             mb.showwarning("Error", "Please enter all fields!")
-        elif self.product_db.product_exists(product_name):
+        elif self.admin.product_exists(product_name):
             mb.showwarning("Error", "That product name already exists!")
         else:
             if self.product_check(product_name, quantity, price):
                 product = Product(product_name, int(quantity), float(price))
-                self.product_db.add_product(product)
+                self.admin.add_product(product)
                 self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
 
     def edit_product(self):
@@ -112,17 +112,16 @@ class AdminController(AbstractController, AbstractObserverController):
             mb.showwarning("Error", "Please enter a field to edit!")
         else:
             product_name = self.tree_views[1].item(selected_item, "values")[0]
-            if values[0] != "" and values[0] != product_name and \
-                    self.product_db.product_exists(values[0]):
+            if values[0] != "" and values[0] != product_name and self.admin.product_exists(values[0]):
                 mb.showwarning("Error", "That product name already exists!")
             else:
                 for i, value in enumerate(values):
                     if value == "":
                         values[i] = self.tree_views[1].item(selected_item, "values")[i]
                 if self.product_check(values[0], values[1], values[2]):
-                    product = self.product_db.get_product(product_name)
+                    product = self.admin.get_product(product_name)
                     for i, value in enumerate(values):
-                        self.product_db.edit_product(product, i, value)
+                        self.admin.edit_product(product, i, value)
                     self.view.edit_item(self.tree_views[1], selected_item, values[0], values[1],
                                         str(float(values[2])))
 
@@ -136,8 +135,8 @@ class AdminController(AbstractController, AbstractObserverController):
             item_dict = self.tree_views[1].item(selected_item)
             values = list(item_dict.values())
             product_name = values[2][0]
-            product = self.product_db.get_product(product_name)
-            self.product_db.remove_product(product)
+            product = self.admin.get_product(product_name)
+            self.admin.remove_product(product)
             self.view.remove_item(self.tree_views[1], selected_item)
 
     def logout_user(self):

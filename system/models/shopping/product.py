@@ -42,3 +42,13 @@ class Product:
         :returns: Price of the product.
         """
         return self.product_price
+
+    def calc_price(self, quantity: int) -> float:
+        """
+        This method calculates the price of certain quantity
+        of products.
+
+        :param quantity: Quantity of products.
+        :returns: Price of the products.
+        """
+        return float(quantity) * self.product_price
