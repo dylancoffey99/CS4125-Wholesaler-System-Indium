@@ -2,7 +2,7 @@ from tkinter import messagebox as mb
 from typing import List
 
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases import UserDB, OrderDB
+from system.databases.db_handler import OrderDB
 from system.models.shopping import Product
 from system.views import HomeView, AdminView
 
@@ -11,7 +11,6 @@ class AdminController(AbstractController, AbstractObserverController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
         self.admin = self.access_controller.user
-        self.user_db = UserDB("system/databases/csv/user_db")
         self.order_db = OrderDB("system/databases/csv/order_db")
         self.view = AdminView(self.access_controller.root, self.access_controller.frame,
                               self.admin)
@@ -21,7 +20,7 @@ class AdminController(AbstractController, AbstractObserverController):
         self.attach_observers()
 
     def fill_customers(self) -> List[str]:
-        customers = self.user_db.get_all_customers()
+        customers = self.admin.get_all_customers()
         user_names = []
         for customer in customers:
             user_names.append(customer.get_user_name())
@@ -58,7 +57,7 @@ class AdminController(AbstractController, AbstractObserverController):
         elif discount_category == "":
             mb.showwarning("Error", "Please select a discount category!")
         else:
-            customer = self.user_db.get_customer(user_name)
+            customer = self.admin.get_customer(user_name)
             if not self.order_db.orders_exist(user_name):
                 mb.showwarning("Error", "This customer does not have any orders!")
             elif customer.get_discount_id() != -1:
@@ -69,7 +68,7 @@ class AdminController(AbstractController, AbstractObserverController):
                 discount_percentage = discount.get_discount_percentage()
                 customer.set_discount_id(discount_id)
                 self.view_order()
-                self.user_db.set_customer_discount(user_name, discount_id)
+                self.admin.set_customer_discount(user_name, discount_id)
                 self.order_db.update_order_subtotals(user_name, discount_percentage)
                 self.update_orders(discount_percentage)
 
@@ -112,7 +111,8 @@ class AdminController(AbstractController, AbstractObserverController):
             mb.showwarning("Error", "Please enter a field to edit!")
         else:
             product_name = self.tree_views[1].item(selected_item, "values")[0]
-            if values[0] != "" and values[0] != product_name and self.admin.product_exists(values[0]):
+            if values[0] != "" and values[0] != product_name and \
+                    self.admin.product_exists(values[0]):
                 mb.showwarning("Error", "That product name already exists!")
             else:
                 for i, value in enumerate(values):

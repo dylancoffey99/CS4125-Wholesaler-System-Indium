@@ -3,7 +3,7 @@ from tkinter import messagebox as mb
 from typing import List
 
 from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases import UserDB, OrderDB, CountryDB
+from system.databases.db_handler import CountryDB
 from system.models.shopping import AbstractObserver, Basket, Order
 from system.views import HomeView, CustomerView
 
@@ -81,23 +81,21 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
                     if product_name == product.get_product_name():
                         self.customer.sub_product_quantity(product_name, quantity)
                         product_names.append(product.get_product_name())
-            customer_name = self.customer.get_user_name()
-            country_id = self.customer.get_country_id()
-            self.create_order(customer_name, country_id, product_names)
+            self.create_order(product_names)
             self.basket.clear_items()
             self.view.clear_tree_view(self.tree_view)
 
-    def create_order(self, customer_name: str, country_id: int, product_names: List[str]):
+    def create_order(self, product_names: List[str]):
         order_db = OrderDB("system/databases/csv/order_db")
         country_db = CountryDB("system/databases/csv/country_db")
-        country = country_db.get_country(country_id)
+        country = country_db.get_country(self.customer.get_country_id())
         basket_subtotal = self.basket.get_basket_subtotal()
         vat_cost = basket_subtotal * country.get_vat_percentage()
         shipping_cost = country.get_shipping_cost()
         order_subtotal = (basket_subtotal + vat_cost + shipping_cost)
-        discount = self.calc_discount(customer_name, order_subtotal)
+        discount = self.calc_discount(order_subtotal)
         order_subtotal -= discount
-        order = Order(customer_name, product_names, datetime.now(), order_subtotal)
+        order = Order(self.customer.get_user_name(), product_names, datetime.now(), order_subtotal)
         order_db.add_order(order)
         mb.showwarning("Success", "Checkout successful, your order has been created!\n"
                                   "\nBasket Subtotal = €" + str(basket_subtotal) +
@@ -105,6 +103,13 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
                        "\nShipping Cost = €" + str(shipping_cost) +
                        "\nDiscount = €" + str(f"{discount:.1f}") +
                        "\n=================\nTotal Cost = €" + str(order_subtotal))
+
+    def calc_discount(self, order_subtotal: float):
+        if self.customer.get_discount_id() != -1:
+            discount_category = self.customer.check_discount_category()
+            discount = order_subtotal * discount_category.get_discount_percentage()
+            return discount
+        return 0
 
     def logout_user(self):
         self.view.clear_frame()
@@ -121,13 +126,3 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
 
     def update(self, subject):
         self.view.set_basket_subtotal_label(subject.get_basket_subtotal())
-
-    @staticmethod
-    def calc_discount(customer_name: str, order_subtotal: float):
-        user_db = UserDB("system/databases/csv/user_db")
-        customer = user_db.get_customer(customer_name)
-        if customer.get_discount_id() != -1:
-            discount_category = customer.check_discount_category()
-            discount = order_subtotal * discount_category.get_discount_percentage()
-            return discount
-        return 0

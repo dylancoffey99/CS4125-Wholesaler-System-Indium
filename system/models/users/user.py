@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from system.databases.product_db import AbstractUserProductDB, AbstractProductDB, ProductDB
-from system.models.shopping.product import Product
+from system.models.shopping import Product
 from system.models.users.abstract_user import AbstractUser
 
 

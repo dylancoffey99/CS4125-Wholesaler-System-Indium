@@ -2,33 +2,6 @@ from typing import List
 from abc import ABC, abstractmethod
 
 from system.models.shopping import Country, Order
-from system.models.users import Customer
-
-
-class AbstractUserDB(ABC):
-    @abstractmethod
-    def add_customer(self, customer: Customer):
-        pass
-
-    @abstractmethod
-    def get_user(self, user_name: str):
-        pass
-
-    @abstractmethod
-    def get_customer(self, user_name: str):
-        pass
-
-    @abstractmethod
-    def get_all_customers(self) -> List[Customer]:
-        pass
-
-    @abstractmethod
-    def set_customer_discount(self, user_name: str, discount_id: int):
-        pass
-
-    @abstractmethod
-    def user_exists(self, user_name: str) -> bool:
-        pass
 
 
 class AbstractOrderDB(ABC):
