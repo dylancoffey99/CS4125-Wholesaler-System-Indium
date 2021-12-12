@@ -2,9 +2,10 @@ from datetime import datetime
 from tkinter import messagebox as mb
 from typing import List
 
-from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases.db_handler import CountryDB
-from system.models.shopping import AbstractObserver, Basket, Order
+from system.controllers import AbstractController, AbstractObserverController
+from system.models.payment import Order
+from system.models.shopping import AbstractObserver
+from system.models.shopping.basket import Basket
 from system.views import HomeView, CustomerView
 
 
@@ -86,30 +87,15 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
             self.view.clear_tree_view(self.tree_view)
 
     def create_order(self, product_names: List[str]):
-        order_db = OrderDB("system/databases/csv/order_db")
-        country_db = CountryDB("system/databases/csv/country_db")
-        country = country_db.get_country(self.customer.get_country_id())
-        basket_subtotal = self.basket.get_basket_subtotal()
-        vat_cost = basket_subtotal * country.get_vat_percentage()
-        shipping_cost = country.get_shipping_cost()
-        order_subtotal = (basket_subtotal + vat_cost + shipping_cost)
-        discount = self.calc_discount(order_subtotal)
-        order_subtotal -= discount
-        order = Order(self.customer.get_user_name(), product_names, datetime.now(), order_subtotal)
-        order_db.add_order(order)
+        subtotals = self.basket.calc_subtotals(self.customer)
+        order = Order(self.customer.get_user_name(), product_names, datetime.now(), subtotals[4])
+        self.customer.add_order(order)
         mb.showwarning("Success", "Checkout successful, your order has been created!\n"
-                                  "\nBasket Subtotal = €" + str(basket_subtotal) +
-                       "\nVAT Cost = €" + str(f"{vat_cost:.1f}") +
-                       "\nShipping Cost = €" + str(shipping_cost) +
-                       "\nDiscount = €" + str(f"{discount:.1f}") +
-                       "\n=================\nTotal Cost = €" + str(order_subtotal))
-
-    def calc_discount(self, order_subtotal: float):
-        if self.customer.get_discount_id() != -1:
-            discount_category = self.customer.check_discount_category()
-            discount = order_subtotal * discount_category.get_discount_percentage()
-            return discount
-        return 0
+                                  "\nBasket Subtotal = €" + str(subtotals[0]) +
+                       "\nVAT Cost = €" + str(f"{subtotals[1]:.1f}") +
+                       "\nShipping Cost = €" + str(subtotals[2]) +
+                       "\nDiscount = €" + str(f"{subtotals[3]:.1f}") +
+                       "\n=================\nTotal Cost = €" + str(subtotals[4]))
 
     def logout_user(self):
         self.view.clear_frame()

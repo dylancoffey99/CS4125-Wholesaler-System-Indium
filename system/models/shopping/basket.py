@@ -3,10 +3,10 @@ This module contains the Basket class. The module imports the type List from the
 typing module, the Product class from the product module, and the AbstractSubject
 class from observer module, both in the systems shopping package.
 """
-from typing import List
+from typing import List, Tuple
 
-from system.models.shopping.abstract_observer import AbstractSubject
-from system.models.shopping.product import Product
+from system.models.shopping import AbstractSubject, Product
+from system.models.users.customer import Customer
 
 
 class Basket(AbstractSubject):
@@ -98,6 +98,28 @@ class Basket(AbstractSubject):
             if product_name == product.get_product_name():
                 return True
         return False
+
+    def calc_subtotals(self, customer: Customer) -> Tuple:
+        """
+        This method calculates the order subtotal of a customers basket,
+        including the basket subtotal, the VAT cost, and the shipping cost.
+        A discount is then calculated and returned by Customer, and finally
+        subtracted from the order subtotal.
+
+        :param customer: Object of the customer.
+        :returns: Subtotals of the customers order.
+        """
+        country = customer.get_country(customer.get_country_id())
+        basket_subtotal = self.basket_subtotal
+        vat_cost = basket_subtotal * country.get_vat_percentage()
+        shipping_cost = country.get_shipping_cost()
+        order_subtotal = (basket_subtotal + vat_cost + shipping_cost)
+        discount = 0
+        if customer.get_discount_id() != -1:
+            discount_category = customer.check_discount_category()
+            discount = discount_category.calc_discount(order_subtotal)
+            order_subtotal -= discount
+        return basket_subtotal, vat_cost, shipping_cost, discount, order_subtotal
 
     def attach(self, observer):
         self.observers.append(observer)

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox as mb
 
-from system.controllers.abstract_controllers import AbstractObserverController
+from system.controllers import AbstractObserverController
 from system.controllers.admin_controller import AdminController
 from system.controllers.customer_controller import CustomerController
 from system.models.access import UserAccess
@@ -85,7 +85,8 @@ class AccessController(AbstractObserverController):
                                 "Spain": 26, "Sweden": 27, "United Kingdom": 28}
                 self.view.clear_frame()
                 self.clear_input()
-                self.user = Customer(username, access.hash_password(password), country_dict.get(country))
+                self.user = Customer(username, access.hash_password(password),
+                                     country_dict.get(country))
                 access.add_customer(self.user)
                 CustomerController(self)
 

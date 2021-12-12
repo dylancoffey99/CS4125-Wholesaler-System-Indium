@@ -1,11 +1,11 @@
 from typing import List, Union
 
-from system.databases.product_db import AbstractUserProductDB, AbstractProductDB, ProductDB
+from system.databases import AbstractUserProductDB, ProductDB
 from system.models.shopping import Product
-from system.models.users.abstract_user import AbstractUser
+from system.models.users import AbstractUser
 
 
-class User(AbstractUser, AbstractUserProductDB, AbstractProductDB):
+class User(AbstractUser, AbstractUserProductDB):
     def __init__(self, user_name: str, password: str, is_admin: int, country_id: int):
         self.user_name = user_name
         self.password = password

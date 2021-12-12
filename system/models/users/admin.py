@@ -1,17 +1,18 @@
 from typing import List
 
-from system.databases.product_db import AbstractAdminProductDB
+from system.databases import AbstractAdminOrderDB, AbstractAdminProductDB, OrderDB
 from system.databases.user_db import AbstractAdminUserDB, UserDB
 from system.models.shopping import Product
-from system.models.users.abstract_user import AbstractUser
+from system.models.users import AbstractUser
 from system.models.users.customer import Customer
 from system.models.users.user import User
 
 
-class Admin(User, AbstractUser, AbstractAdminProductDB, AbstractAdminUserDB):
+class Admin(User, AbstractUser, AbstractAdminProductDB, AbstractAdminUserDB, AbstractAdminOrderDB):
     def __init__(self, user_name: str, password: str):
         User.__init__(self, user_name, password, 1, -1)
         self.user_db = UserDB("system/databases/csv/user_db")
+        self.order_db = OrderDB("system/databases/csv/order_db")
 
     def add_product(self, product: Product):
         self.product_db.add_product(product)
@@ -30,3 +31,12 @@ class Admin(User, AbstractUser, AbstractAdminProductDB, AbstractAdminUserDB):
 
     def set_customer_discount(self, user_name: str, discount_id: int):
         self.user_db.set_customer_discount(user_name, discount_id)
+
+    def update_order_subtotals(self, user_name: str, discount_percentage: float):
+        self.order_db.update_order_subtotals(user_name, discount_percentage)
+
+    def get_customer_orders(self, user_name: str) -> List:
+        return self.order_db.get_customer_orders(user_name)
+
+    def orders_exist(self, user_name: str) -> bool:
+        return bool(self.order_db.orders_exist(user_name))

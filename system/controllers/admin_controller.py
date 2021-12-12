@@ -1,9 +1,8 @@
 from tkinter import messagebox as mb
 from typing import List
 
-from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases.db_handler import OrderDB
-from system.models.shopping import Product
+from system.controllers import AbstractController, AbstractObserverController
+from system.models.shopping.product import Product
 from system.views import HomeView, AdminView
 
 
@@ -11,7 +10,6 @@ class AdminController(AbstractController, AbstractObserverController):
     def __init__(self, access_controller):
         self.access_controller = access_controller
         self.admin = self.access_controller.user
-        self.order_db = OrderDB("system/databases/csv/order_db")
         self.view = AdminView(self.access_controller.root, self.access_controller.frame,
                               self.admin)
         self.view.set_combobox(self.fill_customers())
@@ -38,10 +36,10 @@ class AdminController(AbstractController, AbstractObserverController):
         user_name = self.view.get_input_value("user_name")
         if user_name == "":
             mb.showwarning("Error", "Please select a customer!")
-        elif not self.order_db.orders_exist(user_name):
+        elif not self.admin.orders_exist(user_name):
             mb.showwarning("Error", "This customer does not have any orders!")
         else:
-            orders = self.order_db.get_customer_orders(user_name)
+            orders = self.admin.get_customer_orders(user_name)
             self.view.clear_tree_view(self.tree_views[0])
             for order in orders:
                 product_name = order[1]
@@ -58,7 +56,7 @@ class AdminController(AbstractController, AbstractObserverController):
             mb.showwarning("Error", "Please select a discount category!")
         else:
             customer = self.admin.get_customer(user_name)
-            if not self.order_db.orders_exist(user_name):
+            if not self.admin.orders_exist(user_name):
                 mb.showwarning("Error", "This customer does not have any orders!")
             elif customer.get_discount_id() != -1:
                 mb.showwarning("Error", "This customer already has a discount category!")
@@ -69,7 +67,7 @@ class AdminController(AbstractController, AbstractObserverController):
                 customer.set_discount_id(discount_id)
                 self.view_order()
                 self.admin.set_customer_discount(user_name, discount_id)
-                self.order_db.update_order_subtotals(user_name, discount_percentage)
+                self.admin.update_order_subtotals(user_name, discount_percentage)
                 self.update_orders(discount_percentage)
 
     def update_orders(self, discount_percentage: float):

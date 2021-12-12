@@ -1,11 +1,31 @@
 import csv
+from abc import ABC, abstractmethod
 from typing import List
 
-from system.databases.abstract_db_handler import AbstractOrderDB, AbstractCountryDB
-from system.models.shopping import Country, Order
+from system.models.payment import Order
 
 
-class OrderDB(AbstractOrderDB):
+class AbstractAdminOrderDB(ABC):
+    @abstractmethod
+    def update_order_subtotals(self, user_name: str, discount_percentage: float):
+        pass
+
+    @abstractmethod
+    def get_customer_orders(self, user_name: str) -> List:
+        pass
+
+    @abstractmethod
+    def orders_exist(self, user_name: str) -> bool:
+        pass
+
+
+class AbstractCustomerOrderDB(ABC):
+    @abstractmethod
+    def add_order(self, order: Order):
+        pass
+
+
+class OrderDB(AbstractAdminOrderDB, AbstractCustomerOrderDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
         self.order_separator = "================"
@@ -65,27 +85,3 @@ class OrderDB(AbstractOrderDB):
                 if row[0] == user_name:
                     return True
             return False
-
-
-class CountryDB(AbstractCountryDB):
-    def __init__(self, db_name: str):
-        self.db_name = db_name
-
-    def get_country(self, country_id: int):
-        with open(self.db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-            reader = csv.reader(file, delimiter=",")
-            next(reader)
-            for row in reader:
-                if row[0] == str(country_id):
-                    return Country(int(row[0]), row[1], float(row[2]), float(row[3]))
-            return False
-
-    def get_all_countries(self) -> List[Country]:
-        with open(self.db_name + ".csv", "r", newline="", encoding="utf-8") as file:
-            reader = csv.reader(file, delimiter=",")
-            next(reader)
-            countries = []
-            for row in reader:
-                country = Country(int(row[0]), row[1], float(row[2]), float(row[3]))
-                countries.append(country)
-            return countries

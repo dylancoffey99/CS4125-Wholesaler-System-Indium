@@ -42,3 +42,13 @@ class DiscountCategory:
         :returns: Discount percentage of the discount category.
         """
         return self.discount_percentage
+
+    def calc_discount(self, order_subtotal: float):
+        """
+        This method calculates the discount amount of a order
+        subtotal.
+
+        :param order_subtotal: Subtotal of an order.
+        :returns: Discount amount of an order subtotal.
+        """
+        return order_subtotal * self.get_discount_percentage()

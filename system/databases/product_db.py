@@ -28,8 +28,6 @@ class AbstractUserProductDB(ABC):
     def get_all_products(self) -> List[Product]:
         pass
 
-
-class AbstractProductDB(ABC):
     @abstractmethod
     def sub_product_quantity(self, product_name: str, quantity: int):
         pass
@@ -39,7 +37,7 @@ class AbstractProductDB(ABC):
         pass
 
 
-class ProductDB(AbstractAdminProductDB, AbstractUserProductDB, AbstractProductDB):
+class ProductDB(AbstractAdminProductDB, AbstractUserProductDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
 
