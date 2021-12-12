@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from system.databases import UserDB, ProductDB
 from system.models.shopping import Product
-from system.models.users import User
+from system.models.users import Customer
 
 
 class TestProductDB(TestCase):
@@ -58,7 +58,7 @@ class TestProductDB(TestCase):
 class TestUserDB(TestCase):
     mock_db_name = "test_user_db"
     mock_db = UserDB(mock_db_name)
-    mock_user = User("username", "password", 0, 1)
+    mock_user = Customer("username", "password", 1)
     mock_user_name = mock_user.get_user_name()
 
     def setUp(self):
@@ -68,22 +68,23 @@ class TestUserDB(TestCase):
             writer.writerow([self.mock_user.get_user_name(),
                              self.mock_user.get_password(),
                              self.mock_user.get_is_admin(),
-                             self.mock_user.get_country_id()])
+                             self.mock_user.get_country_id(),
+                             self.mock_user.get_discount_id()])
 
     def tearDown(self):
         os.remove(self.mock_db_name + ".csv")
 
-    def test_add_user(self):
-        new_user = User("new_user", "password", 0, 1)
-        self.mock_db.add_user(new_user)
+    def test_add_customer(self):
+        new_user = Customer("new_user", "password", 1)
+        self.mock_db.add_customer(new_user)
         self.assertEqual(self.mock_db.user_exists(new_user.get_user_name()), True)
 
     def test_get_user(self):
         self.assertEqual(self.mock_db.get_user(self.mock_user_name).get_user_name(),
                          self.mock_user_name)
 
-    def test_get_all_users(self):
-        self.assertEqual(self.mock_db.get_all_users()[0].get_user_name(), self.mock_user_name)
+    def test_get_all_customers(self):
+        self.assertEqual(self.mock_db.get_all_customers()[0].get_user_name(), self.mock_user_name)
 
     def test_user_exists(self):
         self.assertEqual(self.mock_db.user_exists(self.mock_user_name), True)
