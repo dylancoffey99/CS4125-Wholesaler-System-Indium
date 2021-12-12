@@ -2,9 +2,10 @@ import csv
 import os
 from unittest import TestCase
 
-from system.databases import UserDB, ProductDB
+from system.databases import ProductDB
+from system.databases.user_db import UserDB
 from system.models.shopping import Product
-from system.models.users import Customer
+from system.models.users.customer import Customer
 
 
 class TestProductDB(TestCase):
@@ -40,7 +41,7 @@ class TestProductDB(TestCase):
                          edited_product_name)
 
     def test_sub_product_quantity(self):
-        self.mock_db.sub_product_quantity(self.mock_product, 25)
+        self.mock_db.sub_product_quantity(self.mock_product_name, 25)
         self.assertEqual(self.mock_db.get_product(self.mock_product_name).get_product_quantity(), 0)
 
     def test_get_product(self):
