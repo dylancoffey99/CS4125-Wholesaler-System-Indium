@@ -2,7 +2,7 @@ from tkinter import messagebox as mb
 from typing import List
 
 from system.controllers import AbstractController, AbstractObserverController
-from system.models.shopping.product import Product
+from system.models.shopping import Product
 from system.views import HomeView, AdminView
 
 
