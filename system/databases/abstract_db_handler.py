@@ -1,9 +1,8 @@
-from typing import List
 from abc import ABC, abstractmethod
-from system.models.users.user import User
-from system.models.shopping.order import Order
-from system.models.shopping.product import Product
-from system.models.shopping.country import Country
+from typing import List
+
+from system.models.shopping import Country, Order, Product
+from system.models.users import Customer
 
 
 class AbstractProductDB(ABC):
@@ -38,7 +37,7 @@ class AbstractProductDB(ABC):
 
 class AbstractUserDB(ABC):
     @abstractmethod
-    def add_user(self, user: User):
+    def add_customer(self, customer: Customer):
         pass
 
     @abstractmethod
@@ -46,7 +45,15 @@ class AbstractUserDB(ABC):
         pass
 
     @abstractmethod
-    def get_all_users(self) -> List[User]:
+    def get_customer(self, user_name: str):
+        pass
+
+    @abstractmethod
+    def get_all_customers(self) -> List[Customer]:
+        pass
+
+    @abstractmethod
+    def set_customer_discount(self, user_name: str, discount_id: int):
         pass
 
     @abstractmethod
@@ -60,17 +67,21 @@ class AbstractOrderDB(ABC):
         pass
 
     @abstractmethod
-    def update_order_subtotals(self, customer_name: str, discount_percentage: float):
+    def update_order_subtotals(self, user_name: str, discount_percentage: float):
         pass
 
     @abstractmethod
-    def get_customer_orders(self, customer_name: str) -> List:
+    def get_customer_orders(self, user_name: str) -> List:
+        pass
+
+    @abstractmethod
+    def orders_exist(self, user_name: str) -> bool:
         pass
 
 
 class AbstractCountryDB(ABC):
     @abstractmethod
-    def get_country(self, country_name: str):
+    def get_country(self, country_id: int):
         pass
 
     @abstractmethod

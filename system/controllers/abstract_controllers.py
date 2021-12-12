@@ -1,48 +1,13 @@
-import tkinter as tk
 from abc import ABC, abstractmethod
 
 
-class AbstractAccessController(ABC):
+class AbstractController(ABC):
     @abstractmethod
-    def start(self):
-        pass
-
-    @abstractmethod
-    def login_view(self, root: tk.Tk, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def register_view(self, root: tk.Tk, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def login_user(self, root: tk.Tk, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def register_user(self, root: tk.Tk, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def destroy_frame(self, frame: tk.Frame):
+    def logout_user(self):
         pass
 
 
-class AbstractCustomerController(ABC):
+class AbstractObserverController(ABC):
     @abstractmethod
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def destroy_frame(self, frame: tk.Frame):
-        pass
-
-
-class AbstractAdminController(ABC):
-    @abstractmethod
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
-        pass
-
-    @abstractmethod
-    def destroy_frame(self,  frame: tk.Frame):
+    def attach_observers(self):
         pass

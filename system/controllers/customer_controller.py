@@ -1,52 +1,61 @@
-import tkinter as tk
-from tkinter import ttk
 from datetime import datetime
-from system import views
-from system.models.shopping.order import Order
-from system.models.shopping.basket import Basket
-from system.database.db_handler import ProductDB, OrderDB, CountryDB
-from system.controllers.abstract_controllers import AbstractCustomerController
+from tkinter import messagebox as mb
+from typing import List
+
+from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
+from system.databases import UserDB, OrderDB, ProductDB, CountryDB
+from system.models.shopping import AbstractObserver, Basket, Order
+from system.views import HomeView, CustomerView
 
 
-class CustomerController(AbstractCustomerController):
+class CustomerController(AbstractController, AbstractObserverController, AbstractObserver):
     def __init__(self, access_controller):
         self.access_controller = access_controller
-        self.order_db = OrderDB("system/database/orderDB")
-        self.product_db = ProductDB("system/database/productDB")
-        self.country_db = CountryDB("system/database/countryDB")
-        self.input = {"product_name": tk.StringVar(),
-                      "product_quantity": tk.StringVar()}
-        self.view = views.CustomerView(self.access_controller.root, self)
+        self.product_db = ProductDB("system/databases/csv/product_db")
+        self.view = CustomerView(self.access_controller.root, self.access_controller.frame,
+                                 self.access_controller.user)
+        self.view.set_combobox(self.fill_products())
+        self.tree_view = self.view.get_tree_view()
         self.basket = Basket([], 0)
-        self.fill_products()
+        self.attach_observers()
 
-    def fill_products(self):
+    def fill_products(self) -> List[str]:
         products = self.product_db.get_all_products()
         product_names = []
-        for product, _ in enumerate(products):
-            product_names.append(products[product].get_product_name())
+        for product in products:
+            product_names.append(product.get_product_name())
         return product_names
 
-    def add_product(self, tree_view: ttk.Treeview):
-        product_name = self.input["product_name"].get()
-        quantity = self.input["product_quantity"].get()
-        if product_name == "":
-            print("Error: please select a product!")
-        elif quantity == "":
-            print("Error: please enter the quantity!")
+    def add_product(self):
+        product_name = self.view.get_input_value("product_name")
+        quantity = self.view.get_input_value("product_quantity")
+        if product_name == "" or quantity == "":
+            mb.showwarning("Error", "Please enter all fields!")
+        elif not quantity.isdigit() or quantity == str(0):
+            mb.showwarning("Error", "The quantity entered is not a valid number!")
         else:
             product = self.product_db.get_product(product_name)
-            price = float(quantity) * product.get_product_price()
-            self.basket.add_item(product)
-            self.basket.add_basket_subtotal(price)
-            self.insert_item(tree_view, product_name, quantity, price)
+            if self.basket.item_exists(product_name):
+                mb.showwarning("Error", "That product is already in the basket!")
+            elif product.get_product_quantity() == 0:
+                mb.showwarning("Error", "Product out of stock!")
+            elif int(quantity) > product.get_product_quantity():
+                mb.showwarning("Error", "The quantity entered is too high,"
+                                        " not enough left in stock!")
+            else:
+                price = float(quantity) * product.get_product_price()
+                self.basket.add_item(product)
+                self.basket.add_basket_subtotal(price)
+                self.view.insert_item(self.tree_view, product_name, int(quantity), price)
 
-    def remove_product(self, tree_view: ttk.Treeview):
-        selected_item = tree_view.focus()
-        if not selected_item:
-            print("Error: please select from the basket items!")
+    def remove_product(self):
+        selected_item = self.tree_view.focus()
+        if len(self.tree_view.get_children("")) == 0:
+            mb.showwarning("Error", "The basket is empty, there aren't any products to remove!")
+        elif not selected_item:
+            mb.showwarning("Error", "Please select a product from the basket!")
         else:
-            item_dict = tree_view.item(selected_item)
+            item_dict = self.tree_view.item(selected_item)
             values = list(item_dict.values())
             product_name = values[2][0]
             quantity = values[2][1]
@@ -56,65 +65,69 @@ class CustomerController(AbstractCustomerController):
                     price = float(quantity) * product.get_product_price()
                     self.basket.remove_item(product)
                     self.basket.sub_basket_subtotal(price)
-                    self.remove_item(tree_view)
+                    self.view.remove_item(self.tree_view, selected_item)
 
-    def checkout(self, tree_view: ttk.Treeview):
-        if not self.basket_empty(tree_view):
+    def checkout(self):
+        if len(self.tree_view.get_children("")) == 0:
+            mb.showwarning("Error", "The basket is empty, please add some products to the basket!")
+        else:
             customer_name = self.access_controller.user.get_user_name()
-            tree_list = list(tree_view.get_children(''))
+            country_id = self.access_controller.user.get_country_id()
+            tree_list = list(self.tree_view.get_children(""))
             products = self.basket.get_basket_items()
             product_names = []
             for row in tree_list:
-                product_name = tree_view.item(row, 'values')[0]
-                quantity = int(tree_view.item(row, 'values')[1])
+                product_name = self.tree_view.item(row, "values")[0]
+                quantity = int(self.tree_view.item(row, "values")[1])
                 for product in products:
                     if product_name == product.get_product_name():
                         self.product_db.sub_product_quantity(product, quantity)
                         product_names.append(product.get_product_name())
-            self.create_order(customer_name, product_names)
-            self.clear_items(tree_view)
-            self.basket = Basket([], 0)
-            print("Checkout successful, your order has been created!")
+            self.create_order(customer_name, country_id, product_names)
+            self.basket.clear_items()
+            self.view.clear_tree_view(self.tree_view)
 
-    def create_order(self, customer_name, product_names):
-        country_id = self.access_controller.user.get_country_id()
-        country = self.country_db.get_country(country_id)
+    def create_order(self, customer_name: str, country_id: int, product_names: List[str]):
+        order_db = OrderDB("system/databases/csv/order_db")
+        country_db = CountryDB("system/databases/csv/country_db")
+        country = country_db.get_country(country_id)
         basket_subtotal = self.basket.get_basket_subtotal()
-        order_subtotal = (basket_subtotal * (1 + country.get_vat_percentage())
-                          + country.get_shipping_cost())
+        vat_cost = basket_subtotal * country.get_vat_percentage()
+        shipping_cost = country.get_shipping_cost()
+        order_subtotal = (basket_subtotal + vat_cost + shipping_cost)
+        discount = self.calc_discount(customer_name, order_subtotal)
+        order_subtotal -= discount
         order = Order(customer_name, product_names, datetime.now(), order_subtotal)
-        self.order_db.add_order(order)
+        order_db.add_order(order)
+        mb.showwarning("Success", "Checkout successful, your order has been created!\n"
+                                  "\nBasket Subtotal = €" + str(basket_subtotal) +
+                       "\nVAT Cost = €" + str(f"{vat_cost:.1f}") +
+                       "\nShipping Cost = €" + str(shipping_cost) +
+                       "\nDiscount = €" + str(f"{discount:.1f}") +
+                       "\n=================\nTotal Cost = €" + str(order_subtotal))
 
-    def logout_user(self, root: tk.Tk, frame: tk.Frame):
-        self.destroy_frame(frame)
-        for child in root.winfo_children():
-            child.destroy()
-        self.view = views.LoginView(self.access_controller.root, self.access_controller)
-        print("Logout successful!")
+    def logout_user(self):
+        self.view.clear_frame()
+        self.view = HomeView(self.access_controller.root, self.access_controller.frame,
+                             self.access_controller.observers)
+        self.access_controller.user = None
 
-    def destroy_frame(self, frame: tk.Frame):
-        for widget in frame.winfo_children():
-            widget.destroy()
-        frame.destroy()
+    def attach_observers(self):
+        self.view.attach((1, self.add_product))
+        self.view.attach((2, self.remove_product))
+        self.view.attach((3, self.checkout))
+        self.view.attach((4, self.logout_user))
+        self.basket.attach(self)
 
-    @staticmethod
-    def insert_item(tree_view: ttk.Treeview, product_name: str, quantity: int, price: float):
-        tree_view.insert('', 'end', text="Item", values=(product_name, quantity, price))
-
-    @staticmethod
-    def remove_item(tree_view: ttk.Treeview):
-        selected_item = tree_view.selection()[0]
-        tree_view.delete(selected_item)
-
-    @staticmethod
-    def clear_items(tree_view: ttk.Treeview):
-        for item in tree_view.get_children():
-            tree_view.delete(item)
+    def update(self, subject):
+        self.view.set_basket_subtotal_label(subject.get_basket_subtotal())
 
     @staticmethod
-    def basket_empty(tree_view: ttk.Treeview):
-        children = tree_view.get_children('')
-        if len(children) == 0:
-            print("Error: the basket is empty, please add some products!")
-            return True
-        return False
+    def calc_discount(customer_name: str, order_subtotal: float):
+        user_db = UserDB("system/databases/csv/user_db")
+        customer = user_db.get_customer(customer_name)
+        if customer.get_discount_id() != -1:
+            discount_category = customer.check_discount_category()
+            discount = order_subtotal * discount_category.get_discount_percentage()
+            return discount
+        return 0

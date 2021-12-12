@@ -1,0 +1,15 @@
+﻿customer_name,product_name,order_date,subtotal
+username1,================,================,================
+username1,product1,15-11-2021 23:30:00,200.0
+username1,product2,,
+username1,product3,,
+username1,product4,,
+username2,================,================,================
+username2,product4,10-12-2021 14:00:00,1500.0
+username2,product3,,
+username2,product2,,
+username2,product1,,
+username1,================,================,================
+username1,product1,10-12-2021 16:30:00,250.0
+username1,product2,,
+username1,product3,,

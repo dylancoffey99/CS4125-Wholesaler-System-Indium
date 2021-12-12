@@ -1,16 +1,21 @@
 """
-This module contains the Basket class. The module imports the type List from the typing
-module, and the Product class from the product module, in the systems shopping package.
+This module contains the Basket class. The module imports the type List from the
+typing module, the Product class from the product module, and the AbstractSubject
+class from observer module, both in the systems shopping package.
 """
 from typing import List
+
+from system.models.shopping.abstract_observer import AbstractSubject
 from system.models.shopping.product import Product
 
 
-class Basket:
+class Basket(AbstractSubject):
     """
-    This class represents a model of a basket, containing a constructor, and
-    the getter/setter methods for its parameters.
+    This class represents a model of a basket and implements AbstractSubject.
+    It contains a constructor, the getter/setter methods for its parameters,
+    and the implemented abstract methods.
     """
+
     def __init__(self, basket_items: List[Product], basket_subtotal: float):
         """
         This constructor instantiates a basket object.
@@ -20,6 +25,7 @@ class Basket:
         """
         self.basket_items = basket_items
         self.basket_subtotal = basket_subtotal
+        self.observers = []
 
     def get_basket_items(self) -> List[Product]:
         """
@@ -44,6 +50,7 @@ class Basket:
         :param price: Price to be added to the basket subtotal.
         """
         self.basket_subtotal += price
+        self.notify()
 
     def sub_basket_subtotal(self, price: float):
         """
@@ -53,6 +60,7 @@ class Basket:
         """
         if self.basket_subtotal > 0 and price <= self.basket_subtotal:
             self.basket_subtotal -= price
+            self.notify()
 
     def add_item(self, product: Product):
         """
@@ -69,3 +77,31 @@ class Basket:
         :param product: Product to be removed from the basket items.
         """
         self.basket_items.remove(product)
+
+    def clear_items(self):
+        """
+        This method clears all items from the basket, and resets
+        the basket subtotal to zero.
+        """
+        self.basket_items.clear()
+        self.basket_subtotal = 0
+
+    def item_exists(self, product_name: str) -> bool:
+        """
+        This method checks if a product already exists in the
+        basket.
+
+        :param product_name: Product name of product to be checked.
+        :returns: Boolean on whether or not a product exists.
+        """
+        for product in self.basket_items:
+            if product_name == product.get_product_name():
+                return True
+        return False
+
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def notify(self):
+        for observer in self.observers:
+            observer.update(self)

@@ -6,6 +6,7 @@ class Country:
     This class represents a model of a country, containing a constructor, and
     the getter methods for its parameters.
     """
+
     def __init__(self, country_id: int, country_name: str, vat_percentage: float,
                  shipping_cost: float):
         """
