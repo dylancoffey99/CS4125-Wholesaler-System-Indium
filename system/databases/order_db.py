@@ -1,7 +1,9 @@
 import csv
+import os
 from abc import ABC, abstractmethod
 from typing import List
 
+from system.databases.abstract_db import AbstractDB
 from system.models.payment import Order
 
 
@@ -25,10 +27,21 @@ class AbstractCustomerOrderDB(ABC):
         pass
 
 
-class OrderDB(AbstractAdminOrderDB, AbstractCustomerOrderDB):
+class OrderDB(AbstractDB, AbstractAdminOrderDB, AbstractCustomerOrderDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
         self.order_separator = "================"
+        self.check_db()
+
+    def check_db(self):
+        if not os.path.exists(self.db_name + ".csv"):
+            self.create_db()
+
+    def create_db(self):
+        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            writer.writerow(["customer_name", "product_name", "order_date",
+                             "subtotal"])
 
     def add_order(self, order: Order):
         with open(self.db_name + ".csv", "a", newline="", encoding="utf-8") as file:

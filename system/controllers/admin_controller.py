@@ -87,7 +87,7 @@ class AdminController(AbstractController, AbstractObserverController):
         quantity = self.view.get_input_value("product_quantity")
         price = self.view.get_input_value("product_price")
         if product_name == "" or quantity == "" or price == "":
-            mb.showwarning("Error", "Please enter all fields!")
+            mb.showwarning("Error", "Please enter all the fields!")
         elif self.admin.product_exists(product_name):
             mb.showwarning("Error", "That product name already exists!")
         else:

@@ -1,7 +1,9 @@
 import csv
-from typing import List, Union
+import os
 from abc import ABC, abstractmethod
+from typing import List, Union
 
+from system.databases.abstract_db import AbstractDB
 from system.models.shopping import Product
 
 
@@ -37,9 +39,19 @@ class AbstractUserProductDB(ABC):
         pass
 
 
-class ProductDB(AbstractAdminProductDB, AbstractUserProductDB):
+class ProductDB(AbstractDB, AbstractAdminProductDB, AbstractUserProductDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
+        self.check_db()
+
+    def check_db(self):
+        if not os.path.exists(self.db_name + ".csv"):
+            self.create_db()
+
+    def create_db(self):
+        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            writer.writerow(["product_name", "product_quantity", "product_price"])
 
     def add_product(self, product: Product):
         with open(self.db_name + ".csv", "a", newline="", encoding="utf-8") as file:

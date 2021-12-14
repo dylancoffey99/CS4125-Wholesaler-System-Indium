@@ -1,7 +1,9 @@
 import csv
+import os
 from abc import ABC, abstractmethod
 from typing import List, Union
 
+from system.databases.abstract_db import AbstractDB
 from system.models.payment import Country
 
 
@@ -21,9 +23,20 @@ class AbstractAccessCountryDB(ABC):
         pass
 
 
-class CountryDB(AbstractAccessCountryDB, AbstractCustomerCountryDB):
+class CountryDB(AbstractDB, AbstractAccessCountryDB, AbstractCustomerCountryDB):
     def __init__(self, db_name: str):
         self.db_name = db_name
+        self.check_db()
+
+    def check_db(self):
+        if not os.path.exists(self.db_name + ".csv"):
+            self.create_db()
+
+    def create_db(self):
+        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            writer.writerow(["country_id", "country_name", "vat_percentage",
+                             "shipping_cost"])
 
     def get_country(self, country_id: int) -> Union[Country, bool]:
         with open(self.db_name + ".csv", "r", newline="", encoding="utf-8") as file:
