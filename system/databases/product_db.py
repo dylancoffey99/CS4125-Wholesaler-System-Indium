@@ -1,8 +1,8 @@
 """
 This module contains the ProductDB, AbstractAdminProductDB and AbstractUserProductDB
 classes. The module imports the modules csv and os, the type List and Union from the
-typing module, the class Product from the product module in the systems shopping package,
-and the class AbstractDB from the abstract_db module, in the systems databases package.
+typing module, the class Product from the systems shopping package, and the class
+AbstractDB from the systems databases package.
 """
 import csv
 import os

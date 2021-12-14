@@ -1,9 +1,8 @@
 """
 This module contains the UserDB, AbstractAccessUserDB and AbstractAdminUserDB
 classes. The module imports the modules csv and os, the type List and Union from the
-typing module, the class Customer from the customer module, and the class User from the
-user module, both in the systems users package. It also imports the class AbstractDB from
-the abstract_db module, in the systems databases package.
+typing module, the class AbstractDB from the systems databases package, the classes
+Customer and User from the systems users package.
 """
 import csv
 import os

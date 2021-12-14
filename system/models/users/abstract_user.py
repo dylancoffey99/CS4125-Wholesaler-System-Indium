@@ -1,47 +1,44 @@
 """
-This module contains the AbstractUser class.
+This module contains the abstract class AbstractUser. The module imports
+ABC (Abstract Base Class) and abstractmethod from the abc module.
 """
 from abc import ABC, abstractmethod
 
 
 class AbstractUser(ABC):
     """
-    This abstract user class represents an interface for the user. It contains the
-    abstract methods to be implemented into the user access and user database classes.
+    This abstract user class represents an interface user. It contains the
+    abstract methods to be implemented in user classes.
     """
 
     @abstractmethod
     def get_user_name(self) -> str:
         """
-        This method gets a users username.
+        This method gets the username.
 
         :returns: Username of the user.
         """
-        pass
 
     @abstractmethod
     def get_password(self) -> str:
         """
-        This method gets a users password.
+        This method gets the password.
 
         :returns: Password of the user.
         """
-        pass
 
     @abstractmethod
     def get_is_admin(self) -> int:
         """
-        This method gets whether a user is admin or customer.
+        This method gets the admin flag.
 
-        :returns: Identity of the User.
+        :returns: Admin flag of the user.
         """
-        pass
 
     @abstractmethod
     def get_country_id(self) -> int:
         """
-        This method gets a users country.
+        This method gets the country ID.
 
-        :returns: Country of the user.
+        :returns: Country ID of the user.
         """
-        pass

@@ -1,10 +1,10 @@
 """
 This module contains the CustomerController class. The module imports the datetime class
 from the datetime module, the messagebox module from the tkinter package, the type List
-from the typing module, the AbstractUserController and AbstractObserverController classes from
-the systems controllers package. It also imports the AbstractObserver and Basket classes from
-the systems shopping package, the Order class from the systems payment package, and the views
-HomeView and CustomerView from the systems views package.
+from the typing module, and the AbstractUserController and AbstractObserverController
+classes from the systems controllers package. It also imports the AbstractObserver and
+Basket classes from the systems shopping package, the Order class from the systems
+payment package, and the views HomeView and CustomerView from the systems views package.
 """
 from datetime import datetime
 from tkinter import messagebox as mb

@@ -1,9 +1,9 @@
 """
 This module contains the AdminController class. The module imports the messagebox module
-from the tkinter package, the type List from the typing module, and the AbstractUserController
-and AbstractObserverController classes from the abstract_db module in the systems controllers
-package. It also imports the Product class from the product module in the systems shopping
-package, and the views HomeView and AdminView from the systems views package.
+from the tkinter package, the type List from the typing module, the AbstractUserController
+and AbstractObserverController classes from the systems controllers package, the Product
+class from the systems shopping package, and the views HomeView and AdminView from the
+systems views package.
 """
 from tkinter import messagebox as mb
 from typing import List

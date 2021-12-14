@@ -1,8 +1,7 @@
 """
-This module contains the CustomerView class. The module imports the tk package from the
-tkinter package, the ttk module from the tkinter package, and the classes AbstractView,
-AbstractSelectView, and AbstractUserView from the abstract_views module, all in the
-systems views package.
+This module contains the CustomerView class. The module imports the tkinter package,
+the ttk module from the tkinter package, and the classes AbstractView, AbstractSelectView,
+and AbstractUserView from the systems views package.
 """
 import tkinter as tk
 from tkinter import ttk

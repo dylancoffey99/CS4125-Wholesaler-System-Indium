@@ -1,8 +1,8 @@
 """
 This module contains the OrderDB, AbstractAdminOrderDB and AbstractCustomerOrderDB
 classes. The module imports the modules csv and os, the type List from the typing
-module, the class Order from the order module in the systems payment package, and
-the class AbstractDB from the abstract_db module, in the systems databases package.
+module, the class Order from the systems payment package, and the class AbstractDB
+from the systems databases package.
 """
 import csv
 import os

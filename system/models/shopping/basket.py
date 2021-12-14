@@ -1,7 +1,7 @@
 """
 This module contains the Basket class. The module imports the type List and Tuple
-from the typing module, the Product class from the product module, and the AbstractSubject
-class from abstract_observer module, both in the systems shopping package.
+from the typing module, the classes Product and AbstractSubject from the
+systems shopping package, and the Customer class from the systems users package.
 """
 from typing import List, Tuple
 

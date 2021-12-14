@@ -1,10 +1,9 @@
 """
 This module contains the AccessController class. The module imports the tkinter package,
-its messagebox module, and the AbstractObserverController class from the abstract_db
-module in the systems controllers package. It also imports the UserAccess class from the
-user_access module in the access package, the Admin and Customer classes from the systems
-users package, and the views HomeView, LoginView, and RegisterView from the systems views
-package.
+the messagebox module from the tkinter package, the AbstractObserverController class from
+the systems controllers package, and the UserAccess class from the systems access package.
+It also imports the Admin and Customer classes from the systems users package, and the views
+HomeView, LoginView, and RegisterView from the systems views package.
 """
 import tkinter as tk
 from tkinter import messagebox as mb
@@ -22,7 +21,8 @@ class AccessController(AbstractObserverController):
     """
     This class represents an access controller and implements
     AbstractObserverController. It contains a constructor, the methods
-    for controlling the views, and the implemented abstract methods.
+    for controlling the HomeView, LoginView, and RegisterView, and the
+    implemented abstract methods.
     """
 
     def __init__(self):
@@ -74,19 +74,18 @@ class AccessController(AbstractObserverController):
         if username == "" or password == "" or r_password == "":
             mb.showwarning("Error", "Please enter all the fields!")
         else:
-            access = UserAccess()
-            if not access.user_exists(username):
+            if not self.access.user_exists(username):
                 mb.showwarning("Error", "That username does not exist!")
             elif password != r_password:
                 mb.showwarning("Error", "The passwords are not the same!")
             else:
-                if access.verify_password(password):
+                self.user = self.access.get_user(username)
+                if not self.access.verify_password(password, self.user.get_password()):
                     mb.showwarning("Error", "The password is incorrect!")
                 else:
                     self.view.clear_frame()
                     self.clear_input()
-                    self.user = access.get_user(username)
-                    if access.is_admin(username):
+                    if self.user.get_is_admin() == 1:
                         self.user = Admin(self.user.get_user_name(), self.user.get_password())
                         AdminController(self)
                     else:

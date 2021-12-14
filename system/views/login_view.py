@@ -1,7 +1,6 @@
 """
 This module contains the LoginView class. The module imports the ttk module from the
-tkinter package, and the AbstractView class from the abstract_views module, in the
-systems views package.
+tkinter package, and the AbstractView class from the systems views package.
 """
 from tkinter import ttk
 

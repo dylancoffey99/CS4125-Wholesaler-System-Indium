@@ -1,7 +1,7 @@
 """
 This module contains the RegisterView class. The module imports the ttk module from the
-tkinter package, the type List from the typing module and the classes AbstractView
-and AbstractSelectView from the abstract_views module, both in the systems views package.
+tkinter package, the type List from the typing module, and the classes AbstractView
+and AbstractSelectView from the systems views package.
 """
 from tkinter import ttk
 from typing import List
