@@ -1,7 +1,7 @@
 """
 This module contains the CountryDB, AbstractCustomerCountryDB and AbstractAccessCountryDB
 classes. The module imports the modules csv and os, the type List and Union from the typing
-module, the class Product from the product module in the systems shopping package, and the
+module, the class Country from the country module in the systems payment package, and the
 class AbstractDB from the abstract_db module, in the systems databases package.
 """
 import csv
