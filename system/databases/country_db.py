@@ -1,3 +1,9 @@
+"""
+This module contains the CountryDB, AbstractCustomerCountryDB and AbstractAccessCountryDB
+classes. The module imports the modules csv and os, the type List and Union from the typing
+module, the class Product from the product module in the systems shopping package, and the
+class AbstractDB from the abstract_db module, in the systems databases package.
+"""
 import csv
 import os
 from abc import ABC, abstractmethod
@@ -8,23 +14,59 @@ from system.models.payment import Country
 
 
 class AbstractCustomerCountryDB(ABC):
+    """
+    This abstract class represents an interface for the customer and country database.
+    It contains the abstract methods to be implemented into the customer and country
+    database classes.
+    """
+
     @abstractmethod
     def get_country(self, country_id: int) -> Country:
-        pass
+        """
+        This method gets an object of country from the database.
+
+        :param country_id: Country ID of the country object.
+        :returns: Country object from the database.
+        """
 
 
 class AbstractAccessCountryDB(ABC):
+    """
+    This abstract class represents an interface for the user access and country
+    database. It contains the abstract methods to be implemented into the user
+    access and country database classes.
+    """
+
     @abstractmethod
     def get_country_names(self) -> List:
-        pass
+        """
+        This method gets a list of country names from the database.
+
+        :returns: List of country names from the database.
+        """
 
     @abstractmethod
     def get_country_dict(self) -> dict:
-        pass
+        """
+        This method gets a dictionary of country names and IDs from the database.
+
+        :returns: Dictionary of country names and IDs from the database.
+        """
 
 
 class CountryDB(AbstractDB, AbstractAccessCountryDB, AbstractCustomerCountryDB):
+    """
+    This class represents a country database and implements AbstractDB,
+    AbstractAccessCountryDB, and AbstractCustomerCountryDB. It contains a
+    constructor, and the implemented abstract methods.
+    """
+
     def __init__(self, db_name: str):
+        """
+        This constructor instantiates a country database object.
+
+        :param db_name: Name of the database and its file path.
+        """
         self.db_name = db_name
         self.check_db()
 
@@ -33,7 +75,7 @@ class CountryDB(AbstractDB, AbstractAccessCountryDB, AbstractCustomerCountryDB):
             self.create_db()
 
     def create_db(self):
-        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
+        with open(self.db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
             writer.writerow(["country_id", "country_name", "vat_percentage",
                              "shipping_cost"])

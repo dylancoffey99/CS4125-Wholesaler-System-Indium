@@ -1,3 +1,10 @@
+"""
+This module contains the UserDB, AbstractAccessUserDB and AbstractAdminUserDB
+classes. The module imports the modules csv and os, the type List and Union from the
+typing module, the class Customer from the customer module, and the class User from the
+user module, both in the systems users package. It also imports the class AbstractDB from
+the abstract_db module, in the systems databases package.
+"""
 import csv
 import os
 from abc import ABC, abstractmethod
@@ -9,35 +16,86 @@ from system.models.users.user import User
 
 
 class AbstractAccessUserDB(ABC):
+    """
+    This abstract class represents an interface for the user access and user database.
+    It contains the abstract methods to be implemented into the user access and user
+    database classes.
+    """
+
     @abstractmethod
     def add_customer(self, customer: Customer):
-        pass
+        """
+        This method adds a customer to the database.
+
+        :param customer: Customer object to be added to the database.
+        """
 
     @abstractmethod
     def get_user(self, user_name: str) -> User:
-        pass
+        """
+        This method gets an object of user from the database.
+
+        :param user_name: Username of the user.
+        :returns: User object from the database.
+        """
 
     @abstractmethod
     def user_exists(self, user_name: str) -> bool:
-        pass
+        """
+        This method checks if a user exists in the database.
+
+        :param user_name: Username of the user.
+        :returns: Boolean on whether or not the user exists.
+        """
 
 
 class AbstractAdminUserDB(ABC):
+    """
+    This abstract class represents an interface for the admin and user database.
+    It contains the abstract methods to be implemented into the admin and user
+    database classes.
+    """
+
     @abstractmethod
     def get_customer(self, user_name: str) -> Customer:
-        pass
+        """
+        This method gets an object of customer from the database.
+
+        :param user_name: Username of the customer.
+        :returns: Customer object from the database.
+        """
 
     @abstractmethod
     def get_all_customers(self) -> List[Customer]:
-        pass
+        """
+        This method gets a list of all customer objects from the database.
+
+        :returns: List of all customer objects from the database.
+        """
 
     @abstractmethod
     def set_customer_discount(self, user_name: str, discount_id: int):
-        pass
+        """
+        This method sets the discount ID of a customer in the database.
+
+        :param user_name: Username of the customer.
+        :param discount_id: Discount ID to be set to the customer.
+        """
 
 
 class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
+    """
+    This class represents a user database and implements AbstractDB,
+    AbstractAccessUserDB, and AbstractAdminUserDB. It contains a constructor,
+    and the implemented abstract methods.
+    """
+
     def __init__(self, db_name: str):
+        """
+        This constructor instantiates a user database object.
+
+        :param db_name: Name of the database and its file path.
+        """
         self.db_name = db_name
         self.check_db()
 
@@ -46,7 +104,7 @@ class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
             self.create_db()
 
     def create_db(self):
-        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
+        with open(self.db_name + ".csv", "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
             writer.writerow(["user_name", "password", "is_admin",
                              "country_id", "discount_id"])

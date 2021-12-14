@@ -1,3 +1,9 @@
+"""
+This module contains the ProductDB, AbstractAdminProductDB and AbstractUserProductDB
+classes. The module imports the modules csv and os, the type List and Union from the
+typing module, the class Product from the product module in the systems shopping package,
+and the class AbstractDB from the abstract_db module, in the systems databases package.
+"""
 import csv
 import os
 from abc import ABC, abstractmethod
@@ -8,39 +14,95 @@ from system.models.shopping import Product
 
 
 class AbstractAdminProductDB(ABC):
+    """
+    This abstract class represents an interface for the admin and product database.
+    It contains the abstract methods to be implemented into the admin and product
+    database classes.
+    """
+
     @abstractmethod
     def add_product(self, product: Product):
-        pass
+        """
+        This method adds a product to the database.
+
+        :param product: Product object to be added to the database.
+        """
 
     @abstractmethod
     def remove_product(self, product: Product):
-        pass
+        """
+        This method removes a product from the database.
+
+        :param product: Product object to be removed to the database.
+        """
 
     @abstractmethod
     def edit_product(self, product: Product, column: int, new_value: str):
-        pass
+        """
+        This method edits a product in the database.
+
+        :param product: Product object to be edited in the database.
+        :param column: Column of the row in the database to edit.
+        :param new_value: New value to replace the chosen column.
+        """
 
 
 class AbstractUserProductDB(ABC):
+    """
+    This abstract class represents an interface for the user and product database.
+    It contains the abstract methods to be implemented into the user and product
+    database classes.
+    """
+
     @abstractmethod
     def get_product(self, product_name: str) -> Union[Product, bool]:
-        pass
+        """
+        This method gets an object of product from the database.
+
+        :param product_name: Name of the product object.
+        :returns: Product object from the database.
+        """
 
     @abstractmethod
     def get_all_products(self) -> List[Product]:
-        pass
+        """
+        This method gets a list of all product objects from the database.
+
+        :returns: List of all product objects from the database.
+        """
 
     @abstractmethod
     def sub_product_quantity(self, product_name: str, quantity: int):
-        pass
+        """
+        This method subtracts the quantity of a product in the database.
+
+        :param product_name: Name of the product.
+        :param quantity: Quantity amount to subtract.
+        """
 
     @abstractmethod
     def product_exists(self, product_name: str) -> bool:
-        pass
+        """
+        This method checks if a product exists in the database.
+
+        :param product_name: Name of the product.
+        :returns: Boolean on whether or not the product exists.
+        """
 
 
 class ProductDB(AbstractDB, AbstractAdminProductDB, AbstractUserProductDB):
+    """
+    This class represents a product database and implements AbstractDB,
+    AbstractAdminProductDB, and AbstractUserProductDB. It contains a constructor,
+    and the implemented abstract methods.
+    """
+
     def __init__(self, db_name: str):
+        """
+        This constructor instantiates a product database object.
+
+        :param db_name: Name of the database and its file path.
+        """
         self.db_name = db_name
         self.check_db()
 
