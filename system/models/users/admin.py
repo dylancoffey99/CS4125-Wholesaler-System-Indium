@@ -3,7 +3,7 @@ This module contains the Admin class. The module imports the type List from
 the typing module, the Abstract Admin Order database, Abstract Admin Product
 Database and the Order database from the systems database package. This
 module also imports the Abstract Admin User database class and the User
-database class from the user_db modules from the systems database package.
+database class from the user_db module from the systems database package.
 This module also imports the Product class from the product module in the
 systems shopping package. This module also imports the Abstract User class
 from the Abstract User Module, the Customer class from the Customer module and
