@@ -1,11 +1,29 @@
+"""
+This module contains the RegisterView class. The module imports the ttk module from the
+tkinter package, the type List from the typing module and the classes AbstractView
+and AbstractSelectView from the abstract_views module, both in the systems views package.
+"""
 from tkinter import ttk
 from typing import List
 
-from system.views.abstract_views import AbstractView
+from system.views.abstract_views import AbstractView, AbstractSelectView
 
 
-class RegisterView(AbstractView):
+class RegisterView(AbstractView, AbstractSelectView):
+    """
+    This class represents the register view of the system and implements AbstractView
+    and AbstractSelectView. It contains a constructor, the setup/load methods for the
+    root/widgets, and the implemented abstract methods.
+    """
+
     def __init__(self, frame, access_input, observers):
+        """
+        This constructor instantiates a register view object.
+
+        :param frame: Tkinter frame to hold the widgets of the view.
+        :param access_input: Input dictionary to hold the inputs of the user.
+        :param observers: List to hold the observers of the view.
+        """
         self.frame = frame
         self.input = access_input
         self.country_combobox = ttk.Combobox()

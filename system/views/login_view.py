@@ -1,10 +1,28 @@
+"""
+This module contains the LoginView class. The module imports the ttk module from the
+tkinter package, and the AbstractView class from the abstract_views module, in the
+systems views package.
+"""
 from tkinter import ttk
 
 from system.views.abstract_views import AbstractView
 
 
 class LoginView(AbstractView):
+    """
+    This class represents the login view of the system and implements AbstractView.
+    It contains a constructor, the setup/load methods for the root/widgets, and the
+    implemented abstract methods.
+    """
+
     def __init__(self, frame, access_input, observers):
+        """
+        This constructor instantiates a login view object.
+
+        :param frame: Tkinter frame to hold the widgets of the view.
+        :param access_input: Input dictionary to hold the inputs of the user.
+        :param observers: List to hold the observers of the view.
+        """
         self.frame = frame
         self.input = access_input
         self.observers = observers

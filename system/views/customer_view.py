@@ -1,12 +1,31 @@
+"""
+This module contains the CustomerView class. The module imports the tk package from the
+tkinter package, the ttk module from the tkinter package, and the classes AbstractView,
+AbstractSelectView, and AbstractUserView from the abstract_views module, all in the
+systems views package.
+"""
 import tkinter as tk
 from tkinter import ttk
 from typing import List
 
-from system.views.abstract_views import AbstractUserView, AbstractView
+from system.views.abstract_views import AbstractView, AbstractSelectView, AbstractUserView
 
 
-class CustomerView(AbstractUserView, AbstractView):
+class CustomerView(AbstractView, AbstractSelectView, AbstractUserView):
+    """
+    This class represents the customer view of the system and implements AbstractView,
+    AbstractSelectView, and AbstractUserView. It contains a constructor, the setup/load
+    methods for the root/widgets, and the implemented abstract methods.
+    """
+
     def __init__(self, root, frame, user):
+        """
+        This constructor instantiates a customer view object.
+
+        :param root: Tkinter window to hold the frame of the view.
+        :param frame: Tkinter frame to hold the widgets of the view.
+        :param user: Object of the logged in user.
+        """
         self.root = root
         self.frame = frame
         self.user = user
@@ -100,4 +119,9 @@ class CustomerView(AbstractUserView, AbstractView):
         return "continue"
 
     def set_basket_subtotal_label(self, basket_subtotal: float):
+        """
+        This method sets the text of the basket subtotal label.
+
+        :param basket_subtotal: Basket subtotal to be set to the label.
+        """
         self.update_widgets[0].config(text="Basket Subtotal = €" + str(basket_subtotal))

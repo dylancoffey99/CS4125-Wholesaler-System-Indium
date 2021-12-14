@@ -1,12 +1,31 @@
+"""
+This module contains the AdminView class. The module imports the tk package from the
+tkinter package, the ttk module from the tkinter package, and the classes AbstractView,
+AbstractSelectView, and AbstractUserView from the abstract_views module, all in the
+systems views package.
+"""
 import tkinter as tk
 from tkinter import ttk
 from typing import List
 
-from system.views.abstract_views import AbstractUserView, AbstractView
+from system.views.abstract_views import AbstractView, AbstractSelectView, AbstractUserView
 
 
-class AdminView(AbstractUserView, AbstractView):
+class AdminView(AbstractView, AbstractSelectView, AbstractUserView):
+    """
+    This class represents the admin view of the system and implements AbstractView,
+    AbstractSelectView, and AbstractUserView. It contains a constructor, the setup/load
+    methods for the root/widgets, and the implemented abstract methods.
+    """
+
     def __init__(self, root, frame, user):
+        """
+        This constructor instantiates an admin view object.
+
+        :param root: Tkinter window to hold the frame of the view.
+        :param frame: Tkinter frame to hold the widgets of the view.
+        :param user: Object of the logged in user.
+        """
         self.root = root
         self.frame = frame
         self.user = user
@@ -38,6 +57,10 @@ class AdminView(AbstractUserView, AbstractView):
         product_price_label.grid(row=0, column=9, padx=10, pady=10)
 
     def load_separator(self):
+        """
+        This method loads the Tkinter separator of the view and a
+        label to expand the separator to the bottom of the frame.
+        """
         separator = ttk.Separator(self.frame, orient="vertical")
         separator.grid(row=0, rowspan=7, column=4, sticky="ns")
         separator_expand = ttk.Label(self.frame, text="")
@@ -103,10 +126,6 @@ class AdminView(AbstractUserView, AbstractView):
 
     def attach(self, observer):
         self.observers.append(observer)
-
-    def detach_all(self):
-        for observer in self.observers:
-            self.observers.remove(observer)
 
     def notify(self, command: int):
         for observer in self.observers:

@@ -1,10 +1,28 @@
+"""
+This module contains the HomeView class. The module imports the ttk module from the
+tkinter package, and the AbstractView class from the abstract_views module, in the
+systems views package.
+"""
 from tkinter import ttk
 
 from system.views.abstract_views import AbstractView
 
 
 class HomeView(AbstractView):
+    """
+    This class represents the home view of the system and implements AbstractView.
+    It contains a constructor, the setup/load methods for the root/widgets, and the
+    implemented abstract methods.
+    """
+
     def __init__(self, root, frame, observers):
+        """
+        This constructor instantiates a home view object.
+
+        :param root: Tkinter window to hold the frame of the view.
+        :param frame: Tkinter frame to hold the widgets of the view.
+        :param observers: List to hold the observers of the view.
+        """
         self.root = root
         self.frame = frame
         self.observers = observers
