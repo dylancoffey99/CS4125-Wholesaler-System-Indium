@@ -1,15 +1,13 @@
 """
 This module contains the OrderDB, AbstractAdminOrderDB and AbstractCustomerOrderDB
-classes. The module imports the modules csv and os, the type List from the typing
-module, the class Order from the systems payment package, and the class AbstractDB
-from the systems databases package.
+classes. The module imports the module csv, the ABC (Abstract Base Class)
+and abstractmethod from the abc module, the type List from the typing module,
+and the class Order from the systems payment package.
 """
 import csv
-import os
 from abc import ABC, abstractmethod
 from typing import List
 
-from system.databases.abstract_db import AbstractDB
 from system.models.payment import Order
 
 
@@ -61,15 +59,15 @@ class AbstractCustomerOrderDB(ABC):
         """
         This method adds an order to the database.
 
-        :param order: Order object to be added to the database..
+        :param order: Order object to be added to the database.
         """
 
 
-class OrderDB(AbstractDB, AbstractAdminOrderDB, AbstractCustomerOrderDB):
+class OrderDB(AbstractAdminOrderDB, AbstractCustomerOrderDB):
     """
-    This class represents a order database and implements AbstractDB,
-    AbstractAdminOrderDB, and AbstractCustomerOrderDB. It contains a constructor,
-    and the implemented abstract methods.
+    This class represents an order database and implements AbstractAdminOrderDB
+    and AbstractCustomerOrderDB. It contains a constructor, and the implemented
+    abstract methods.
     """
 
     def __init__(self, db_name: str):
@@ -80,17 +78,6 @@ class OrderDB(AbstractDB, AbstractAdminOrderDB, AbstractCustomerOrderDB):
         """
         self.db_name = db_name
         self.order_separator = "================"
-        self.check_db()
-
-    def check_db(self):
-        if not os.path.exists(self.db_name + ".csv"):
-            self.create_db()
-
-    def create_db(self):
-        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
-            writer = csv.writer(file, delimiter=",")
-            writer.writerow(["customer_name", "product_name", "order_date",
-                             "subtotal"])
 
     def add_order(self, order: Order):
         with open(self.db_name + ".csv", "a", newline="", encoding="utf-8") as file:

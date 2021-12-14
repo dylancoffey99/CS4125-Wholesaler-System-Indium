@@ -133,11 +133,11 @@ class CustomerController(AbstractUserController, AbstractObserverController, Abs
         order = Order(self.customer.get_user_name(), product_names, datetime.now(), subtotals[4])
         self.customer.add_order(order)
         mb.showinfo("Success", "Checkout successful, your order has been created!\n"
-                               "\nBasket Subtotal = €" + str(subtotals[0]) +
+                               "\nBasket Subtotal = €" + str(f"{subtotals[0]:.1f}") +
                     "\nVAT Cost = €" + str(f"{subtotals[1]:.1f}") +
                     "\nShipping Cost = €" + str(subtotals[2]) +
                     "\nDiscount = €" + str(f"{subtotals[3]:.1f}") +
-                    "\n=================\nTotal Cost = €" + str(subtotals[4]))
+                    "\n=================\nTotal Cost = €" + str(f"{subtotals[4]:.1f}"))
 
     def logout_user(self):
         self.view.clear_frame()

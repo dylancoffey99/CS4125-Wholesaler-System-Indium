@@ -213,11 +213,13 @@ class AdminController(AbstractUserController, AbstractObserverController):
         """
         if not quantity.isdigit():
             mb.showwarning("Error", "The quantity entered is not a valid number!")
+            return False
         try:
             float(price)
             price.isdigit()
         except ValueError:
             mb.showwarning("Error", "The price entered is not a valid number!")
+            return False
         else:
             if len(product_name) > 30:
                 mb.showwarning("Error", "The product name has to be less than 30 characters!")

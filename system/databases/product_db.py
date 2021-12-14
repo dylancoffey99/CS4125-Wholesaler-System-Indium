@@ -1,15 +1,13 @@
 """
-This module contains the ProductDB, AbstractAdminProductDB and AbstractUserProductDB
-classes. The module imports the modules csv and os, the type List and Union from the
-typing module, the class Product from the systems shopping package, and the class
-AbstractDB from the systems databases package.
+This module contains the ProductDB, AbstractAdminProductDB, AbstractCustomerProductDB,
+and AbstractUserProductDB classes. The module imports the module csv, the
+ABC (Abstract Base Class) and abstractmethod from the abc module, the type List and
+Union from the typing module, and the class Product from the systems shopping package.
 """
 import csv
-import os
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from system.databases.abstract_db import AbstractDB
 from system.models.shopping import Product
 
 
@@ -46,6 +44,32 @@ class AbstractAdminProductDB(ABC):
         :param new_value: New value to replace the chosen column.
         """
 
+    @abstractmethod
+    def product_exists(self, product_name: str) -> bool:
+        """
+        This method checks if a product exists in the database.
+
+        :param product_name: Name of the product.
+        :returns: Boolean on whether or not the product exists.
+        """
+
+
+class AbstractCustomerProductDB(ABC):
+    """
+    This abstract class represents an interface for the customer and product database.
+    It contains the abstract methods to be implemented into the customer and product
+    database classes.
+    """
+
+    @abstractmethod
+    def sub_product_quantity(self, product_name: str, quantity: int):
+        """
+        This method subtracts the quantity of a product in the database.
+
+        :param product_name: Name of the product.
+        :param quantity: Quantity amount to subtract.
+        """
+
 
 class AbstractUserProductDB(ABC):
     """
@@ -71,29 +95,11 @@ class AbstractUserProductDB(ABC):
         :returns: List of all product objects from the database.
         """
 
-    @abstractmethod
-    def sub_product_quantity(self, product_name: str, quantity: int):
-        """
-        This method subtracts the quantity of a product in the database.
 
-        :param product_name: Name of the product.
-        :param quantity: Quantity amount to subtract.
-        """
-
-    @abstractmethod
-    def product_exists(self, product_name: str) -> bool:
-        """
-        This method checks if a product exists in the database.
-
-        :param product_name: Name of the product.
-        :returns: Boolean on whether or not the product exists.
-        """
-
-
-class ProductDB(AbstractDB, AbstractAdminProductDB, AbstractUserProductDB):
+class ProductDB(AbstractAdminProductDB, AbstractCustomerProductDB, AbstractUserProductDB):
     """
-    This class represents a product database and implements AbstractDB,
-    AbstractAdminProductDB, and AbstractUserProductDB. It contains a constructor,
+    This class represents a product database and implements AbstractAdminProductDB,
+    AbstractCustomerProductDB and AbstractUserProductDB. It contains a constructor,
     and the implemented abstract methods.
     """
 
@@ -104,16 +110,6 @@ class ProductDB(AbstractDB, AbstractAdminProductDB, AbstractUserProductDB):
         :param db_name: Name of the database and its file path.
         """
         self.db_name = db_name
-        self.check_db()
-
-    def check_db(self):
-        if not os.path.exists(self.db_name + ".csv"):
-            self.create_db()
-
-    def create_db(self):
-        with open(self.db_name + ".csv", "w", newline="",  encoding="utf-8") as file:
-            writer = csv.writer(file, delimiter=",")
-            writer.writerow(["product_name", "product_quantity", "product_price"])
 
     def add_product(self, product: Product):
         with open(self.db_name + ".csv", "a", newline="", encoding="utf-8") as file:

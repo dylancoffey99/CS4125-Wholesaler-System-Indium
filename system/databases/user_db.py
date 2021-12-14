@@ -1,15 +1,13 @@
 """
 This module contains the UserDB, AbstractAccessUserDB and AbstractAdminUserDB
-classes. The module imports the modules csv and os, the type List and Union from the
-typing module, the class AbstractDB from the systems databases package, the classes
-Customer and User from the systems users package.
+classes. The module imports the modules csv, the type List and Union from the
+typing module, the ABC (Abstract Base Class) and abstractmethod from the abc module,
+and the classes Customer and User from the systems users package.
 """
 import csv
-import os
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from system.databases.abstract_db import AbstractDB
 from system.models.users.customer import Customer
 from system.models.users.user import User
 
@@ -82,11 +80,11 @@ class AbstractAdminUserDB(ABC):
         """
 
 
-class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
+class UserDB(AbstractAccessUserDB, AbstractAdminUserDB):
     """
-    This class represents a user database and implements AbstractDB,
-    AbstractAccessUserDB, and AbstractAdminUserDB. It contains a constructor,
-    and the implemented abstract methods.
+    This class represents a user database and implements AbstractAccessUserDB
+    and AbstractAdminUserDB. It contains a constructor, and the implemented
+    abstract methods.
     """
 
     def __init__(self, db_name: str):
@@ -96,17 +94,6 @@ class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
         :param db_name: Name of the database and its file path.
         """
         self.db_name = db_name
-        self.check_db()
-
-    def check_db(self):
-        if not os.path.exists(self.db_name + ".csv"):
-            self.create_db()
-
-    def create_db(self):
-        with open(self.db_name + ".csv", "w", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file, delimiter=",")
-            writer.writerow(["user_name", "password", "is_admin",
-                             "country_id", "discount_id"])
 
     def add_customer(self, customer: Customer):
         with open(self.db_name + ".csv", "a", newline="", encoding="utf-8") as file:
@@ -121,7 +108,7 @@ class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
             next(reader)
             for row in reader:
                 if row[0] == user_name:
-                    return User(row[0], row[1], int(row[2]), int(row[3]))
+                    return User(row[0], row[1], int(row[2]), int(row[3]), int(row[4]))
             return False
 
     def get_customer(self, user_name: str) -> Union[Customer, bool]:
@@ -130,7 +117,7 @@ class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
             next(reader)
             for row in reader:
                 if row[0] == user_name:
-                    return Customer(row[0], row[1], int(row[2]), int(row[4]))
+                    return Customer(row[0], row[1], int(row[2]), int(row[3]), int(row[4]))
             return False
 
     def get_all_customers(self) -> List[Customer]:
@@ -140,7 +127,7 @@ class UserDB(AbstractDB, AbstractAccessUserDB, AbstractAdminUserDB):
             customers = []
             for row in reader:
                 if row[2] == str(0):
-                    customer = Customer(row[0], row[1], int(row[2]), int(row[4]))
+                    customer = Customer(row[0], row[1], int(row[2]), int(row[3]), int(row[4]))
                     customers.append(customer)
             return customers
 

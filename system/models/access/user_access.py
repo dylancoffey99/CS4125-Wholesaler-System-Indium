@@ -2,13 +2,14 @@
 This module contains the UserAccess class. The module imports the module hashlib,
 the type List from the typing module, the classes AbstractAccessCountryDB,
 AbstractAccessUserDB, CountryDB and UserDB from the systems database package, and
-the classes Customer and User from the systems users package.
+the classes Admin, Customer, and User from the systems users package.
 """
 import hashlib
 from typing import List
 
 from system.databases import AbstractAccessCountryDB, CountryDB
 from system.databases.user_db import AbstractAccessUserDB, UserDB
+from system.models.users.admin import Admin
 from system.models.users.customer import Customer
 from system.models.users.user import User
 
@@ -17,8 +18,8 @@ class UserAccess(AbstractAccessCountryDB, AbstractAccessUserDB):
     """
     This class represents a model of user access and implements
     AbstractAccessCountryDB and AbstractAccessUserDB. It also contains
-    a constructor, password verifying methods, and the implemented
-    abstract methods.
+    a constructor, password verifying and user creating methods, and the
+    implemented abstract methods.
     """
 
     def __init__(self):
@@ -40,6 +41,26 @@ class UserAccess(AbstractAccessCountryDB, AbstractAccessUserDB):
 
     def get_country_dict(self) -> dict:
         return self.country_db.get_country_dict()
+
+    def create_user(self, user_name: str, password: str, is_admin: int, country_id: int,
+                    discount_id: int = -1):
+        """
+        This method acts as a factory method for the user classes. It creates an
+        admin/customer object depending on the value of the users admin flag.
+
+        :param user_name: Username of the user.
+        :param password: Password of the user.
+        :param is_admin: Admin flag of the user.
+        :param country_id: Country ID of the user.
+        :param discount_id: Discount ID of the user (optional).
+        :returns: Customer/Admin object of the user.
+        """
+        if is_admin == 1:
+            user = Admin(user_name, self.hash_password(password), is_admin, -1)
+        else:
+            user = Customer(user_name, self.hash_password(password), is_admin,
+                            country_id, discount_id)
+        return user
 
     def verify_password(self, password: str, db_password: str) -> bool:
         """

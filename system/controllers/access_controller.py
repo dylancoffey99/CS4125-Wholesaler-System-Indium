@@ -2,8 +2,7 @@
 This module contains the AccessController class. The module imports the tkinter package,
 the messagebox module from the tkinter package, the AbstractObserverController class from
 the systems controllers package, and the UserAccess class from the systems access package.
-It also imports the Admin and Customer classes from the systems users package, and the views
-HomeView, LoginView, and RegisterView from the systems views package.
+It also imports the views HomeView, LoginView, and RegisterView from the systems views package.
 """
 import tkinter as tk
 from tkinter import messagebox as mb
@@ -12,8 +11,6 @@ from system.controllers import AbstractObserverController
 from system.controllers.admin_controller import AdminController
 from system.controllers.customer_controller import CustomerController
 from system.models.access import UserAccess
-from system.models.users.admin import Admin
-from system.models.users.customer import Customer
 from system.views import HomeView, LoginView, RegisterView
 
 
@@ -86,11 +83,12 @@ class AccessController(AbstractObserverController):
                     self.view.clear_frame()
                     self.clear_input()
                     if self.user.get_is_admin() == 1:
-                        self.user = Admin(self.user.get_user_name(), self.user.get_password())
+                        self.user = self.access.create_user(username, password, 1, -1)
                         AdminController(self)
                     else:
-                        self.user = Customer(self.user.get_user_name(), self.user.get_password(),
-                                             self.user.get_country_id())
+                        self.user = self.access.create_user(username, password, 0,
+                                                            self.user.get_country_id(),
+                                                            self.user.get_discount_id())
                         CustomerController(self)
 
     def register_user(self):
@@ -115,8 +113,8 @@ class AccessController(AbstractObserverController):
                 country_dict = self.access.get_country_dict()
                 self.view.clear_frame()
                 self.clear_input()
-                self.user = Customer(username, self.access.hash_password(password),
-                                     country_dict.get(country))
+                self.user = self.access.create_user(username, password, 0,
+                                                    country_dict.get(country))
                 self.access.add_customer(self.user)
                 CustomerController(self)
 

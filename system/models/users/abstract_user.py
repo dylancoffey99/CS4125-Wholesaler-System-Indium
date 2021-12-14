@@ -42,3 +42,11 @@ class AbstractUser(ABC):
 
         :returns: Country ID of the user.
         """
+
+    @abstractmethod
+    def get_discount_id(self) -> int:
+        """
+        This method gets the discount ID.
+
+        :returns: Discount ID of the user.
+        """

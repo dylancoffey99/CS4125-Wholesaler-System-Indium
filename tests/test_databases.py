@@ -10,9 +10,9 @@ from datetime import datetime
 from typing import List
 from unittest import TestCase
 
-from system.databases import ProductDB, OrderDB, CountryDB
+from system.databases import CountryDB, OrderDB, ProductDB
 from system.databases.user_db import UserDB
-from system.models.payment import Order, Country
+from system.models.payment import Country, Order
 from system.models.shopping import Product
 from system.models.users.customer import Customer
 from system.models.users.user import User
@@ -90,7 +90,7 @@ class TestUserDB(TestCase):
     mock_db = UserDB(mock_db_name)
     mock_user = User("user", "password", 0, 1)
     mock_user_name = mock_user.get_user_name()
-    mock_customer = Customer("customer", "password", 1)
+    mock_customer = Customer("customer", "password", 0, 1)
     mock_customer_name = mock_customer.get_user_name()
 
     def setUp(self):
@@ -108,7 +108,7 @@ class TestUserDB(TestCase):
 
     def test_add_customer(self):
         """This method tests the add_customer method of the UserDB class."""
-        new_customer = Customer("new_user", "password", 1)
+        new_customer = Customer("new_user", "password", 0, 1)
         self.mock_db.add_customer(new_customer)
         self.assertTrue(self.mock_db.user_exists(new_customer.get_user_name()))
 
@@ -120,9 +120,9 @@ class TestUserDB(TestCase):
 
     def test_get_customer(self):
         """This method tests the get_customer method of the UserDB class."""
-        customer = self.mock_db.get_customer(self.mock_user_name)
+        customer = self.mock_db.get_customer(self.mock_customer_name)
         self.assertTrue(isinstance(customer, Customer))
-        self.assertEqual(customer.get_user_name(), self.mock_user_name)
+        self.assertEqual(customer.get_user_name(), self.mock_customer_name)
 
     def test_get_all_customers(self):
         """This method tests the get_all_customers method of the UserDB class."""
@@ -133,8 +133,8 @@ class TestUserDB(TestCase):
     def test_set_customer_discount(self):
         """This method tests the set_customer_discount method of the UserDB class."""
         discount_id = 0
-        self.mock_db.set_customer_discount(self.mock_user_name, discount_id)
-        self.assertEqual(self.mock_db.get_customer(self.mock_user_name).get_discount_id(),
+        self.mock_db.set_customer_discount(self.mock_customer_name, discount_id)
+        self.assertEqual(self.mock_db.get_customer(self.mock_customer_name).get_discount_id(),
                          discount_id)
 
     def test_user_exists(self):
