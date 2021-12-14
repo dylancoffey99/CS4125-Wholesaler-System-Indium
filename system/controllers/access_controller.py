@@ -1,3 +1,11 @@
+"""
+This module contains the AccessController class. The module imports the tkinter package,
+its messagebox module, and the AbstractObserverController class from the abstract_db
+module in the systems controllers package. It also imports the UserAccess class from the
+user_access module in the access package, the Admin and Customer classes from the systems
+users package, and the views HomeView, LoginView, and RegisterView from the systems views
+package.
+"""
 import tkinter as tk
 from tkinter import messagebox as mb
 
@@ -11,7 +19,14 @@ from system.views import HomeView, LoginView, RegisterView
 
 
 class AccessController(AbstractObserverController):
+    """
+    This class represents an access controller and implements
+    AbstractObserverController. It contains a constructor, the methods
+    for controlling the views, and the implemented abstract methods.
+    """
+
     def __init__(self):
+        """This constructor instantiates an access controller object."""
         self.root = tk.Tk()
         self.frame = tk.Frame(self.root)
         self.input = {"username": tk.StringVar(), "password": tk.StringVar(),
@@ -23,20 +38,36 @@ class AccessController(AbstractObserverController):
         self.attach_observers()
 
     def start(self):
+        """
+        This method starts an instance of a Tkinter window and continues
+        to run it in a loop.
+        """
         self.root.mainloop()
 
     def login_view(self):
+        """This method clears the view frame and switches the view to LoginView."""
         self.view.clear_frame()
         self.clear_input()
         self.view = LoginView(self.frame, self.input, self.observers)
 
     def register_view(self):
+        """
+        This method clears the views frame and input dictionary, switches the
+        view to RegisterView, and sets the values of the views country combo
+        box to the country names from the country database.
+        """
         self.view.clear_frame()
         self.clear_input()
         self.view = RegisterView(self.frame, self.input, self.observers)
         self.view.set_combobox(self.access.get_country_names())
 
     def login_user(self):
+        """
+        This method logs the user into the system. Depending on if the user
+        is an admin, an object of AdminController or CustomerController
+        is created, which then switches the view to AdminView/CustomerView
+        respectively.
+        """
         username = self.input["username"].get()
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()
@@ -64,6 +95,12 @@ class AccessController(AbstractObserverController):
                         CustomerController(self)
 
     def register_user(self):
+        """
+        This method registers a customer into the system and logs them in.
+        A customer object is created and added to the user database. An object
+        of CustomerController is then created, which switches the view to
+        CustomerView.
+        """
         username = self.input["username"].get()
         password = self.input["password"].get()
         r_password = self.input["r_password"].get()
@@ -85,6 +122,7 @@ class AccessController(AbstractObserverController):
                 CustomerController(self)
 
     def clear_input(self):
+        """This method clears the values of the views input dictionary."""
         for value in self.input.items():
             value = value[0]
             self.input[value].set("")
