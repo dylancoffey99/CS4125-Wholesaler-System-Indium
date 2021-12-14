@@ -1,4 +1,4 @@
-country_id,country_name,vat,shipping
+country_id,country_name,vat_percentage,shipping_cost
 1,Austria,0.2,16.0
 2,Belgium,0.21,11.0
 3,Bulgaria,0.2,22.5
