@@ -40,7 +40,7 @@ class AdminView(AbstractUserView, AbstractView):
     def load_separator(self):
         separator = ttk.Separator(self.frame, orient="vertical")
         separator.grid(row=0, rowspan=7, column=4, sticky="ns")
-        separator_expand = ttk.Label(self.frame, text="")  # To expand separator to the bottom
+        separator_expand = ttk.Label(self.frame, text="")
         separator_expand.grid(row=6, column=7, columnspan=4)
 
     def load_interactions(self):
@@ -61,7 +61,7 @@ class AdminView(AbstractUserView, AbstractView):
         self.tree_views[0].heading("c3", text="Subtotal")
         self.tree_views[0].grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
         self.tree_views[0].bind("<Button-1>", lambda event:
-        self.stop_tree_view_resize(self.tree_views[0], event))
+                                self.stop_tree_view_resize(self.tree_views[0], event))
         self.tree_views[1] = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
                                           show="headings", height=21)
         self.tree_views[1].column("c1", width=190)
@@ -72,7 +72,7 @@ class AdminView(AbstractUserView, AbstractView):
         self.tree_views[1].heading("c3", text="Price")
         self.tree_views[1].grid(row=1, rowspan=5, column=5, columnspan=2, padx=10, pady=2)
         self.tree_views[1].bind("<Button-1>", lambda event:
-        self.stop_tree_view_resize(self.tree_views[1], event))
+                                self.stop_tree_view_resize(self.tree_views[1], event))
         product_name_entry = ttk.Entry(self.frame, width=42,
                                        textvariable=self.input["product_name"])
         product_name_entry.grid(row=0, column=6, padx=10, pady=10, )

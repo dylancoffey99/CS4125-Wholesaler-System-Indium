@@ -21,8 +21,11 @@ class UserAccess(AbstractAccessCountryDB, AbstractAccessUserDB):
     def user_exists(self, user_name) -> bool:
         return self.user_db.user_exists(user_name)
 
-    def get_all_countries_id_name(self) -> List:
-        return self.country_db.get_all_countries_id_name()
+    def get_country_names(self) -> List:
+        return self.country_db.get_country_names()
+
+    def get_country_dict(self) -> dict:
+        return self.country_db.get_country_dict()
 
     def verify_password(self, password: str) -> bool:
         return bool(password == self.hash_password(password))

@@ -1,6 +1,6 @@
 import csv
-from typing import List, Union
 from abc import ABC, abstractmethod
+from typing import List, Union
 
 from system.models.payment import Country
 
@@ -13,7 +13,11 @@ class AbstractCustomerCountryDB(ABC):
 
 class AbstractAccessCountryDB(ABC):
     @abstractmethod
-    def get_all_countries_id_name(self) -> List:
+    def get_country_names(self) -> List:
+        pass
+
+    @abstractmethod
+    def get_country_dict(self) -> dict:
         pass
 
 
@@ -30,12 +34,20 @@ class CountryDB(AbstractAccessCountryDB, AbstractCustomerCountryDB):
                     return Country(int(row[0]), row[1], float(row[2]), float(row[3]))
             return False
 
-    def get_all_countries_id_name(self) -> List:
+    def get_country_names(self) -> List:
         with open(self.db_name + ".csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             next(reader)
-            countries = []
+            country_names = []
             for row in reader:
-                country_id_name = (int(row[0]), row[1])
-                countries.append(country_id_name)
-            return countries
+                country_names.append(row[1])
+            return country_names
+
+    def get_country_dict(self) -> dict:
+        with open(self.db_name + ".csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            next(reader)
+            country_dict = {}
+            for row in reader:
+                country_dict[row[1]] = (int(row[0]))
+            return country_dict

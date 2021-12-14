@@ -19,6 +19,7 @@ class AccessController(AbstractObserverController):
         self.observers = []
         self.view = HomeView(self.root, self.frame, self.observers)
         self.user = None
+        self.access = UserAccess()
         self.attach_observers()
 
     def start(self):
@@ -33,6 +34,7 @@ class AccessController(AbstractObserverController):
         self.view.clear_frame()
         self.clear_input()
         self.view = RegisterView(self.frame, self.input, self.observers)
+        self.view.set_combobox(self.access.get_country_names())
 
     def login_user(self):
         username = self.input["username"].get()
@@ -69,25 +71,17 @@ class AccessController(AbstractObserverController):
         if username == "" or password == "" or r_password == "" or country == "":
             mb.showwarning("Error", "Please enter all the fields!")
         else:
-            access = UserAccess()
-            if access.user_exists(username):
+            if self.access.user_exists(username):
                 mb.showwarning("Error", "That username already exists!")
             elif password != r_password:
                 mb.showwarning("Error", "The passwords are not the same!")
             else:
-                country_dict = {"Austria": 1, "Belgium": 2, "Bulgaria": 3, "Croatia": 4,
-                                "Cyprus": 5, "Czech": 6, "Denmark": 7, "Estonia": 8,
-                                "Finland": 9, "France": 10, "Germany": 11, "Greece": 12,
-                                "Hungary": 13, "Ireland": 14, "Italy": 15, "Latvia": 16,
-                                "Lithuania": 17, "Luxembourg": 18, "Malta": 19,
-                                "Netherlands": 20, "Poland": 21, "Portugal": 22,
-                                "Romania": 23, "Slovakia": 24, "Slovenia": 25,
-                                "Spain": 26, "Sweden": 27, "United Kingdom": 28}
+                country_dict = self.access.get_country_dict()
                 self.view.clear_frame()
                 self.clear_input()
-                self.user = Customer(username, access.hash_password(password),
+                self.user = Customer(username, self.access.hash_password(password),
                                      country_dict.get(country))
-                access.add_customer(self.user)
+                self.access.add_customer(self.user)
                 CustomerController(self)
 
     def clear_input(self):

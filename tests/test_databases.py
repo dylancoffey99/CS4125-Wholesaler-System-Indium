@@ -219,8 +219,14 @@ class TestCountryDB(TestCase):
         self.assertTrue(isinstance(country, Country))
         self.assertEqual(country.get_country_id(), self.mock_country_id)
 
-    def test_get_all_countries_id_name(self):
-        """This method tests the get_all_countries_id_name method of the CountryDB class."""
-        countries_id_name = self.mock_db.get_all_countries_id_name()
-        self.assertTrue(isinstance(countries_id_name, List))
-        self.assertEqual(countries_id_name[0][0], self.mock_country_id)
+    def test_get_country_names(self):
+        """This method tests the get_country_names method of the CountryDB class."""
+        country_names = self.mock_db.get_country_names()
+        self.assertTrue(isinstance(country_names, List))
+        self.assertEqual(country_names[0], self.mock_country.get_country_name())
+
+    def test_get_country_dict(self):
+        """This method tests the get_country_dict method of the CountryDB class."""
+        country_dict = self.mock_db.get_country_dict()
+        self.assertTrue(isinstance(country_dict, dict))
+        self.assertEqual(country_dict[self.mock_country.get_country_name()], self.mock_country_id)

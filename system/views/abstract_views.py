@@ -35,7 +35,7 @@ class AbstractUserView(ABC):
         pass
 
     @abstractmethod
-    def get_tree_view(self):
+    def get_tree_view(self) -> ttk.Treeview:
         pass
 
     @abstractmethod
