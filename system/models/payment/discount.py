@@ -4,7 +4,8 @@
 class DiscountCategory:
     """
     This class represents a model of a discount category, containing a constructor,
-    and the getter methods for its parameters.
+    the getter methods for its parameters, and a calculation method for the discount
+    amount of an order subtotal.
     """
 
     def __init__(self, discount_id: int, discount_name: str, discount_percentage: float):
@@ -43,7 +44,7 @@ class DiscountCategory:
         """
         return self.discount_percentage
 
-    def calc_discount(self, order_subtotal: float):
+    def calc_discount(self, order_subtotal: float) -> float:
         """
         This method calculates the discount amount of a order
         subtotal.
@@ -51,4 +52,4 @@ class DiscountCategory:
         :param order_subtotal: Subtotal of an order.
         :returns: Discount amount of an order subtotal.
         """
-        return order_subtotal * self.get_discount_percentage()
+        return order_subtotal * self.discount_percentage

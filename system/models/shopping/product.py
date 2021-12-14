@@ -3,8 +3,9 @@
 
 class Product:
     """
-    This class represents a model of a product, containing a constructor, and
-    the getter methods for its parameters.
+    This class represents a model of a product, containing a constructor, the
+    getter methods for its parameters, and a calculation method for the price
+    of a quantity of products.
     """
 
     def __init__(self, product_name: str, product_quantity: int, product_price: float):
@@ -49,6 +50,6 @@ class Product:
         of products.
 
         :param quantity: Quantity of products.
-        :returns: Price of the products.
+        :returns: Price of a quantity of products.
         """
         return float(quantity) * self.product_price
