@@ -1,16 +1,35 @@
+"""
+This module contains the CustomerController class. The module imports the datetime class
+from the datetime module, the messagebox module from the tkinter package, the type List
+from the typing module, the AbstractUserController and AbstractObserverController classes from
+the systems controllers package. It also imports the AbstractObserver and Basket classes from
+the systems shopping package, the Order class from the systems payment package, and the views
+HomeView and CustomerView from the systems views package.
+"""
 from datetime import datetime
 from tkinter import messagebox as mb
 from typing import List
 
-from system.controllers import AbstractController, AbstractObserverController
+from system.controllers import AbstractUserController, AbstractObserverController
 from system.models.payment import Order
 from system.models.shopping import AbstractObserver
 from system.models.shopping.basket import Basket
 from system.views import HomeView, CustomerView
 
 
-class CustomerController(AbstractController, AbstractObserverController, AbstractObserver):
+class CustomerController(AbstractUserController, AbstractObserverController, AbstractObserver):
+    """
+    This class represents an customer controller and implements
+    AbstractUserController, AbstractObserverController, and AbstractObserver.
+    It contains a constructor, the methods for controlling CustomerView, and
+    the implemented abstract methods.
+    """
+
     def __init__(self, access_controller):
+        """
+        This constructor instantiates a customer controller object.
+
+        :param access_controller: Object of AccessController"""
         self.access_controller = access_controller
         self.customer = self.access_controller.user
         self.view = CustomerView(self.access_controller.root, self.access_controller.frame,
@@ -21,6 +40,12 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
         self.attach_observers()
 
     def fill_products(self) -> List[str]:
+        """
+        This method gets a list of all product objects from the product
+        database so it can be filled into the product combobox.
+
+        :returns: A list of customer objects.
+        """
         products = self.customer.get_all_products()
         product_names = []
         for product in products:
@@ -28,6 +53,10 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
         return product_names
 
     def add_product(self):
+        """
+        This method adds a product to the basket items and the
+        CustomerView product tree view.
+        """
         product_name = self.view.get_input_value("product_name")
         quantity = self.view.get_input_value("product_quantity")
         if product_name == "" or quantity == "":
@@ -50,6 +79,10 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
                 self.view.insert_item(self.tree_view, product_name, int(quantity), price)
 
     def remove_product(self):
+        """
+        This method removes a product from the basket items and the
+        CustomerView product tree view.
+        """
         selected_item = self.tree_view.focus()
         if len(self.tree_view.get_children("")) == 0:
             mb.showwarning("Error", "The basket is empty, there aren't any products to remove!")
@@ -69,6 +102,11 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
                     self.view.remove_item(self.tree_view, selected_item)
 
     def checkout(self):
+        """
+        This method checks out the customers order by obtaining the basket items,
+        subtracting the quantity of the products added from the the product database,
+        and creating an order using the product names of the basket items.
+        """
         if len(self.tree_view.get_children("")) == 0:
             mb.showwarning("Error", "The basket is empty, please add some products to the basket!")
         else:
@@ -87,15 +125,19 @@ class CustomerController(AbstractController, AbstractObserverController, Abstrac
             self.view.clear_tree_view(self.tree_view)
 
     def create_order(self, product_names: List[str]):
+        """
+        This method creates an order by calculating the subtotals needed from the
+        basket. It then creates an order object which is added to the order database.
+        """
         subtotals = self.basket.calc_subtotals(self.customer)
         order = Order(self.customer.get_user_name(), product_names, datetime.now(), subtotals[4])
         self.customer.add_order(order)
-        mb.showwarning("Success", "Checkout successful, your order has been created!\n"
-                                  "\nBasket Subtotal = €" + str(subtotals[0]) +
-                       "\nVAT Cost = €" + str(f"{subtotals[1]:.1f}") +
-                       "\nShipping Cost = €" + str(subtotals[2]) +
-                       "\nDiscount = €" + str(f"{subtotals[3]:.1f}") +
-                       "\n=================\nTotal Cost = €" + str(subtotals[4]))
+        mb.showinfo("Success", "Checkout successful, your order has been created!\n"
+                               "\nBasket Subtotal = €" + str(subtotals[0]) +
+                    "\nVAT Cost = €" + str(f"{subtotals[1]:.1f}") +
+                    "\nShipping Cost = €" + str(subtotals[2]) +
+                    "\nDiscount = €" + str(f"{subtotals[3]:.1f}") +
+                    "\n=================\nTotal Cost = €" + str(subtotals[4]))
 
     def logout_user(self):
         self.view.clear_frame()
