@@ -32,4 +32,4 @@ class AbstractObserver(ABC):
 
     @abstractmethod
     def update(self, subject):
-        """This method updates a subject when the observer is notified."""
+        """This method updates something when the observer is notified."""

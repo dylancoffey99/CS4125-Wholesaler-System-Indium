@@ -1,12 +1,30 @@
+"""
+This module contains the AdminView class. The module imports the tkinter package,
+the ttk module from the tkinter package, and the classes AbstractView, AbstractSelectView,
+and AbstractUserView from the systems views package.
+"""
 import tkinter as tk
 from tkinter import ttk
 from typing import List
 
-from system.views.abstract_views import AbstractUserView, AbstractView
+from system.views.abstract_views import AbstractView, AbstractSelectView, AbstractUserView
 
 
-class AdminView(AbstractUserView, AbstractView):
+class AdminView(AbstractView, AbstractSelectView, AbstractUserView):
+    """
+    This class represents the admin view of the system and implements AbstractView,
+    AbstractSelectView, and AbstractUserView. It contains a constructor, the setup/load
+    methods for the root/widgets, and the implemented abstract methods.
+    """
+
     def __init__(self, root, frame, user):
+        """
+        This constructor instantiates an admin view object.
+
+        :param root: Tkinter window to hold the frame of the view.
+        :param frame: Tkinter frame to hold the widgets of the view.
+        :param user: Object of the logged in user.
+        """
         self.root = root
         self.frame = frame
         self.user = user
@@ -38,9 +56,13 @@ class AdminView(AbstractUserView, AbstractView):
         product_price_label.grid(row=0, column=9, padx=10, pady=10)
 
     def load_separator(self):
+        """
+        This method loads the Tkinter separator of the view and a
+        label to expand the separator to the bottom of the frame.
+        """
         separator = ttk.Separator(self.frame, orient="vertical")
         separator.grid(row=0, rowspan=7, column=4, sticky="ns")
-        separator_expand = ttk.Label(self.frame, text="")  # To expand separator to the bottom
+        separator_expand = ttk.Label(self.frame, text="")
         separator_expand.grid(row=6, column=7, columnspan=4)
 
     def load_interactions(self):
@@ -61,7 +83,7 @@ class AdminView(AbstractUserView, AbstractView):
         self.tree_views[0].heading("c3", text="Subtotal")
         self.tree_views[0].grid(row=1, rowspan=5, column=0, columnspan=2, padx=10, pady=2)
         self.tree_views[0].bind("<Button-1>", lambda event:
-        self.stop_tree_view_resize(self.tree_views[0], event))
+                                self.stop_tree_view_resize(self.tree_views[0], event))
         self.tree_views[1] = ttk.Treeview(self.frame, column=("c1", "c2", "c3"),
                                           show="headings", height=21)
         self.tree_views[1].column("c1", width=190)
@@ -72,7 +94,7 @@ class AdminView(AbstractUserView, AbstractView):
         self.tree_views[1].heading("c3", text="Price")
         self.tree_views[1].grid(row=1, rowspan=5, column=5, columnspan=2, padx=10, pady=2)
         self.tree_views[1].bind("<Button-1>", lambda event:
-        self.stop_tree_view_resize(self.tree_views[1], event))
+                                self.stop_tree_view_resize(self.tree_views[1], event))
         product_name_entry = ttk.Entry(self.frame, width=42,
                                        textvariable=self.input["product_name"])
         product_name_entry.grid(row=0, column=6, padx=10, pady=10, )
@@ -103,10 +125,6 @@ class AdminView(AbstractUserView, AbstractView):
 
     def attach(self, observer):
         self.observers.append(observer)
-
-    def detach_all(self):
-        for observer in self.observers:
-            self.observers.remove(observer)
 
     def notify(self, command: int):
         for observer in self.observers:

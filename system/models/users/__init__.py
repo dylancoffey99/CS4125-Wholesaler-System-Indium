@@ -1,2 +1,2 @@
-from system.models.users.customer import Customer
-from system.models.users.user import User
+"""This module contains the imports for the systems users package."""
+from system.models.users.abstract_user import AbstractUser

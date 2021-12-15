@@ -36,9 +36,8 @@ jobs:
           pip install pylint
       - name: Run Pylint
         run: |
-          pylint $(git ls-files '*.py') --disable=C0111 --fail-under=5
-      # --disable=C0111 disables docstring warnings
-      # --fail-under=5 means any score above 5 will result in a successful build
+          pylint $(git ls-files '*.py') --fail-under=5
+        # --fail-under=5 means any score above 5 will result in a successful build
 
       - name: Run Tests
         run: python -m unittest discover -p "test_*.py"

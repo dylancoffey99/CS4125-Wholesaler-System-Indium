@@ -1,5 +1,20 @@
 ﻿product_name,product_quantity,product_price
-product1,10,50.0
-product2,100,10.0
-product3,50,20.0
-product4,5,100.0
+22 Inch Monitor,1000,150.0
+Headphones,800,80.0
+Laptops,2000,800.0
+Chargers,700,30.0
+Tablets,900,300.0
+Printer,700,120.0
+Mouse,2000,40.0
+Keyboard,400,60.0
+Webcam,700,40.0
+Microphone,700,50.0
+Speakers,700,80.0
+USB Hub,700,40.0
+27 Inch Monitor,1000,200.0
+256GB HDD,500,60.0
+512GB HDD,600,90.0
+1TB HDD,600,120.0
+256GB SSD,700,90.0
+512GB SSD,800,120.0
+1TB SSD,900,150.0

@@ -1,34 +1,59 @@
+"""
+This module contains the AdminController class. The module imports the messagebox module
+from the tkinter package, the type List from the typing module, the AbstractUserController
+and AbstractObserverController classes from the systems controllers package, the Product
+class from the systems shopping package, and the views HomeView and AdminView from the
+systems views package.
+"""
 from tkinter import messagebox as mb
 from typing import List
 
-from system.controllers.abstract_controllers import AbstractController, AbstractObserverController
-from system.databases import UserDB, OrderDB, ProductDB
+from system.controllers import AbstractUserController, AbstractObserverController
 from system.models.shopping import Product
 from system.views import HomeView, AdminView
 
 
-class AdminController(AbstractController, AbstractObserverController):
+class AdminController(AbstractUserController, AbstractObserverController):
+    """
+    This class represents an admin controller and implements
+    AbstractUserController and AbstractObserverController. It contains
+    a constructor, the methods for controlling AdminView, and the
+    implemented abstract methods.
+    """
+
     def __init__(self, access_controller):
+        """
+        This constructor instantiates an admin controller object.
+
+        :param access_controller: Object of AccessController"""
         self.access_controller = access_controller
-        self.user_db = UserDB("system/databases/csv/user_db")
-        self.order_db = OrderDB("system/databases/csv/order_db")
-        self.product_db = ProductDB("system/databases/csv/product_db")
+        self.admin = self.access_controller.user
         self.view = AdminView(self.access_controller.root, self.access_controller.frame,
-                              self.access_controller.user)
+                              self.admin)
         self.view.set_combobox(self.fill_customers())
         self.tree_views = self.view.get_tree_view()
         self.fill_products()
         self.attach_observers()
 
     def fill_customers(self) -> List[str]:
-        customers = self.user_db.get_all_customers()
+        """
+        This method gets a list of all customer usernames from the user
+        database so it can be filled into the customer combobox.
+
+        :returns: A list of customer usernames.
+        """
+        customers = self.admin.get_all_customers()
         user_names = []
         for customer in customers:
             user_names.append(customer.get_user_name())
         return user_names
 
     def fill_products(self):
-        products = self.product_db.get_all_products()
+        """
+        This method gets all the product objects from the product database
+        so they can be inserted into the AdminView product tree view.
+        """
+        products = self.admin.get_all_products()
         for product in products:
             product_name = product.get_product_name()
             quantity = product.get_product_quantity()
@@ -36,13 +61,17 @@ class AdminController(AbstractController, AbstractObserverController):
             self.view.insert_item(self.tree_views[1], product_name, quantity, price)
 
     def view_order(self):
+        """
+        This method displays the orders of a selected customer into the
+        AdminView order tree view.
+        """
         user_name = self.view.get_input_value("user_name")
         if user_name == "":
             mb.showwarning("Error", "Please select a customer!")
-        elif not self.order_db.orders_exist(user_name):
+        elif not self.admin.orders_exist(user_name):
             mb.showwarning("Error", "This customer does not have any orders!")
         else:
-            orders = self.order_db.get_customer_orders(user_name)
+            orders = self.admin.get_customer_orders(user_name)
             self.view.clear_tree_view(self.tree_views[0])
             for order in orders:
                 product_name = order[1]
@@ -51,6 +80,10 @@ class AdminController(AbstractController, AbstractObserverController):
                 self.view.insert_item(self.tree_views[0], product_name, date_time, subtotal)
 
     def add_discount(self):
+        """
+        This method adds a discount to the orders of a selected customer
+        by updating the customers order subtotals in the order database,
+        and in the AdminView order tree view."""
         user_name = self.view.get_input_value("user_name")
         discount_category = self.view.get_input_value("discount_category")
         if user_name == "":
@@ -58,8 +91,8 @@ class AdminController(AbstractController, AbstractObserverController):
         elif discount_category == "":
             mb.showwarning("Error", "Please select a discount category!")
         else:
-            customer = self.user_db.get_customer(user_name)
-            if not self.order_db.orders_exist(user_name):
+            customer = self.admin.get_customer(user_name)
+            if not self.admin.orders_exist(user_name):
                 mb.showwarning("Error", "This customer does not have any orders!")
             elif customer.get_discount_id() != -1:
                 mb.showwarning("Error", "This customer already has a discount category!")
@@ -69,11 +102,17 @@ class AdminController(AbstractController, AbstractObserverController):
                 discount_percentage = discount.get_discount_percentage()
                 customer.set_discount_id(discount_id)
                 self.view_order()
-                self.user_db.set_customer_discount(user_name, discount_id)
-                self.order_db.update_order_subtotals(user_name, discount_percentage)
+                self.admin.set_customer_discount(user_name, discount_id)
+                self.admin.update_order_subtotals(user_name, discount_percentage)
                 self.update_orders(discount_percentage)
 
     def update_orders(self, discount_percentage: float):
+        """
+        This method updates and gives a discount to a customers order
+        subtotals in the AdminView order tree view.
+
+        :param discount_percentage: Discount percentage to be used.
+        """
         tree_list = list(self.tree_views[0].get_children(""))
         for item in tree_list:
             product_name = self.tree_views[0].item(item, "values")[0]
@@ -86,20 +125,28 @@ class AdminController(AbstractController, AbstractObserverController):
             self.view.edit_item(self.tree_views[0], item, product_name, date_time, subtotal)
 
     def add_product(self):
+        """
+        This method adds a product to the product database and the
+        AdminView product tree view.
+        """
         product_name = self.view.get_input_value("product_name")
         quantity = self.view.get_input_value("product_quantity")
         price = self.view.get_input_value("product_price")
         if product_name == "" or quantity == "" or price == "":
-            mb.showwarning("Error", "Please enter all fields!")
-        elif self.product_db.product_exists(product_name):
+            mb.showwarning("Error", "Please enter all the fields!")
+        elif self.admin.product_exists(product_name):
             mb.showwarning("Error", "That product name already exists!")
         else:
             if self.product_check(product_name, quantity, price):
                 product = Product(product_name, int(quantity), float(price))
-                self.product_db.add_product(product)
+                self.admin.add_product(product)
                 self.view.insert_item(self.tree_views[1], product_name, quantity, float(price))
 
     def edit_product(self):
+        """
+        This method edits a product in the product database and the
+        AdminView product tree view.
+        """
         values = [self.view.get_input_value("product_name"),
                   self.view.get_input_value("product_quantity"),
                   self.view.get_input_value("product_price")]
@@ -113,20 +160,24 @@ class AdminController(AbstractController, AbstractObserverController):
         else:
             product_name = self.tree_views[1].item(selected_item, "values")[0]
             if values[0] != "" and values[0] != product_name and \
-                    self.product_db.product_exists(values[0]):
+                    self.admin.product_exists(values[0]):
                 mb.showwarning("Error", "That product name already exists!")
             else:
                 for i, value in enumerate(values):
                     if value == "":
                         values[i] = self.tree_views[1].item(selected_item, "values")[i]
                 if self.product_check(values[0], values[1], values[2]):
-                    product = self.product_db.get_product(product_name)
+                    product = self.admin.get_product(product_name)
                     for i, value in enumerate(values):
-                        self.product_db.edit_product(product, i, value)
+                        self.admin.edit_product(product, i, value)
                     self.view.edit_item(self.tree_views[1], selected_item, values[0], values[1],
                                         str(float(values[2])))
 
     def remove_product(self):
+        """
+        This method removes a product from the product database and the
+        AdminView product tree view.
+        """
         selected_item = self.tree_views[1].focus()
         if len(self.tree_views[1].get_children("")) == 0:
             mb.showwarning("Error", "There aren't any products to remove!")
@@ -136,8 +187,8 @@ class AdminController(AbstractController, AbstractObserverController):
             item_dict = self.tree_views[1].item(selected_item)
             values = list(item_dict.values())
             product_name = values[2][0]
-            product = self.product_db.get_product(product_name)
-            self.product_db.remove_product(product)
+            product = self.admin.get_product(product_name)
+            self.admin.remove_product(product)
             self.view.remove_item(self.tree_views[1], selected_item)
 
     def logout_user(self):
@@ -156,13 +207,19 @@ class AdminController(AbstractController, AbstractObserverController):
 
     @staticmethod
     def product_check(product_name: str, quantity: str, price: str):
+        """
+        This method checks that the values entered by the admin are the
+        correct types, and don't exceed certain lengths.
+        """
         if not quantity.isdigit():
             mb.showwarning("Error", "The quantity entered is not a valid number!")
+            return False
         try:
             float(price)
             price.isdigit()
         except ValueError:
             mb.showwarning("Error", "The price entered is not a valid number!")
+            return False
         else:
             if len(product_name) > 30:
                 mb.showwarning("Error", "The product name has to be less than 30 characters!")
